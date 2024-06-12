@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { createReducerManager } from './reducerManager';
+//import { userApi } from '../users/userApiSlice';
 
 const staticReducers = {
     
@@ -10,6 +11,14 @@ const staticReducers = {
   const store = configureStore({
     reducer: reducerManager.reduce,
   });
+
+  // export const store = configureStore({
+  //   reducer: {
+  //     [userApi.reducerPath]: userApi.reducer,
+  //   },
+  //   middleware: (getDefaultMiddleware) =>
+  //     getDefaultMiddleware().concat(userApi.middleware),
+  // })
   
   store.reducerManager = reducerManager;
   

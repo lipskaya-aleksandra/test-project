@@ -1,8 +1,8 @@
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
+import { Await, useLoaderData, useNavigate, json } from "react-router-dom";
 import { Suspense, useState } from "react";
-import { Typography } from "@mui/material";
-import UsersList from "./UsersList";
-import store from "../common";
+import { Typography, Pagination } from "@mui/material";
+import UsersTable from "./UsersTable.jsx";
+import store from "../common/store/config";
 import { userApi } from "./userApiSlice";
 
 export default function UsersPage() {
@@ -17,15 +17,13 @@ export default function UsersPage() {
       >
         {(resolvedUsers) => (
           <>
-            <UsersList users={resolvedUsers} />
+            <UsersTable users={resolvedUsers} />
             <Pagination
               count={10}
               page={page}
-              onChange={() => {
-                setPage((prevPage) => {
-                  navigate(`/users/${prevPage + 1}`);
-                  return prevPage + 1;
-                });
+              onChange={(e, value) => {
+                setPage(value);
+                navigate(`/users/${value}`);
               }}
             />
           </>
@@ -37,13 +35,12 @@ export default function UsersPage() {
 
 export async function usersLoader({ params }) {
   try {
-    console.log("in users loader");
     const { page } = params;
     const response = await store
       .dispatch(userApi.endpoints.getUsers.initiate(page))
       .unwrap();
 
-    return response;
+    return { users: response.items };
   } catch (e) {
     throw json(
       { message: "Error occured while fetching users" },

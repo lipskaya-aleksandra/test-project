@@ -1,10 +1,13 @@
-import { Await, useLoaderData } from "react-router-dom";
-import { Suspense } from "react";
-import { Typography } from "@mui/material";
-import PostsList from "./PostsList";
+import { Await, useLoaderData, json, useNavigate } from "react-router-dom";
+import { Suspense, useState } from "react";
+import { Typography, Pagination } from "@mui/material";
+import PostsList from "./PostsList.jsx";
 import { postApi } from "./postApiSlice";
+import store from "../common/store/config";
 
 export default function PostsPage() {
+  const [page, setPage] = useState(1);
+  const navigate = useNavigate();
   const { posts } = useLoaderData();
   return (
     <Suspense fallback={<Typography>Loading users...</Typography>}>
@@ -18,11 +21,9 @@ export default function PostsPage() {
             <Pagination
               count={10}
               page={page}
-              onChange={() => {
-                setPage((prevPage) => {
-                  navigate(`/users/${prevPage + 1}`);
-                  return prevPage + 1;
-                });
+              onChange={(e, value) => {
+                setPage(value);
+                navigate(`/posts/${value}`);
               }}
             />
           </>
@@ -39,7 +40,7 @@ export async function postsLoader({ params }) {
       .dispatch(postApi.endpoints.getPosts.initiate(page))
       .unwrap();
 
-    return response;
+    return { posts: response.items };
   } catch (e) {
     throw json(
       { message: "Error occured while fetching posts" },

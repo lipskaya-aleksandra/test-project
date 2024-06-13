@@ -12,7 +12,8 @@ export const userApi = createApi({
         url: "users",
         params: {
           page,
-          pagesize: 20,
+          pagesize: 10,
+          site: "stackoverflow",
         },
       }),
     }),

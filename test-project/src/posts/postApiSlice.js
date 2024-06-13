@@ -9,11 +9,11 @@ export const postApi = createApi({
   endpoints: (builder) => ({
     getPosts: builder.query({
       query: (page) => ({
-        url: "posts",
+        url: "questions",
         params: {
           page,
-          pagesize: 20,
-          filter: "withtitle", //?
+          pagesize: 10,
+          site: "stackoverflow",
         },
       }),
     }),

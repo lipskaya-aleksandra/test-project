@@ -1,37 +1,36 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 
-import Root, { rootLoader } from "./common/Root";
-import UsersPage, { usersLoader } from "./users/UsersPage";
-import store from "./common";
-import PostsPage, { postsLoader } from "./posts/PostsPage";
-import DefaultPageRedirect from "./common/DefaultPageRedirect";
+import Root, { rootLoader } from "./common/components/Root.jsx";
+import UsersPage, { usersLoader } from "./users/UsersPage.jsx";
+import { store } from "./common/store/index.js";
+import PostsPage, { postsLoader } from "./posts/PostsPage.jsx";
+import DefaultPageRedirect from "./common/components/DefaultPageRedirect.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
-    loader: rootLoader,
     children: [
+      { index: true, loader: rootLoader },
       {
-        path: "users",
-        //loader: usersLoader,
+        path: "users/:page",
+        loader: usersLoader,
         element: (
-          // <DefaultPageRedirect path="users">
-          //   <UsersPage />
-          // </DefaultPageRedirect>
-          <p>users</p>
+          <DefaultPageRedirect path="users">
+            <UsersPage />
+          </DefaultPageRedirect>
         ),
       },
-      // {
-      //   path: "posts/:page",
-      //   loader: postsLoader,
-      //   element: (
-      //     <DefaultPageRedirect path="posts">
-      //       <PostsPage />
-      //     </DefaultPageRedirect>
-      //   ),
-      // },
+      {
+        path: "posts/:page",
+        loader: postsLoader,
+        element: (
+          <DefaultPageRedirect path="posts">
+            <PostsPage />
+          </DefaultPageRedirect>
+        ),
+      },
     ],
   },
 ]);

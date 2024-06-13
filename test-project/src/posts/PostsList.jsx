@@ -4,7 +4,7 @@ export default function PostsList({ posts }) {
   return (
     <List style={{ width: "100vw" }}>
       {posts.map((post) => (
-        <ListItemButton key={post.post_id}>
+        <ListItemButton key={post.question_id}>
           <ListItemText primary={post.title} />
         </ListItemButton>
       ))}

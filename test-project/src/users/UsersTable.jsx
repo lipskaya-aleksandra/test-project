@@ -7,7 +7,7 @@ import {
   TableBody,
 } from "@mui/material";
 
-export default function UsersList({ users }) {
+export default function UsersTable({ users }) {
   return (
     <TableContainer style={{ width: "100vw" }}>
       <Table>

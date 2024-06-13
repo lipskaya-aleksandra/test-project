@@ -1,11 +1,12 @@
 import React from "react";
 import { Navigate, useParams } from "react-router-dom";
+import { usePagination } from "../hooks/usePagination";
 
 const DefaultPageRedirect = ({ children, path }) => {
-  const { page } = useParams();
+  const [pageParams, setPageParams] = usePagination();
 
-  if (!page) {
-    return <Navigate to={`/${path}/1`} />;
+  if (!pageParams) {
+    return <Navigate to={`/${path}?page=1&perPage=10`} />;
   }
 
   return children;

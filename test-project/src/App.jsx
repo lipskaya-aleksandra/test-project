@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, loader: rootLoader },
       {
-        path: "users/:page",
+        path: "users",
         loader: usersLoader,
         element: (
           <DefaultPageRedirect path="users">
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "posts/:page",
+        path: "posts",
         loader: postsLoader,
         element: (
           <DefaultPageRedirect path="posts">

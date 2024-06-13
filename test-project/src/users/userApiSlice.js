@@ -8,11 +8,11 @@ export const userApi = createApi({
   }),
   endpoints: (builder) => ({
     getUsers: builder.query({
-      query: (page) => ({
+      query: ({ page, perPage }) => ({
         url: "users",
         params: {
           page,
-          pagesize: 10,
+          pagesize: perPage,
           site: "stackoverflow",
         },
       }),

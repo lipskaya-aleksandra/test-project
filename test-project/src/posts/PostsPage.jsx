@@ -35,6 +35,7 @@ export default function PostsPage() {
 
 export async function postsLoader({ params }) {
   try {
+    store.reducerManager.add(postApi.reducerPath, postApi.reducer);
     const { page } = params;
     const response = await store
       .dispatch(postApi.endpoints.getPosts.initiate(page))

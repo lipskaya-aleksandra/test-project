@@ -35,6 +35,7 @@ export default function UsersPage() {
 
 export async function usersLoader({ params }) {
   try {
+    store.reducerManager.add(userApi.reducerPath, userApi.reducer);
     const { page } = params;
     const response = await store
       .dispatch(userApi.endpoints.getUsers.initiate(page))

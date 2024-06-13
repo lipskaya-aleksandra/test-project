@@ -12,10 +12,11 @@ const reducerManager = createReducerManager(staticReducers);
 // });
 
 export const store = configureStore({
-  reducer: {
-    [userApi.reducerPath]: userApi.reducer,
-    [postApi.reducerPath]: postApi.reducer,
-  },
+  // reducer: {
+  //   [userApi.reducerPath]: userApi.reducer,
+  //   [postApi.reducerPath]: postApi.reducer,
+  // },
+  reducer: reducerManager.reduce,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(userApi.middleware)

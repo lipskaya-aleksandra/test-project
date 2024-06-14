@@ -23,6 +23,9 @@ importers:
       axios:
         specifier: ^1.7.2
         version: 1.7.2
+      pnpm:
+        specifier: ^9.3.0
+        version: 9.3.0
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -1389,6 +1392,11 @@ packages:
 
   picocolors@1.0.1:
     resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
+
+  pnpm@9.3.0:
+    resolution: {integrity: sha512-7nuT4MK9EUCcZCT5K4ZvMdPqG+9fvkfTx1AM3DyWaIM9LlVoGtZt9bZAxh+p3CXVRu+lTXbX+L9UsTYUrCk2MQ==}
+    engines: {node: '>=18.12'}
+    hasBin: true
 
   possible-typed-array-names@1.0.0:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
@@ -3174,6 +3182,8 @@ snapshots:
   path-type@4.0.0: {}
 
   picocolors@1.0.1: {}
+
+  pnpm@9.3.0: {}
 
   possible-typed-array-names@1.0.0: {}
 

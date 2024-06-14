@@ -1,6 +1,6 @@
 import { Await, useLoaderData, json, useNavigate } from "react-router-dom";
 import { Suspense, useState } from "react";
-import { Typography, Pagination } from "@mui/material";
+import { Typography, TablePagination } from "@mui/material";
 import PostsList from "./PostsList.jsx";
 import { postApi } from "./postApiSlice";
 import store, { injectReducer } from "../common/store/config";
@@ -20,12 +20,18 @@ export default function PostsPage() {
         {(resolvedPosts) => (
           <>
             <PostsList posts={resolvedPosts} />
-            <Pagination
-              count={10}
-              page={pageParams.page}
-              onChange={(e, value) => {
-                navigate(`/posts`);
-                setPageParams({ page: value });
+            <TablePagination
+              component="div"
+              count={100}
+              page={pageParams.page - 1}
+              onPageChange={(e, value) => {
+                setPageParams({ page: value + 1 });
+                //navigate(`/users?page=${value}&perPage=${pageParams.perPage}`);
+              }}
+              rowsPerPage={pageParams.perPage}
+              onRowsPerPageChange={(e) => {
+                setPageParams({ perPage: e.target.value, page: 1 });
+                //navigate(`/users?page=${value}&perPage=${pageParams.perPage}`);
               }}
             />
           </>
@@ -39,7 +45,7 @@ export async function postsLoader({ request }) {
   try {
     //store.reducerManager.add(postApi.reducerPath, postApi.reducer);
     //const { page } = params;
-    //injectReducer(postApi.reducerPath, postApi.reducer);
+    injectReducer(postApi.reducerPath, postApi.reducer);
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get("page");
     const perPage = searchParams.get("perPage");

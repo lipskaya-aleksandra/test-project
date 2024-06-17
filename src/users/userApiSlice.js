@@ -18,7 +18,12 @@ export const userApi = createApi({
       }),
     }),
     getUserById: builder.query({
-      query: (id) => `users/${id}`,
+      query: ({ id }) => ({
+        url: `users/${id}`,
+        params: {
+          site: "stackoverflow",
+        },
+      }),
     }),
   }),
 });

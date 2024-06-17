@@ -1,26 +1,31 @@
-import { Await, useLoaderData, useNavigate, json } from "react-router-dom";
+import {
+  Await,
+  useLoaderData,
+  useNavigate,
+  json,
+  defer,
+} from "react-router-dom";
 import { Suspense, useState } from "react";
-import { Typography, Pagination, TablePagination } from "@mui/material";
+import { Typography, TablePagination, Alert } from "@mui/material";
 import UsersTable from "./UsersTable.jsx";
 import store, { injectReducer } from "../common/store/config";
 import { userApi } from "./userApiSlice";
 import { usePagination } from "../common/hooks/usePagination.js";
 
 export default function UsersPage() {
-  //const [page, setPage] = useState(1);
-  const navigate = useNavigate();
   const [pageParams, setPageParams] = usePagination();
   const { users } = useLoaderData();
-  console.log(pageParams)
   return (
-    <Suspense fallback={<Typography>Loading users...</Typography>}>
+    <Suspense
+      fallback={<UsersTable pageSize={pageParams.perPage} loading={true} />}
+    >
       <Await
         resolve={users}
-        errorElement={<Typography>Could not load users</Typography>}
+        errorElement={<Alert severity="error">Could not load users</Alert>}
       >
         {(resolvedUsers) => (
           <>
-            <UsersTable users={resolvedUsers} />
+            <UsersTable users={resolvedUsers.items} />
             <TablePagination
               component="div"
               count={100}
@@ -42,19 +47,18 @@ export default function UsersPage() {
   );
 }
 
-export async function usersLoader({ request }) {
+export async function usersLoader({ request, params }) {
   try {
     //store.reducerManager.add(userApi.reducerPath, userApi.reducer);
-    //const { page } = params;
     injectReducer(userApi.reducerPath, userApi.reducer);
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get("page");
     const perPage = searchParams.get("perPage");
-    const response = await store
+    const response = store //await
       .dispatch(userApi.endpoints.getUsers.initiate({ page, perPage }))
       .unwrap();
 
-    return { users: response.items };
+    return defer({ users: response }); //.items
   } catch (e) {
     console.log(e);
     throw json(

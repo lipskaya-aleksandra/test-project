@@ -6,6 +6,7 @@ import UsersPage, { usersLoader } from "./users/UsersPage.jsx";
 import { store } from "./common/store/index.js";
 import PostsPage, { postsLoader } from "./posts/PostsPage.jsx";
 import DefaultPageRedirect from "./common/components/DefaultPageRedirect.jsx";
+import UserDetailPage, { userDetailLoader } from "./users/UserDetailPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,12 +16,22 @@ const router = createBrowserRouter([
       { index: true, loader: rootLoader },
       {
         path: "users",
-        loader: usersLoader,
-        element: (
-          <DefaultPageRedirect path="users">
-            <UsersPage />
-          </DefaultPageRedirect>
-        ),
+        children: [
+          {
+            index: true,
+            loader: usersLoader,
+            element: (
+              <DefaultPageRedirect path="users">
+                <UsersPage />
+              </DefaultPageRedirect>
+            ),
+          },
+          {
+            path: ":userId",
+            loader: userDetailLoader,
+            element: <UserDetailPage />,
+          },
+        ],
       },
       {
         path: "posts",

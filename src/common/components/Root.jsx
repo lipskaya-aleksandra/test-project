@@ -1,11 +1,8 @@
 import { AppBar, Button, Link, Toolbar } from "@mui/material";
-import { Outlet, redirect, useNavigate } from "react-router-dom";
-import { usePagination } from "../hooks/usePagination";
+import { Outlet, redirect } from "react-router-dom";
 
 export default function Root() {
-  const navigate = useNavigate();
-  const [pageParams, setPageParams] = usePagination();
-  const searchParams = new URLSearchParams({ page: 1, perPage: 10 }); //new URLSearchParams(pageParams);
+  const searchParams = new URLSearchParams({ page: 1, perPage: 10 });
   return (
     <>
       <AppBar style={{ width: "100vw", marginTop: 0 }} position="fixed">
@@ -15,20 +12,10 @@ export default function Root() {
             variant="body2"
             color={"inherit"}
             href={"/users?" + searchParams.toString()}
-            //onClick={() => navigate("/users?" + searchParams.toString())}
-            // onClick={() => {
-            //   setPageParams({ page: 1, perPage: 10 });
-            //   navigate("/users?" + searchParams.toString());
-            // }}
           >
             Users
           </Link>
           <Link
-            // variant="contained"
-            // onClick={() => {
-            //   setPageParams({ page: 1, perPage: 10 });
-            //   navigate("/posts?" + searchParams.toString());
-            // }}
             variant="body2"
             color={"inherit"}
             href={"/posts?" + searchParams.toString()}

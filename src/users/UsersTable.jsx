@@ -60,15 +60,6 @@ export default function UsersTable({ users, loading, pageSize }) {
     <TableContainer style={{ width: "100vw" }}>
       <Table>
         <TableHead>
-          {/* <TableRow>
-            <TableCell>id</TableCell>
-            <TableCell align="center">username</TableCell>
-            <TableCell align="center">age</TableCell>
-            <TableCell align="center">created</TableCell>
-            <TableCell align="center">type</TableCell>
-            <TableCell align="center">last online</TableCell>
-            <TableCell align="center">location</TableCell>
-          </TableRow> */}
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
@@ -76,9 +67,9 @@ export default function UsersTable({ users, loading, pageSize }) {
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                 </TableCell>
               ))}
             </TableRow>
@@ -104,36 +95,9 @@ export default function UsersTable({ users, loading, pageSize }) {
                 ))}
               </TableRow>
             ))
-            // users.map((user) => (
-            //   <TableRow
-            //     key={user.user_id}
-            //     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            //     hover={true}
-            //     onClick={() => {
-            //       navigate(`/users/${user.user_id}`);
-            //     }}
-            //   >
-            //     <TableCell component="th" scope="row">
-            //       {user.user_id}
-            //     </TableCell>
-            //     <TableCell align="center">{user.display_name}</TableCell>
-            //     <TableCell align="center">{user.age}</TableCell>
-            //     <TableCell align="center">{user.creation_date}</TableCell>
-            //     <TableCell align="center">{user.user_type}</TableCell>
-            //     <TableCell align="center">{user.last_access_date}</TableCell>
-            //     <TableCell align="center">{user.location}</TableCell>
-            //   </TableRow>
-            // ))
           )}
         </TableBody>
       </Table>
     </TableContainer>
-    // <List>
-    //   {users.map((user) => (
-    //     <ListItemButton key={user.user_id}>
-    //       <ListItemText primary={user.display_name} />
-    //     </ListItemButton>
-    //   ))}
-    // </List>
   );
 }

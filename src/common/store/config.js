@@ -7,15 +7,7 @@ const staticReducers = {};
 
 const reducerManager = createReducerManager(staticReducers);
 
-// const store = configureStore({
-//   reducer: reducerManager.reduce,
-// });
-
 export const store = configureStore({
-  // reducer: {
-  //   [userApi.reducerPath]: userApi.reducer,
-  //   [postApi.reducerPath]: postApi.reducer,
-  // },
   reducer: reducerManager.reduce,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

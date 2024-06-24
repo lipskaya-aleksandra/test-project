@@ -33,46 +33,38 @@ export default function UserCard({ user, loading }) {
         Back
       </Button>
       <Card sx={{ minWidth: "400px" }}>
-        <CardHeader
-          avatar={
-            loading ? (
-              <Skeleton variant="circular" width={40} height={40} />
-            ) : (
-              <Avatar src={user.profile_image} />
-            )
-          }
-          title={
-            loading ? (
-              <Skeleton variant="text" sx={{ fontSize: "1.5rem" }} />
-            ) : (
+        {loading && <CardHeader
+          avatar={<Skeleton variant="circular" width={40} height={40} />}
+          title={<Skeleton variant="text" sx={{ fontSize: "1.5rem" }} />}
+          subheader={<Skeleton variant="text" sx={{ fontSize: "1rem" }} />}
+        />}
+        {!loading && (
+          <CardHeader
+            avatar={<Avatar src={user.profile_image} />}
+            title={(
               <Typography gutterBottom variant="h5" component="h2">
                 {user.display_name}
               </Typography>
-            )
-          }
-          subheader={
-            loading ? (
-              <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
-            ) : (
+            )}
+            subheader={(
               <Typography variant="caption" display="block" gutterBottom>
                 Last seen: {new Date(user.last_access_date).toUTCString()}
               </Typography>
-            )
-          }
-        />
+            )}
+          />
+        )}
 
-        {loading ? (
+        {loading && <>
           <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
-        ) : (
+          <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+          <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+        </>}
+
+        {!loading && <>
           <Stack alignItems="center" direction="row" gap={2}>
             <LocationOn sx={{ m: "4px" }} />
             <Typography>{user.location || "-"}</Typography>
           </Stack>
-        )}
-
-        {loading ? (
-          <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
-        ) : (
           <Stack alignItems="center" direction="row" gap={2}>
             {user.link ? (
               <>
@@ -83,18 +75,13 @@ export default function UserCard({ user, loading }) {
               <Typography>"-"</Typography>
             )}
           </Stack>
-        )}
-
-        {loading ? (
-          <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
-        ) : (
           <Stack alignItems="center" direction="row" gap={2}>
             <Language sx={{ m: "4px" }} />
             <Typography>
               {user.website_url ? <Link>{user.website_url}</Link> : "-"}
             </Typography>
           </Stack>
-        )}
+        </>}
       </Card>
     </Grid>
   );

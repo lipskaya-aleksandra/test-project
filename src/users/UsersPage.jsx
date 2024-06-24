@@ -47,18 +47,17 @@ export default function UsersPage() {
   );
 }
 
-export async function usersLoader({ request, params }) {
+export async function usersLoader({ request }) {
   try {
-    //store.reducerManager.add(userApi.reducerPath, userApi.reducer);
     injectReducer(userApi.reducerPath, userApi.reducer);
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get("page");
     const perPage = searchParams.get("perPage");
-    const response = store //await
+    const response = store
       .dispatch(userApi.endpoints.getUsers.initiate({ page, perPage }))
       .unwrap();
 
-    return defer({ users: response }); //.items
+    return defer({ users: response });
   } catch (e) {
     console.log(e);
     throw json(

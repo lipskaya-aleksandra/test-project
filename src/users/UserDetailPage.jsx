@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import store, { injectReducer } from "../common/store/config";
 import { userApi } from "./userApiSlice";
 import { Alert } from "@mui/material";
-import UserCardFallback from "./UserCardFallback";
 import UserCard from "./UserCard";
 
 export default function UserDetailPage() {

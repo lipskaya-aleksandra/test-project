@@ -30,5 +30,5 @@ export default function Root() {
 }
 
 export function rootLoader() {
-  return redirect("/users?page=1&perPage=10");
+  return redirect("/users");
 }

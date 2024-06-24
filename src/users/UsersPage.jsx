@@ -2,22 +2,63 @@ import {
   Await,
   useLoaderData,
   useNavigate,
+  Link,
   json,
   defer,
 } from "react-router-dom";
 import { Suspense, useState } from "react";
 import { Typography, TablePagination, Alert } from "@mui/material";
-import UsersTable from "./UsersTable.jsx";
+import { createColumnHelper } from "@tanstack/react-table";
+
+import Table from "../common/components/Table.jsx";
 import store, { injectReducer } from "../common/store/config";
 import { userApi } from "./userApiSlice";
 import { usePagination } from "../common/hooks/usePagination.js";
+
+const columnHelper = createColumnHelper();
+
+const columns = [
+  columnHelper.accessor("user_id", {
+    cell: (info) => info.getValue(),
+    header: () => <span>id</span>,
+  }),
+  columnHelper.accessor("display_name", {
+    cell: (info) => (
+      <Link to={`/users/${info.row.original.user_id}`}>{info.getValue()}</Link>
+    ),
+
+    header: () => <span>username</span>,
+  }),
+  columnHelper.accessor("age", {
+    header: () => "age",
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("creation_date", {
+    header: () => <span>created</span>,
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("type", {
+    header: () => <span>type</span>,
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("last_access_date", {
+    header: () => <span>last online</span>,
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("location", {
+    header: () => <span>location</span>,
+    cell: (info) => info.getValue(),
+  }),
+];
 
 export default function UsersPage() {
   const [pageParams, setPageParams] = usePagination();
   const { users } = useLoaderData();
   return (
     <Suspense
-      fallback={<UsersTable pageSize={pageParams.perPage} loading={true} />}
+      fallback={
+        <Table columns={columns} pageSize={pageParams.perPage} loading={true} />
+      }
     >
       <Await
         resolve={users}
@@ -25,19 +66,17 @@ export default function UsersPage() {
       >
         {(resolvedUsers) => (
           <>
-            <UsersTable users={resolvedUsers.items} />
+            <Table data={resolvedUsers.items} columns={columns} />
             <TablePagination
               component="div"
               count={100}
               page={pageParams.page - 1}
               onPageChange={(e, value) => {
                 setPageParams({ page: value + 1 });
-                //navigate(`/users?page=${value}&perPage=${pageParams.perPage}`);
               }}
               rowsPerPage={pageParams.perPage}
               onRowsPerPageChange={(e) => {
                 setPageParams({ perPage: e.target.value, page: 1 });
-                //navigate(`/users?page=${value}&perPage=${pageParams.perPage}`);
               }}
             />
           </>

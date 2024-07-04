@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { User } from "./UserType";
+import { PaginationConfig } from "../common/hooks/usePagination";
 
 export const userApi = createApi({
   reducerPath: "userApi",
@@ -7,7 +9,7 @@ export const userApi = createApi({
     mode: "cors",
   }),
   endpoints: (builder) => ({
-    getUsers: builder.query({
+    getUsers: builder.query<User[], PaginationConfig>({
       query: ({ page, perPage }) => ({
         url: "users",
         params: {
@@ -17,7 +19,7 @@ export const userApi = createApi({
         },
       }),
     }),
-    getUserById: builder.query({
+    getUserById: builder.query<User, { id: number }>({
       query: ({ id }) => ({
         url: `users/${id}`,
         params: {
@@ -28,4 +30,6 @@ export const userApi = createApi({
   }),
 });
 
-export const { useGetUsers, useGetUserById } = userApi;
+export const { useGetUsers } = userApi;
+
+export const useGetUserById = userApi.endpoints.getUserById.useQuery;

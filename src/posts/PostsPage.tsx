@@ -1,14 +1,24 @@
-import { Await, useLoaderData, json } from "react-router-dom";
+import {
+  Await,
+  useLoaderData,
+  json,
+  LoaderFunctionArgs,
+} from "react-router-dom";
 import { Suspense } from "react";
 import { Typography, TablePagination } from "@mui/material";
-import PostsList from "./PostsList.jsx";
-import { postApi } from "./postApiSlice";
-import store, { injectReducer } from "../common/store/config";
+import PostsList from "./PostsList.js";
+import { postApi } from "./postApiSlice.js";
+import store, { injectReducer } from "../common/store/config.js";
 import { usePagination } from "../common/hooks/usePagination.js";
+import { Post } from "./PostType.js";
+
+type LoaderData = {
+  posts: Post[];
+};
 
 export default function PostsPage() {
   const [pageParams, setPageParams] = usePagination();
-  const { posts } = useLoaderData();
+  const { posts } = useLoaderData() as LoaderData;
   return (
     <Suspense fallback={<Typography>Loading users...</Typography>}>
       <Await
@@ -27,7 +37,7 @@ export default function PostsPage() {
               }}
               rowsPerPage={pageParams.perPage}
               onRowsPerPageChange={(e) => {
-                setPageParams({ perPage: e.target.value, page: 1 });
+                setPageParams({ perPage: parseInt(e.target.value), page: 1 });
               }}
             />
           </>
@@ -37,7 +47,8 @@ export default function PostsPage() {
   );
 }
 
-export async function postsLoader({ request }) {
+export async function postsLoader(loaderParams: LoaderFunctionArgs) {
+  const { request } = loaderParams;
   try {
     injectReducer(postApi.reducerPath, postApi.reducer);
     const searchParams = new URL(request.url).searchParams;
@@ -51,8 +62,8 @@ export async function postsLoader({ request }) {
   } catch (e) {
     console.log(e);
     throw json(
-      { message: "Error occured while fetching posts" },
-      { status: e.status }
+      { message: "Error occured while fetching posts" }
+      //{ status: e.status }
     );
   }
 }

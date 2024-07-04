@@ -1,12 +1,23 @@
-import { useLoaderData, json, defer, Await } from "react-router-dom";
+import {
+  useLoaderData,
+  json,
+  defer,
+  Await,
+  LoaderFunctionArgs,
+} from "react-router-dom";
 import { Suspense } from "react";
 import store, { injectReducer } from "../common/store/config";
 import { userApi } from "./userApiSlice";
 import { Alert } from "@mui/material";
 import UserCard from "./UserCard";
+import { User } from "./UserType";
+
+type LoaderData = {
+  user: User;
+};
 
 export default function UserDetailPage() {
-  const { user } = useLoaderData();
+  const { user } = useLoaderData() as LoaderData;
   return (
     <Suspense fallback={<UserCard loading={true} />}>
       <Await
@@ -21,7 +32,10 @@ export default function UserDetailPage() {
   );
 }
 
-export function userDetailLoader({ params }) {
+export async function userDetailLoader(
+  loaderParams: LoaderFunctionArgs
+): Promise<any> {
+  const { params } = loaderParams;
   try {
     injectReducer(userApi.reducerPath, userApi.reducer);
     const { userId } = params;
@@ -33,8 +47,8 @@ export function userDetailLoader({ params }) {
   } catch (e) {
     console.log(e);
     throw json(
-      { message: "Error occured while fetching user details" },
-      { status: e.status }
+      { message: "Error occured while fetching user details" }
+      //{ status: e.status }
     );
   }
 }

@@ -1,12 +1,16 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
 import { usePagination } from "../hooks/usePagination";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-const DefaultPageRedirect = ({ children, path }) => {
-  const [pageParams, setPageParams] = usePagination();
+type Props = {
+  children: JSX.Element;
+  path: string;
+};
+
+const DefaultPageRedirect = (props: Props) => {
+  const { children, path } = props;
+  const [pageParams, _setPageParams] = usePagination();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 

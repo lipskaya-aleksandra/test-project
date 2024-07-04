@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-
 import Root, { rootLoader } from "../components/Root";
 import UsersPage, { usersLoader } from "../../users/UsersPage";
 import PostsPage, { postsLoader } from "../../posts/PostsPage";

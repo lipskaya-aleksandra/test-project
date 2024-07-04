@@ -1,21 +1,22 @@
 import {
   Await,
   useLoaderData,
-  useNavigate,
   Link,
   json,
   defer,
+  LoaderFunctionArgs,
 } from "react-router-dom";
-import { Suspense, useState } from "react";
-import { Typography, TablePagination, Alert } from "@mui/material";
+import { Suspense } from "react";
+import { TablePagination, Alert, Skeleton } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import Table from "../common/components/Table.jsx";
-import store, { injectReducer } from "../common/store/config";
-import { userApi } from "./userApiSlice";
+import Table from "../common/components/table/Table.js";
+import store, { injectReducer } from "../common/store/config.js";
+import { userApi } from "./userApiSlice.js";
 import { usePagination } from "../common/hooks/usePagination.js";
+import { User } from "./UserType.js";
 
-const columnHelper = createColumnHelper();
+const columnHelper = createColumnHelper<User>();
 
 const columns = [
   columnHelper.accessor("user_id", {
@@ -51,9 +52,22 @@ const columns = [
   }),
 ];
 
+type LoaderData = {
+  users: User[];
+};
+
 export default function UsersPage() {
   const [pageParams, setPageParams] = usePagination();
-  const { users } = useLoaderData();
+  const { users } = useLoaderData() as LoaderData;
+
+  const renderAvatarFallback = (cell: { column: { id: string } }) => {
+    if (cell.column.id === "profile_image") {
+      return <Skeleton variant="circular" width={40} height={40} />;
+    }
+
+    return null;
+  };
+
   return (
     <Suspense
       fallback={
@@ -66,7 +80,12 @@ export default function UsersPage() {
       >
         {(resolvedUsers) => (
           <>
-            <Table data={resolvedUsers.items} columns={columns} />
+            <Table
+              renderFallback={renderAvatarFallback}
+              data={resolvedUsers.items}
+              columns={columns}
+            />
+
             <TablePagination
               component="div"
               count={100}
@@ -76,7 +95,7 @@ export default function UsersPage() {
               }}
               rowsPerPage={pageParams.perPage}
               onRowsPerPageChange={(e) => {
-                setPageParams({ perPage: e.target.value, page: 1 });
+                setPageParams({ perPage: parseInt(e.target.value), page: 1 });
               }}
             />
           </>
@@ -86,7 +105,10 @@ export default function UsersPage() {
   );
 }
 
-export async function usersLoader({ request }) {
+export async function usersLoader(
+  loaderParams: LoaderFunctionArgs
+): Promise<any> {
+  const { request } = loaderParams;
   try {
     injectReducer(userApi.reducerPath, userApi.reducer);
     const searchParams = new URL(request.url).searchParams;
@@ -100,8 +122,8 @@ export async function usersLoader({ request }) {
   } catch (e) {
     console.log(e);
     throw json(
-      { message: "Error occured while fetching users" },
-      { status: e.status }
+      { message: "Error occured while fetching users" }
+      //{ status: e.status }
     );
   }
 }

@@ -1,8 +1,9 @@
-import { AppBar, Button, Link, Toolbar } from "@mui/material";
+import { AppBar, Link, Toolbar } from "@mui/material";
 import { Outlet, redirect } from "react-router-dom";
+import { defaultSearchParams } from "../hooks/usePagination";
 
 export default function Root() {
-  const searchParams = new URLSearchParams({ page: 1, perPage: 10 });
+  const searchParams = new URLSearchParams(defaultSearchParams);
   return (
     <>
       <AppBar style={{ width: "100vw", marginTop: 0 }} position="fixed">

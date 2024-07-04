@@ -12,17 +12,28 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
+  ColumnDef,
 } from "@tanstack/react-table";
+import { ReactNode } from "react";
 
-export default function Table({ data, columns, loading, pageSize }) {
+type Props<T> = {
+  loading?: boolean;
+  pageSize?: number;
+  renderFallback?: (cell: { column: { id: string } }) => ReactNode;
+  data?: T[];
+  columns: ColumnDef<T, any>[];
+};
+
+export default function Table<T>(props: Props<T>) {
+  const { data, columns, loading, pageSize, renderFallback } = props;
   const navigate = useNavigate();
-  const table = useReactTable({
+  const table = useReactTable<T>({
     data: data || Array(pageSize),
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <TableContainer style={{ width: "100vw" }}>
+    <TableContainer sx={{ width: "100vw" }}>
       <MUITable>
         <TableHead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -39,19 +50,23 @@ export default function Table({ data, columns, loading, pageSize }) {
             </TableRow>
           ))}
         </TableHead>
+
         <TableBody>
           {table.getRowModel().rows.map((row) => (
             <TableRow
               key={row.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               hover={true}
-              onClick={() => {
-                navigate(`/users/${row.id}`);
-              }}
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell align="center" key={cell.id}>
-                  {loading && <TableCellFallback {...cell} />}
+                  =
+                  {/* {loading && renderFallback !== undefined ? (
+                    renderFallback(cell)
+                  ) : (
+                    <TableCellFallback />
+                  )} */}
+                  {loading && (renderFallback?.(cell) || <TableCellFallback />)}
                   {!loading &&
                     flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>

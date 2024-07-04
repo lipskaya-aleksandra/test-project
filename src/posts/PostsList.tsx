@@ -1,6 +1,12 @@
 import { List, ListItemButton, ListItemText } from "@mui/material";
+import { Post } from "./PostType";
 
-export default function PostsList({ posts }) {
+type Props = {
+  posts: Post[];
+};
+
+export default function PostsList(props: Props) {
+  const { posts } = props;
   return (
     <List style={{ width: "100vw" }}>
       {posts.map((post) => (

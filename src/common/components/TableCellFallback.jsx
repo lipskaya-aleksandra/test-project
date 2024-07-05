@@ -1,4 +1,4 @@
-import { TableRow, TableCell, Skeleton } from "@mui/material";
+import { Skeleton } from "@mui/material";
 
 const fallbackMap = {
   profile_image: <Skeleton variant="circular" width={40} height={40} />,

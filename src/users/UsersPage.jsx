@@ -1,19 +1,15 @@
-import {
-  Await,
-  useLoaderData,
-  useNavigate,
-  Link,
-  json,
-  defer,
-} from "react-router-dom";
-import { Suspense, useState } from "react";
-import { Typography, TablePagination, Alert } from "@mui/material";
+import { Await, useLoaderData, Link, json, defer } from "react-router-dom";
+import { Suspense } from "react";
+import { TablePagination, Alert } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import Table from "../common/components/Table.jsx";
 import store, { injectReducer } from "../common/store/config";
 import { userApi } from "./userApiSlice";
 import { usePagination } from "../common/hooks/usePagination.js";
+import FilterWidget from "../common/components/filter/FilterWidget.jsx";
+import Select from "../common/components/filter/Select.jsx";
+import FilterResults from "../common/components/filter/FilterResults.jsx";
 
 const columnHelper = createColumnHelper();
 
@@ -55,34 +51,48 @@ export default function UsersPage() {
   const [pageParams, setPageParams] = usePagination();
   const { users } = useLoaderData();
   return (
-    <Suspense
-      fallback={
-        <Table columns={columns} pageSize={pageParams.perPage} loading={true} />
-      }
-    >
-      <Await
-        resolve={users}
-        errorElement={<Alert severity="error">Could not load users</Alert>}
+    <>
+      <FilterWidget>
+        <Select
+          label={"Badge"}
+          options={["bronze", "silver", "gold"]}
+          placeholder={"Choose badge"}
+          filter="badge"
+          defaultFilter={{ badge: null }}
+        />
+        {/* <FilterResults defaultFilters={{ badge: null }} /> */}
+      </FilterWidget>
+      <Suspense
+        fallback={
+          <Table
+            columns={columns}
+            pageSize={pageParams.perPage}
+            loading={true}
+          />
+        }
       >
-        {(resolvedUsers) => (
-          <>
+        <Await
+          resolve={users}
+          errorElement={<Alert severity="error">Could not load users</Alert>}
+        >
+          {(resolvedUsers) => (
             <Table data={resolvedUsers.items} columns={columns} />
-            <TablePagination
-              component="div"
-              count={100}
-              page={pageParams.page - 1}
-              onPageChange={(e, value) => {
-                setPageParams({ page: value + 1 });
-              }}
-              rowsPerPage={pageParams.perPage}
-              onRowsPerPageChange={(e) => {
-                setPageParams({ perPage: e.target.value, page: 1 });
-              }}
-            />
-          </>
-        )}
-      </Await>
-    </Suspense>
+          )}
+        </Await>
+      </Suspense>
+      <TablePagination
+        component="div"
+        count={100}
+        page={pageParams.page - 1}
+        onPageChange={(e, value) => {
+          setPageParams({ page: value + 1 });
+        }}
+        rowsPerPage={pageParams.perPage}
+        onRowsPerPageChange={(e) => {
+          setPageParams({ perPage: e.target.value, page: 1 });
+        }}
+      />
+    </>
   );
 }
 

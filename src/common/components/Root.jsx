@@ -1,4 +1,4 @@
-import { AppBar, Button, Link, Toolbar } from "@mui/material";
+import { AppBar, Link, Toolbar } from "@mui/material";
 import { Outlet, redirect } from "react-router-dom";
 
 export default function Root() {

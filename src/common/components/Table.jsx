@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-export default function Table({ data, columns, loading, pageSize }) {
+export default function Table({ data, columns, loading, pageSize, renderFallback }) {
   const navigate = useNavigate();
   const table = useReactTable({
     data: data || Array(pageSize),
@@ -51,7 +51,7 @@ export default function Table({ data, columns, loading, pageSize }) {
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell align="center" key={cell.id}>
-                  {loading && <TableCellFallback {...cell} />}
+                  {loading && (renderFallback?.(cell) || <TableCellFallback />)}
                   {!loading &&
                     flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>

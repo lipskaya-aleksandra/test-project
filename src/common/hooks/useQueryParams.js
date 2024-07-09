@@ -1,26 +1,34 @@
 import { useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export default function useQueryParams(defaults) {
-  const mappedDefaults = {};
-  for (const [key, value] of Object.entries(defaults)) {
-    mappedDefaults[key] = value || [];
+function mapDefaults(params) {
+  const defaults = {};
+  for (const [key, value] of Object.entries(params)) {
+    if (Array.isArray(value)) {
+      defaults[key] = value || [];
+    } else {
+      defaults[key] = value || "";
+    }
   }
-  const defaultParams = new URLSearchParams(mappedDefaults);
-  const [searchParams, setSearchParams] = useSearchParams(defaultParams);
+  return defaults;
+}
+
+export default function useQueryParams(defaults) {
+  const mappedDefaults = mapDefaults(defaults);
+  //const defaultParams = new URLSearchParams(mappedDefaults);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const getCurrentParams = useCallback(
     (getAll) => {
       const params = {};
-
-      for (const [key, value] of searchParams.entries()) {
+      for (const key of searchParams.keys()) {
+        const value = Array.isArray(defaults[key])
+          ? searchParams.getAll(key)
+          : searchParams.get(key);
         if ((!defaults || (defaults && key in defaults) || getAll) && value) {
           params[key] = value;
-
-          console.log({ value, getAll: searchParams.getAll(key) });
         }
       }
-
       return { ...mappedDefaults, ...params };
     },
     [defaults, searchParams]
@@ -28,10 +36,10 @@ export default function useQueryParams(defaults) {
 
   const updateParams = useCallback(
     (newParams) => {
-      let validParams = {};
+      const validParams = {};
       for (const [key, value] of Object.entries(newParams)) {
         if (key in defaults) {
-          validParams[key] = value || [];
+          validParams[key] = value || mappedDefaults[key];
         }
       }
 

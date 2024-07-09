@@ -1,6 +1,6 @@
 import { Await, useLoaderData, Link, json, defer } from "react-router-dom";
 import { Suspense } from "react";
-import { TablePagination, Alert } from "@mui/material";
+import { TablePagination, Alert, Skeleton } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import Table from "../common/components/Table.jsx";
@@ -9,7 +9,8 @@ import { userApi } from "./userApiSlice";
 import { usePagination } from "../common/hooks/usePagination.js";
 import FilterWidget from "../common/components/filter/FilterWidget.jsx";
 import Select from "../common/components/filter/Select.jsx";
-import FilterResults from "../common/components/filter/FilterResults.jsx";
+//import FilterResults from "../common/components/filter/FilterResults.jsx";
+import useQueryParams from "../common/hooks/useQueryParams.js";
 
 const columnHelper = createColumnHelper();
 
@@ -50,6 +51,21 @@ const columns = [
 export default function UsersPage() {
   const [pageParams, setPageParams] = usePagination();
   const { users } = useLoaderData();
+  const defaultFilter = { badge: [] };
+  const [searchParams, setSearchParams] = useQueryParams(defaultFilter);
+  const filter = "badge";
+  const onSelect = (newOptions) => {
+    setSearchParams({
+      [filter]: [...newOptions],
+    });
+  }
+  const renderAvatarFallback = (cell) => {
+    if (cell.column.id === "profile_image") {
+      return <Skeleton variant="circular" width={40} height={40} />;
+    }
+
+    return null;
+  };
   return (
     <>
       <FilterWidget>
@@ -57,8 +73,8 @@ export default function UsersPage() {
           label={"Badge"}
           options={["bronze", "silver", "gold"]}
           placeholder={"Choose badge"}
-          filter="badge"
-          defaultFilter={{ badge: null }}
+          onSelect={onSelect}
+          selectedOptions={searchParams["badge"]}
         />
         {/* <FilterResults defaultFilters={{ badge: null }} /> */}
       </FilterWidget>
@@ -68,6 +84,7 @@ export default function UsersPage() {
             columns={columns}
             pageSize={pageParams.perPage}
             loading={true}
+            renderFallback={renderAvatarFallback}
           />
         }
       >

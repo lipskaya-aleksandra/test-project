@@ -10,7 +10,6 @@ import {
   Button,
 } from "@mui/material";
 import { LocationOn, Link as LinkIcon, Language } from "@mui/icons-material";
-import { usePagination } from "../common/hooks/usePagination";
 import { useNavigate } from "react-router-dom";
 
 export default function UserCard({ user, loading }) {
@@ -72,7 +71,7 @@ export default function UserCard({ user, loading }) {
                 <Link>{user.link}</Link>
               </>
             ) : (
-              <Typography>"-"</Typography>
+              <Typography>-</Typography>
             )}
           </Stack>
           <Stack alignItems="center" direction="row" gap={2}>

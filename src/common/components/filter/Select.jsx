@@ -1,8 +1,8 @@
 import { CheckBox as CheckBoxIcon } from "@mui/icons-material";
 import { CheckBoxOutlineBlank } from "@mui/icons-material";
 import { Autocomplete, Checkbox, TextField } from "@mui/material";
-//import { useSearchParams } from "react-router-dom";
-import useQueryParams from "../../hooks/useQueryParams";
+//import { useEffect } from "react";
+//import { useState } from "react";
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -11,12 +11,13 @@ export default function Select({
   options,
   label,
   placeholder,
-  filter,
-  defaultFilter,
+  onSelect,
+  selectedOptions
 }) {
-  const [searchParams, setSearchParams] = useQueryParams(defaultFilter);
-
-  //   console.log(searchParams);
+  //const [selectedOptions, setSelectedOptions] = useState([]);
+  // useEffect(()=>{
+  //   onSelect(filter, selectedOptions);
+  // }, [selectedOptions, filter, onSelect]);
   return (
     <Autocomplete
       multiple
@@ -31,16 +32,13 @@ export default function Select({
               icon={icon}
               checkedIcon={checkedIcon}
               style={{ marginRight: 8 }}
+              //defaultChecked={selectedOptions.includes(option)}
               checked={selected}
-              onChange={(e, checked) => {
-                if (checked) {
-                  setSearchParams({
-                    [filter]: [...searchParams[filter], option],
-                  });
+              onChange={(e) => {
+                if (e.target.checked) {
+                  onSelect([...selectedOptions, option]);
                 } else {
-                  setSearchParams({
-                    [filter]: searchParams[filter].filter((o) => o !== option),
-                  });
+                  onSelect(selectedOptions.filter(o => o !== option));
                 }
               }}
             />

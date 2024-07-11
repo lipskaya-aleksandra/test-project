@@ -1,14 +1,14 @@
-import { useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 function mapDefaults(params) {
   const defaults = {};
   for (const [key, value] of Object.entries(params)) {
-    if (Array.isArray(value)) {
-      defaults[key] = value || [];
-    } else {
-      defaults[key] = value || "";
-    }
+    // if (Array.isArray(value)) {
+    defaults[key] = value || [];
+    // } else {
+    //   defaults[key] = value || '';
+    // }
   }
   return defaults;
 }
@@ -31,7 +31,7 @@ export default function useQueryParams(defaults) {
       }
       return { ...mappedDefaults, ...params };
     },
-    [defaults, searchParams]
+    [defaults, searchParams],
   );
 
   const updateParams = useCallback(
@@ -42,10 +42,12 @@ export default function useQueryParams(defaults) {
           validParams[key] = value || mappedDefaults[key];
         }
       }
-
-      setSearchParams({ ...getCurrentParams(true), ...validParams });
+      setSearchParams({
+        ...getCurrentParams(true),
+        ...validParams,
+      });
     },
-    [getCurrentParams, setSearchParams, defaults]
+    [getCurrentParams, setSearchParams, defaults],
   );
 
   return [{ ...getCurrentParams(false) }, updateParams];

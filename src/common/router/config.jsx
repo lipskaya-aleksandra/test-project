@@ -4,7 +4,7 @@ import Root, { rootLoader } from "../components/Root";
 import UsersPage, { usersLoader } from "../../users/UsersPage";
 import PostsPage, { postsLoader } from "../../posts/PostsPage";
 import UserDetailPage, { userDetailLoader } from "../../users/UserDetailPage";
-import DefaultPageRedirect from "../components/DefaultPageRedirect";
+import CurrentPageRedirect from "../components/CurrentPageRedirect";
 
 const router = createBrowserRouter([
   {
@@ -19,9 +19,9 @@ const router = createBrowserRouter([
             index: true,
             loader: usersLoader,
             element: (
-              <DefaultPageRedirect path="users">
+              <CurrentPageRedirect path="users">
                 <UsersPage />
-              </DefaultPageRedirect>
+              </CurrentPageRedirect>
             ),
           },
           {
@@ -35,9 +35,9 @@ const router = createBrowserRouter([
         path: "posts",
         loader: postsLoader,
         element: (
-          <DefaultPageRedirect path="posts">
+          <CurrentPageRedirect path="posts">
             <PostsPage />
-          </DefaultPageRedirect>
+          </CurrentPageRedirect>
         ),
       },
     ],

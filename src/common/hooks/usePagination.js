@@ -1,13 +1,9 @@
 import { useCallback } from "react";
-//import { useSearchParams } from "react-router-dom";
 import useQueryParams from "./useQueryParams";
 
-const defaultValues = { page: 1, perPage: 10 };
+export const defaultValues = { page: 1, perPage: 10 };
 
 export function usePagination(defaults = defaultValues) {
-  // const defaultParams = new URLSearchParams(defaults)
-  // const [searchParams, setSearchParams] = useSearchParams(defaultParams);
-
   const [searchParams, setSearchParams] = useQueryParams(defaults);
 
   const getCurrentParams = useCallback(() => {

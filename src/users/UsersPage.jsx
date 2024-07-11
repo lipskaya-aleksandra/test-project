@@ -1,48 +1,49 @@
-import { Await, useLoaderData, Link, json, defer } from "react-router-dom";
-import { Suspense } from "react";
-import { TablePagination, Alert, Skeleton } from "@mui/material";
-import { createColumnHelper } from "@tanstack/react-table";
+import { Await, useLoaderData, Link, json, defer } from 'react-router-dom';
+import { Suspense } from 'react';
+import { TablePagination, Alert, Skeleton } from '@mui/material';
+import { createColumnHelper } from '@tanstack/react-table';
 
-import Table from "../common/components/Table.jsx";
-import store, { injectReducer } from "../common/store/config";
-import { userApi } from "./userApiSlice";
-import { usePagination } from "../common/hooks/usePagination.js";
-import FilterWidget from "../common/components/filter/FilterWidget.jsx";
-import Select from "../common/components/filter/Select.jsx";
+import Table from '../common/components/Table.jsx';
+import store, { injectReducer } from '../common/store/config';
+import { userApi } from './userApiSlice';
+import { usePagination } from '../common/hooks/usePagination.js';
+import FilterWidget from '../common/components/filter/FilterWidget.jsx';
+import Select from '../common/components/filter/MultiSelect.jsx';
 //import FilterResults from "../common/components/filter/FilterResults.jsx";
-import useQueryParams from "../common/hooks/useQueryParams.js";
+import useQueryParams from '../common/hooks/useQueryParams.js';
+import UserFilters from './UserFilters.jsx';
 
 const columnHelper = createColumnHelper();
 
 const columns = [
-  columnHelper.accessor("user_id", {
+  columnHelper.accessor('user_id', {
     cell: (info) => info.getValue(),
     header: () => <span>id</span>,
   }),
-  columnHelper.accessor("display_name", {
+  columnHelper.accessor('display_name', {
     cell: (info) => (
       <Link to={`/users/${info.row.original.user_id}`}>{info.getValue()}</Link>
     ),
 
     header: () => <span>username</span>,
   }),
-  columnHelper.accessor("age", {
-    header: () => "age",
+  columnHelper.accessor('age', {
+    header: () => 'age',
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("creation_date", {
+  columnHelper.accessor('creation_date', {
     header: () => <span>created</span>,
-    cell: (info) => info.getValue(),
+    cell: (info) => new Date(info.getValue()).toUTCString(),
   }),
-  columnHelper.accessor("type", {
+  columnHelper.accessor('type', {
     header: () => <span>type</span>,
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("last_access_date", {
+  columnHelper.accessor('last_access_date', {
     header: () => <span>last online</span>,
-    cell: (info) => info.getValue(),
+    cell: (info) => new Date(info.getValue()).toUTCString(),
   }),
-  columnHelper.accessor("location", {
+  columnHelper.accessor('location', {
     header: () => <span>location</span>,
     cell: (info) => info.getValue(),
   }),
@@ -51,16 +52,17 @@ const columns = [
 export default function UsersPage() {
   const [pageParams, setPageParams] = usePagination();
   const { users } = useLoaderData();
-  const defaultFilter = { badge: [] };
-  const [searchParams, setSearchParams] = useQueryParams(defaultFilter);
-  const filter = "badge";
-  const onSelect = (newOptions) => {
-    setSearchParams({
-      [filter]: [...newOptions],
-    });
-  }
+  // const defaultFilter = { badge: [] };
+  // const [searchParams, setSearchParams] = useQueryParams(defaultFilter);
+  // const filter = 'badge';
+  // const onSelect = (newOptions) => {
+  //   console.log(newOptions);
+  //   setSearchParams({
+  //     [filter]: [...newOptions],
+  //   });
+  // };
   const renderAvatarFallback = (cell) => {
-    if (cell.column.id === "profile_image") {
+    if (cell.column.id === 'profile_image') {
       return <Skeleton variant="circular" width={40} height={40} />;
     }
 
@@ -68,16 +70,17 @@ export default function UsersPage() {
   };
   return (
     <>
-      <FilterWidget>
+      {/* <FilterWidget>
         <Select
-          label={"Badge"}
-          options={["bronze", "silver", "gold"]}
-          placeholder={"Choose badge"}
+          label={'Badge'}
+          options={['bronze', 'silver', 'gold']}
+          placeholder={'Choose badge'}
           onSelect={onSelect}
-          selectedOptions={searchParams["badge"]}
+          selectedOptions={searchParams['badge']}
         />
-        {/* <FilterResults defaultFilters={{ badge: null }} /> */}
-      </FilterWidget>
+        <FilterResults defaultFilters={{ badge: null }} />
+      </FilterWidget> */}
+      <UserFilters />
       <Suspense
         fallback={
           <Table
@@ -117,8 +120,8 @@ export async function usersLoader({ request }) {
   try {
     injectReducer(userApi.reducerPath, userApi.reducer);
     const searchParams = new URL(request.url).searchParams;
-    const page = searchParams.get("page");
-    const perPage = searchParams.get("perPage");
+    const page = searchParams.get('page');
+    const perPage = searchParams.get('perPage');
     const response = store
       .dispatch(userApi.endpoints.getUsers.initiate({ page, perPage }))
       .unwrap();
@@ -127,8 +130,8 @@ export async function usersLoader({ request }) {
   } catch (e) {
     console.log(e);
     throw json(
-      { message: "Error occured while fetching users" },
-      { status: e.status }
+      { message: 'Error occured while fetching users' },
+      { status: e.status },
     );
   }
 }

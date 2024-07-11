@@ -7,9 +7,8 @@ export default function FilterResults({ defaultFilters }) {
   const [searchParams, setSearchParams] = useQueryParams(defaultFilters);
   const filters = Object.entries(searchParams).map(([key, value]) => ({
     label: key,
-    values: [...value],
+    values: Array.isArray(value) ? [...value] : [value],
   }));
-  console.log(filters);
   const onClearAllFilters = () => {
     setSearchParams({});
   };

@@ -5,24 +5,28 @@ import {
   TableRow,
   TableCell,
   TableBody,
-} from "@mui/material";
-import TableCellFallback from "./TableCellFallback";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import TableCellFallback from './TableCellFallback';
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 
-export default function Table({ data, columns, loading, pageSize, renderFallback }) {
-  const navigate = useNavigate();
+export default function Table({
+  data,
+  columns,
+  loading,
+  pageSize,
+  renderFallback,
+}) {
   const table = useReactTable({
     data: data || Array(pageSize),
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <TableContainer style={{ width: "100vw" }}>
+    <TableContainer style={{ width: '100vw' }}>
       <MUITable>
         <TableHead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -32,8 +36,9 @@ export default function Table({ data, columns, loading, pageSize, renderFallback
                   {header.isPlaceholder &&
                     flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
+                  {!header.isPlaceholder && header.column.id}
                 </TableCell>
               ))}
             </TableRow>
@@ -43,11 +48,8 @@ export default function Table({ data, columns, loading, pageSize, renderFallback
           {table.getRowModel().rows.map((row) => (
             <TableRow
               key={row.id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               hover={true}
-              onClick={() => {
-                navigate(`/users/${row.id}`);
-              }}
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell align="center" key={cell.id}>

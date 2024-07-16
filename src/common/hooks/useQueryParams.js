@@ -14,30 +14,25 @@ const isArrayOfStrings = (source) =>
   (source.filter((v) => typeof v === 'string') || source.length === 0);
 
 export default function useQueryParams(defaults) {
-  console.assert(
-    Object.values(defaults).filter(
-      (v) => typeof v === 'string' || isArrayOfStrings(v),
-    ).length === Object.values(defaults).length,
-    { defaults, message: '4itaj doku' },
-  );
-
   const mappedDefaults = mapDefaults(defaults);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const getCurrentParams = useCallback(
     (includesAll) => {
       const params = {};
+
       for (const key of searchParams.keys()) {
+        if (!(key in defaults) && !includesAll) {
+          continue;
+        }
+
         const value = Array.isArray(defaults[key])
           ? searchParams.getAll(key)
           : searchParams.get(key);
-        if (
-          (!defaults || (defaults && key in defaults) || includesAll) &&
-          value
-        ) {
-          params[key] = value;
-        }
+
+        params[key] = value;
       }
+
       return { ...mappedDefaults, ...params };
     },
     [defaults, searchParams],
@@ -46,11 +41,13 @@ export default function useQueryParams(defaults) {
   const updateParams = useCallback(
     (newParams) => {
       const updatedParams = {};
+
       for (const [key, value] of Object.entries(newParams)) {
         if (key in defaults) {
           updatedParams[key] = value || mappedDefaults[key];
         }
       }
+
       setSearchParams({
         ...getCurrentParams(true),
         ...updatedParams,
@@ -59,5 +56,5 @@ export default function useQueryParams(defaults) {
     [getCurrentParams, setSearchParams, defaults],
   );
 
-  return [{ ...getCurrentParams(false) }, updateParams];
+  return [getCurrentParams(false), updateParams];
 }

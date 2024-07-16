@@ -7,12 +7,10 @@ export function usePagination(defaults = defaultValues) {
   const [searchParams, setSearchParams] = useQueryParams(defaults);
 
   const getCurrentParams = useCallback(() => {
-    const params = {};
-
-    params.page = parseInt(searchParams.page, 10);
-    params.perPage = parseInt(searchParams.perPage, 10);
-
-    return params;
+    return {
+      page: parseInt(searchParams.page, 10),
+      perPage: parseInt(searchParams.perPage, 10),
+    };
   }, [searchParams]);
 
   const updatePageParams = useCallback(

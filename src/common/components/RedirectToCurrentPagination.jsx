@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
-const CurrentPageRedirect = ({ children, path }) => {
+const RedirectToCurrentPagination = ({ children, path }) => {
   const [pageParams] = usePagination();
   const [searchParams] = useSearchParams();
   const searchParamsObj = Object.fromEntries(searchParams.entries());
@@ -20,4 +20,4 @@ const CurrentPageRedirect = ({ children, path }) => {
   return children;
 };
 
-export default CurrentPageRedirect;
+export default RedirectToCurrentPagination;

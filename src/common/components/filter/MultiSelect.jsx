@@ -25,10 +25,12 @@ export default function MultiSelect({
   placeholder,
   onSelect,
   renderOption,
+  selectedOptions,
   ...autocompleteProps
 }) {
   return (
     <Autocomplete
+      defaultValue={selectedOptions}
       multiple
       {...autocompleteProps}
       disableCloseOnSelect

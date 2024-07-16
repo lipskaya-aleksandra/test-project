@@ -30,18 +30,6 @@ export default function FilterResults({ defaultFilters }) {
                     setSearchParams({
                       [filter.label]: filter.values.filter((v) => v !== value),
                     });
-                    // let newParams = { ...searchParams };
-                    // if (filter.values.length === 1) {
-                    //   delete newParams[filter.label];
-                    //   setSearchParams(newParams);
-                    // } else {
-                    //   const index = filter.values.indexOf(value);
-                    //   if (index > -1) {
-                    //     filter.values.splice(index, 1);
-                    //   }
-                    //   newParams[filter] = filter.values;
-                    //   setSearchParams();
-                    // }
                   }}
                 />
               ))}

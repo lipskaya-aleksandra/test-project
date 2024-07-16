@@ -6,10 +6,11 @@ import { useEffect } from 'react';
 const CurrentPageRedirect = ({ children, path }) => {
   const [pageParams] = usePagination();
   const [searchParams] = useSearchParams();
+  const searchParamsObj = Object.fromEntries(searchParams.entries());
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!searchParams.size) {
+    if (!searchParamsObj.page || !searchParamsObj.perPage) {
       navigate(
         `/${path}?page=${pageParams.page}&perPage=${pageParams.perPage}`,
       );

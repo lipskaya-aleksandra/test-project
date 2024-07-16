@@ -34,7 +34,7 @@ export default function UserFilters() {
         selectedOptions={searchParams['badge']}
       />
       <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      {/* <FilterResults defaultFilters={defaultFilters} /> */}
+      <FilterResults defaultFilters={defaultFilters} />
     </FilterWidget>
   );
 }

@@ -1,7 +1,6 @@
-import { AppBar, Toolbar } from '@mui/material';
+import { AppBar, Link, Toolbar } from '@mui/material';
 import { Outlet, redirect, Link as RouterLink } from 'react-router-dom';
 import { defaultValues } from '../hooks/usePagination';
-import { Link } from 'react-router-dom';
 
 export default function Root() {
   const searchParams = new URLSearchParams(defaultValues);
@@ -10,10 +9,10 @@ export default function Root() {
       <AppBar style={{ width: '100vw', marginTop: 0 }} position="fixed">
         <Toolbar>
           <Link
-            style={{ color: 'white', marginRight: 12, marginLeft: 6 }}
+            sx={{ color: 'white', marginRight: 12, marginLeft: 6 }}
             variant="body2"
             color={'inherit'}
-            component={<RouterLink />}
+            component={RouterLink}
             to={'/users?' + searchParams.toString()}
           >
             Users
@@ -22,7 +21,7 @@ export default function Root() {
             style={{ color: 'white' }}
             variant="body2"
             color={'inherit'}
-            component={<RouterLink />}
+            component={RouterLink}
             to={'/posts?' + searchParams.toString()}
           >
             Posts

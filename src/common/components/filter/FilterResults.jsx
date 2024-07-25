@@ -1,16 +1,15 @@
 import { Delete } from '@mui/icons-material';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
-//import { useSearchParams } from "react-router-dom";
 import useQueryParams from '../../hooks/useQueryParams';
 
 export default function FilterResults({ defaultFilters }) {
-  const [searchParams, setSearchParams] = useQueryParams(defaultFilters);
-  const filters = Object.entries(searchParams).map(([key, value]) => ({
+  const { queryParams, setQueryParams } = useQueryParams(defaultFilters);
+  const filters = Object.entries(queryParams).map(([key, value]) => ({
     label: key,
     values: Array.isArray(value) ? [...value] : [value],
   }));
   const onClearAllFilters = () => {
-    setSearchParams(defaultFilters);
+    setQueryParams(defaultFilters);
   };
   return (
     <Box>
@@ -27,7 +26,7 @@ export default function FilterResults({ defaultFilters }) {
                   label={value}
                   variant="outlined"
                   onDelete={() => {
-                    setSearchParams({
+                    setQueryParams({
                       [filter.label]: filter.values.filter((v) => v !== value),
                     });
                   }}

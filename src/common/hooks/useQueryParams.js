@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -56,5 +57,5 @@ export default function useQueryParams(defaults) {
     [getCurrentParams, setSearchParams, defaults],
   );
 
-  return [getCurrentParams(false), updateParams];
+  return { queryParams: getCurrentParams(false), setQueryParams: updateParams };
 }

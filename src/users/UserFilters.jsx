@@ -9,16 +9,16 @@ import FilterResults from '../common/components/filter/FilterResults';
 
 export default function UserFilters() {
   const defaultFilters = { badge: [], search: '' };
-  const [searchParams, setSearchParams] = useQueryParams(defaultFilters);
+  const { queryParams, setQueryParams } = useQueryParams(defaultFilters);
   const [searchTerm, setSearchTerm] = useState(defaultFilters.search);
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 1000);
   useEffect(() => {
     if (debouncedSearchTerm.trim() === searchTerm.trim()) {
-      setSearchParams({ search: debouncedSearchTerm.trim() });
+      setQueryParams({ search: debouncedSearchTerm.trim() });
     }
   }, [debouncedSearchTerm, searchTerm]);
   const onSelect = (newOptions, filter) => {
-    setSearchParams({
+    setQueryParams({
       [filter]: [...newOptions],
     });
   };
@@ -31,7 +31,7 @@ export default function UserFilters() {
         onSelect={(newOptions) => {
           onSelect(newOptions, 'badge');
         }}
-        selectedOptions={searchParams['badge']}
+        selectedOptions={queryParams['badge']}
       />
       <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <FilterResults defaultFilters={defaultFilters} />

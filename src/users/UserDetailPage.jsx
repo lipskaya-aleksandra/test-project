@@ -1,9 +1,9 @@
-import { useLoaderData, json, defer, Await } from "react-router-dom";
-import { Suspense } from "react";
-import store, { injectReducer } from "../common/store/config";
-import { userApi } from "./userApiSlice";
-import { Alert } from "@mui/material";
-import UserCard from "./UserCard";
+import { useLoaderData, json, defer, Await } from 'react-router-dom';
+import { Suspense } from 'react';
+import store, { injectReducer } from '../common/store/config';
+import { userApi } from './userApiSlice';
+import { Alert } from '@mui/material';
+import UserCard from './UserCard';
 
 export default function UserDetailPage() {
   const { user } = useLoaderData();
@@ -15,7 +15,7 @@ export default function UserDetailPage() {
           <Alert severity="error">Could not load user details</Alert>
         }
       >
-        {(resolvedUser) => <UserCard user={resolvedUser.items[0]} />}
+        {(resolvedUser) => <UserCard user={resolvedUser} />}
       </Await>
     </Suspense>
   );
@@ -33,8 +33,8 @@ export function userDetailLoader({ params }) {
   } catch (e) {
     console.log(e);
     throw json(
-      { message: "Error occured while fetching user details" },
-      { status: e.status }
+      { message: 'Error occured while fetching user details' },
+      { status: e.status },
     );
   }
 }

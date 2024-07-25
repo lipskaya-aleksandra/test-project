@@ -34,5 +34,6 @@ export default function Root() {
 }
 
 export function rootLoader() {
-  return redirect('/users');
+  const searchParams = new URLSearchParams(defaultValues);
+  return redirect('/users?' + searchParams.toString());
 }

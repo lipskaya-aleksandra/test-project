@@ -5,6 +5,7 @@ import UsersPage, { usersLoader } from '../../users/UsersPage';
 import PostsPage, { postsLoader } from '../../posts/PostsPage';
 import UserDetailPage, { userDetailLoader } from '../../users/UserDetailPage';
 import RedirectToCurrentPagination from '../components/RedirectToCurrentPagination';
+import LoginPage from '../../users/LoginPage';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
   },
 ]);
 

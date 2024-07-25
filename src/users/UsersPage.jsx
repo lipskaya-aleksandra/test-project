@@ -3,64 +3,61 @@ import { Suspense } from 'react';
 import { TablePagination, Alert, Skeleton } from '@mui/material';
 import { createColumnHelper } from '@tanstack/react-table';
 
-import Table from '../common/components/Table.jsx';
+import Table from '../common/components/table/Table.jsx';
 import store, { injectReducer } from '../common/store/config';
-import { userApi } from './userApiSlice';
 import { usePagination } from '../common/hooks/usePagination.js';
-import FilterWidget from '../common/components/filter/FilterWidget.jsx';
-import Select from '../common/components/filter/MultiSelect.jsx';
-//import FilterResults from "../common/components/filter/FilterResults.jsx";
-import useQueryParams from '../common/hooks/useQueryParams.js';
 import UserFilters from './UserFilters.jsx';
+import EditCell from '../common/components/table/EditCell.jsx';
+import { useNavigate } from 'react-router-dom';
+import { useDeleteUserMutation, userApi } from './userApiSlice.js';
 
 const columnHelper = createColumnHelper();
 
 const columns = [
-  columnHelper.accessor('user_id', {
+  columnHelper.accessor('id', {
     cell: (info) => info.getValue(),
     header: () => <span>id</span>,
   }),
-  columnHelper.accessor('display_name', {
+  columnHelper.accessor('email', {
     cell: (info) => (
-      <Link to={`/users/${info.row.original.user_id}`}>{info.getValue()}</Link>
+      <Link to={`/users/${info.row.original.id}`}>{info.getValue()}</Link>
     ),
 
-    header: () => <span>username</span>,
+    header: () => <span>email</span>,
   }),
-  columnHelper.accessor('age', {
-    header: () => 'age',
+  columnHelper.accessor('firstName', {
+    header: () => 'first name',
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor('creation_date', {
-    header: () => <span>created</span>,
+  columnHelper.accessor('lastName', {
+    header: () => 'last name',
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor('createdAt', {
+    header: () => <span>creation date</span>,
     cell: (info) => new Date(info.getValue()).toUTCString(),
   }),
-  columnHelper.accessor('type', {
-    header: () => <span>type</span>,
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor('last_access_date', {
-    header: () => <span>last online</span>,
-    cell: (info) => new Date(info.getValue()).toUTCString(),
-  }),
-  columnHelper.accessor('location', {
-    header: () => <span>location</span>,
-    cell: (info) => info.getValue(),
+  columnHelper.display({
+    id: 'edit',
+    cell: (info) => {
+      const navigate = useNavigate();
+      const [deleteUser] = useDeleteUserMutation();
+      const id = info.row.getValue('id');
+      const onDelete = () => {
+        deleteUser({ id });
+      };
+      const onEdit = () => {
+        navigate(`/users/${id}`);
+      };
+      return <EditCell onDelete={onDelete} onEdit={onEdit} />;
+    },
   }),
 ];
 
 export default function UsersPage() {
-  const [pageParams, setPageParams] = usePagination();
+  const { pageParams, setPageParams } = usePagination();
+
   const { users } = useLoaderData();
-  // const defaultFilter = { badge: [] };
-  // const [searchParams, setSearchParams] = useQueryParams(defaultFilter);
-  // const filter = 'badge';
-  // const onSelect = (newOptions) => {
-  //   console.log(newOptions);
-  //   setSearchParams({
-  //     [filter]: [...newOptions],
-  //   });
-  // };
   const renderAvatarFallback = (cell) => {
     if (cell.column.id === 'profile_image') {
       return <Skeleton variant="circular" width={40} height={40} />;
@@ -68,18 +65,9 @@ export default function UsersPage() {
 
     return null;
   };
+
   return (
     <>
-      {/* <FilterWidget>
-        <Select
-          label={'Badge'}
-          options={['bronze', 'silver', 'gold']}
-          placeholder={'Choose badge'}
-          onSelect={onSelect}
-          selectedOptions={searchParams['badge']}
-        />
-        <FilterResults defaultFilters={{ badge: null }} />
-      </FilterWidget> */}
       <UserFilters />
       <Suspense
         fallback={
@@ -95,9 +83,7 @@ export default function UsersPage() {
           resolve={users}
           errorElement={<Alert severity="error">Could not load users</Alert>}
         >
-          {(resolvedUsers) => (
-            <Table data={resolvedUsers.items} columns={columns} />
-          )}
+          {(resolvedUsers) => <Table data={resolvedUsers} columns={columns} />}
         </Await>
       </Suspense>
       <TablePagination
@@ -122,7 +108,8 @@ export async function usersLoader({ request }) {
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get('page');
     const perPage = searchParams.get('perPage');
-    const response = store
+
+    const response = await store
       .dispatch(userApi.endpoints.getUsers.initiate({ page, perPage }))
       .unwrap();
 

@@ -12,7 +12,7 @@ const defaultRenderOption = (props, option, { selected }) => {
       <Checkbox
         icon={icon}
         checkedIcon={checkedIcon}
-        style={{ marginRight: 8 }}
+        sx={{ marginRight: 8 }}
         checked={selected}
       />
       {option}

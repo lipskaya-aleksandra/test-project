@@ -4,21 +4,24 @@ import useQueryParams from './useQueryParams';
 export const defaultValues = { page: '1', perPage: '10' };
 
 export function usePagination(defaults = defaultValues) {
-  const [searchParams, setSearchParams] = useQueryParams(defaults);
+  const { queryParams, setQueryParams } = useQueryParams(defaults);
 
   const getCurrentParams = useCallback(() => {
     return {
-      page: parseInt(searchParams.page, 10),
-      perPage: parseInt(searchParams.perPage, 10),
+      page: parseInt(queryParams.page, 10),
+      perPage: parseInt(queryParams.perPage, 10),
     };
-  }, [searchParams]);
+  }, [queryParams]);
 
   const updatePageParams = useCallback(
     (newParams) => {
-      setSearchParams({ ...getCurrentParams(), ...newParams });
+      setQueryParams({ ...getCurrentParams(), ...newParams });
     },
-    [getCurrentParams, setSearchParams],
+    [getCurrentParams, setQueryParams],
   );
 
-  return [getCurrentParams(), updatePageParams];
+  return {
+    pageParams: getCurrentParams(),
+    setPageParams: updatePageParams,
+  };
 }

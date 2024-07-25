@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const RedirectToCurrentPagination = ({ children, path }) => {
-  const [pageParams] = usePagination();
+  const { pageParams } = usePagination();
   const [searchParams] = useSearchParams();
   const searchParamsObj = Object.fromEntries(searchParams.entries());
   const navigate = useNavigate();

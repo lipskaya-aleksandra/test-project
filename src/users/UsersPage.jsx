@@ -10,6 +10,7 @@ import UserFilters from './UserFilters.jsx';
 import EditCell from '../common/components/table/EditCell.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useDeleteUserMutation, userApi } from './userApiSlice.js';
+import { useQuery } from '@tanstack/react-query';
 
 const columnHelper = createColumnHelper();
 
@@ -56,20 +57,29 @@ const columns = [
 
 export default function UsersPage() {
   const { pageParams, setPageParams } = usePagination();
+  const { data } = useQuery({
+    queryKey: 'users',
+    queryFn: async () => {
+      const response = await fetch(
+        `http://localhost:3000/users?page=${pageParams.page}&perPage=${pageParams.perPage}`,
+        { mode: 'cors' },
+      );
+      return await response.json();
+    },
+  });
+  // const { users } = useLoaderData();
+  // const renderAvatarFallback = (cell) => {
+  //   if (cell.column.id === 'profile_image') {
+  //     return <Skeleton variant="circular" width={40} height={40} />;
+  //   }
 
-  const { users } = useLoaderData();
-  const renderAvatarFallback = (cell) => {
-    if (cell.column.id === 'profile_image') {
-      return <Skeleton variant="circular" width={40} height={40} />;
-    }
-
-    return null;
-  };
+  //   return null;
+  // };
 
   return (
     <>
       <UserFilters />
-      <Suspense
+      {/* <Suspense
         fallback={
           <Table
             columns={columns}
@@ -85,7 +95,9 @@ export default function UsersPage() {
         >
           {(resolvedUsers) => <Table data={resolvedUsers} columns={columns} />}
         </Await>
-      </Suspense>
+        
+      </Suspense> */}
+      <Table data={data} columns={columns} />
       <TablePagination
         component="div"
         count={100}

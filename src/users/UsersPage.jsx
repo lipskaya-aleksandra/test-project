@@ -1,13 +1,13 @@
 import { Await, useLoaderData, Link, json, defer } from 'react-router-dom';
 import { Suspense } from 'react';
-import { TablePagination, Alert, Skeleton } from '@mui/material';
+import { TablePagination, Alert, Skeleton, Container } from '@mui/material';
 import { createColumnHelper } from '@tanstack/react-table';
 
 import Table from '../common/components/table/Table.jsx';
 import store, { injectReducer } from '../common/store/config';
 import { usePagination } from '../common/hooks/usePagination.js';
 import UserFilters from './UserFilters.jsx';
-import EditCell from '../common/components/table/EditCell.jsx';
+import EditActions from '../common/components/EditActions.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useDeleteUserMutation, userApi } from './userApiSlice.js';
 import {
@@ -16,6 +16,11 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import UsersTable from './UsersTable.jsx';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useState } from 'react';
+import QueryWrapper from '../common/components/QueryWrapper.jsx';
+import { useDeleteUser } from './api/useDeleteUser.js';
+import EditUserCell from './EditUserCell.jsx';
 
 const columnHelper = createColumnHelper();
 
@@ -45,75 +50,53 @@ const columns = [
   }),
   columnHelper.display({
     id: 'edit',
-    cell: (info) => {
-      const navigate = useNavigate();
-      const [deleteUser] = useDeleteUserMutation();
-      const id = info.row.getValue('id');
-      const onDelete = () => {
-        deleteUser({ id });
-      };
-      const onEdit = () => {
-        navigate(`/users/${id}`);
-      };
-      return <EditCell onDelete={onDelete} onEdit={onEdit} />;
-    },
+    cell: (info) => <EditUserCell cell={info} />,
   }),
 ];
-
-const queryClient = new QueryClient();
 
 export default function UsersPage() {
   const { pageParams, setPageParams } = usePagination();
 
-  // const { users } = useLoaderData();
-  // const renderAvatarFallback = (cell) => {
-  //   if (cell.column.id === 'profile_image') {
-  //     return <Skeleton variant="circular" width={40} height={40} />;
-  //   }
-
-  //   return null;
-  // };
-
   return (
-    <>
+    <Container
+      sx={{
+        width: '100vw',
+        padding: 4,
+        mt: 6,
+      }}
+    >
       <UserFilters />
-      {/* <Suspense
-        fallback={
+
+      <QueryWrapper
+        suspenseFallback={
           <Table
             columns={columns}
             pageSize={pageParams.perPage}
             loading={true}
-            renderFallback={renderAvatarFallback}
           />
         }
       >
-        <Await
-          resolve={users}
-          errorElement={<Alert severity="error">Could not load users</Alert>}
-        >
-          {(resolvedUsers) => <Table data={resolvedUsers} columns={columns} />}
-        </Await>
-        
-      </Suspense> */}
-      <QueryClientProvider client={queryClient}>
-        {/* <Suspense
-          fallback={
-            <Table
-              columns={columns}
-              pageSize={pageParams.perPage}
-              loading={true}
-              //renderFallback={renderAvatarFallback}
-            />
-          }
-        > */}
-        <UsersTable />
-        {/* </Suspense> */}
-      </QueryClientProvider>
+        <UsersTable columns={columns} />
+      </QueryWrapper>
 
       <TablePagination
         component="div"
         count={100}
         page={pageParams.page - 1}
+        slotProps={{
+          actions: {
+            previousButton: {
+              sx: {
+                ':focus': { outline: 'none' },
+              },
+            },
+            nextButton: {
+              sx: {
+                ':focus': { outline: 'none' },
+              },
+            },
+          },
+        }}
         onPageChange={(e, value) => {
           setPageParams({ page: value + 1 });
         }}
@@ -122,27 +105,6 @@ export default function UsersPage() {
           setPageParams({ perPage: e.target.value, page: 1 });
         }}
       />
-    </>
+    </Container>
   );
-}
-
-export async function usersLoader({ request }) {
-  try {
-    injectReducer(userApi.reducerPath, userApi.reducer);
-    const searchParams = new URL(request.url).searchParams;
-    const page = searchParams.get('page');
-    const perPage = searchParams.get('perPage');
-
-    const response = await store
-      .dispatch(userApi.endpoints.getUsers.initiate({ page, perPage }))
-      .unwrap();
-
-    return defer({ users: response });
-  } catch (e) {
-    console.log(e);
-    throw json(
-      { message: 'Error occured while fetching users' },
-      { status: e.status },
-    );
-  }
 }

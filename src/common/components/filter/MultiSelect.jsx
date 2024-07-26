@@ -30,6 +30,7 @@ export default function MultiSelect({
 }) {
   return (
     <Autocomplete
+      sx={{ mt: 1, mb: 1 }}
       defaultValue={selectedOptions}
       multiple
       {...autocompleteProps}

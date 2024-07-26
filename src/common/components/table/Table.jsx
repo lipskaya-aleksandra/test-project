@@ -26,7 +26,7 @@ export default function Table({
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <TableContainer style={{ width: '100vw' }}>
+    <TableContainer sx={{ width: '95vw' }}>
       <MUITable>
         <TableHead>
           {table.getHeaderGroups().map((headerGroup) => (

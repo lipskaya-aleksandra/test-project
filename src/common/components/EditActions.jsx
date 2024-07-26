@@ -9,13 +9,13 @@ import { Box, Checkbox, IconButton } from '@mui/material';
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function EditCell({ onDelete, onEdit }) {
+export default function EditActions({ onDelete, onEdit }) {
   return (
     <Box>
-      <IconButton onClick={onEdit}>
+      <IconButton sx={{ ':focus': { outline: 'none' } }} onClick={onEdit}>
         <EditIcon />
       </IconButton>
-      <IconButton onClick={onDelete}>
+      <IconButton sx={{ ':focus': { outline: 'none' } }} onClick={onDelete}>
         <DeleteIcon />
       </IconButton>
       <Checkbox icon={icon} checkedIcon={checkedIcon} />

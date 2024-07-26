@@ -16,7 +16,7 @@ const isArrayOfStrings = (source) =>
 
 export default function useQueryParams(defaults) {
   const mappedDefaults = mapDefaults(defaults);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams(mappedDefaults);
 
   const getCurrentParams = useCallback(
     (includesAll) => {
@@ -57,5 +57,11 @@ export default function useQueryParams(defaults) {
     [getCurrentParams, setSearchParams, defaults],
   );
 
-  return { queryParams: getCurrentParams(false), setQueryParams: updateParams };
+  return useMemo(
+    () => ({
+      queryParams: getCurrentParams(false),
+      setQueryParams: updateParams,
+    }),
+    [getCurrentParams, updateParams],
+  );
 }

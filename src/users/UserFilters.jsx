@@ -12,11 +12,15 @@ export default function UserFilters() {
   const { queryParams, setQueryParams } = useQueryParams(defaultFilters);
   const [searchTerm, setSearchTerm] = useState(defaultFilters.search);
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 1000);
-  useEffect(() => {
-    if (debouncedSearchTerm.trim() === searchTerm.trim()) {
-      setQueryParams({ search: debouncedSearchTerm.trim() });
-    }
-  }, [debouncedSearchTerm, searchTerm]);
+  // useEffect(() => {
+  //   if (
+  //     debouncedSearchTerm.trim() === searchTerm.trim() /* &&
+  //     searchTerm.length > 0 */
+  //   ) {
+  //     console.log(123);
+  //     setQueryParams({ search: debouncedSearchTerm.trim() });
+  //   }
+  // }, [debouncedSearchTerm, searchTerm]);
   const onSelect = (newOptions, filter) => {
     setQueryParams({
       [filter]: [...newOptions],

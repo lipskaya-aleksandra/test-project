@@ -1,12 +1,22 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
-const queryClient = new QueryClient({});
-
-export default function QueryWrapper({ suspenseFallback, children }) {
+export default function QueryWrapper({
+  errorFallback,
+  suspenseFallback,
+  children,
+}) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Suspense fallback={suspenseFallback}>{children}</Suspense>
-    </QueryClientProvider>
+    <QueryErrorResetBoundary>
+      {({ reset }) => {
+        return (
+          <ErrorBoundary onReset={reset} fallbackRender={errorFallback}>
+            <Suspense fallback={suspenseFallback}>{children}</Suspense>
+          </ErrorBoundary>
+        );
+      }}
+    </QueryErrorResetBoundary>
+    // <Suspense fallback={suspenseFallback}>{children}</Suspense>
   );
 }

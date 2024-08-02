@@ -14,50 +14,57 @@ import { useState } from 'react';
 import EditActions from '../common/components/EditActions';
 import { Delete } from '@mui/icons-material';
 import { Close } from '@mui/icons-material';
+import { useSnackbar } from 'notistack';
 
 export default function EditUserCell({ cell }) {
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const id = cell.row.getValue('id');
+
   const onSuccess = () => {
-    setSnackbarOpen(true);
+    enqueueSnackbar(`User with id ${id} deleted succesfully.`, {
+      anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'center',
+      },
+      content: (key, message) => (
+        <Alert
+          onClose={() => {
+            closeSnackbar(key);
+          }}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          {message}
+        </Alert>
+      ),
+    });
   };
+
   const deleteMutation = useDeleteUser({ onSuccess });
+
   const onDeleteInitiated = () => {
     setDialogOpen(true);
   };
+
   const onDeleteConfirmed = () => {
     setDialogOpen(false);
     deleteMutation.mutateAsync(id);
   };
+
   const onEdit = () => {
-    navigate(`/users/${id}`);
+    navigate(`/users/edit/${id}`);
   };
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
+
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
+
   return (
     <>
       <EditActions onDelete={onDeleteInitiated} onEdit={onEdit} />
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={snackbarOpen}
-        autoHideDuration={5000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity="success"
-          sx={{ width: '100%' }}
-        >
-          {`User with id ${id} deleted succesfully.`}
-        </Alert>
-      </Snackbar>
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle>
           Are you sure you want to delete a user with id {id}?

@@ -1,11 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import Root, { rootLoader } from '../components/Root';
-import UsersPage from '../../users/UsersPage';
+import UsersPage from '../../users/pages/UsersPage';
 import PostsPage, { postsLoader } from '../../posts/PostsPage';
-import UserDetailPage, { userDetailLoader } from '../../users/UserDetailPage';
+import UserDetailPage from '../../users/pages/UserDetailPage';
 import RedirectToCurrentPagination from '../components/RedirectToCurrentPagination';
-import LoginPage from '../../users/LoginPage';
+import LoginPage from '../../users/pages/LoginPage';
+import CreateUserPage from '../../users/pages/CreateUserPage';
+import EditUserPage from '../../users/pages/EditUserPage';
 
 const router = createBrowserRouter([
   {
@@ -18,17 +20,19 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            //loader: usersLoader,
-            element: (
-              //<RedirectToCurrentPagination path="users">
-              <UsersPage />
-              //</RedirectToCurrentPagination>
-            ),
+            element: <UsersPage />,
           },
           {
             path: ':userId',
-            loader: userDetailLoader,
             element: <UserDetailPage />,
+          },
+          {
+            path: 'edit/:userId',
+            element: <EditUserPage />,
+          },
+          {
+            path: 'create',
+            element: <CreateUserPage />,
           },
         ],
       },

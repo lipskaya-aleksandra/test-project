@@ -5,7 +5,6 @@ export default function SearchInput({ searchTerm, setSearchTerm }) {
   return (
     <TextField
       sx={{ mt: 1, mb: 1 }}
-      size="small"
       variant="outlined"
       value={searchTerm}
       onChange={(e) => {

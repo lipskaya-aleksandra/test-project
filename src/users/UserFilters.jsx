@@ -6,6 +6,7 @@ import useQueryParams from '../common/hooks/useQueryParams';
 import useDebouncedValue from '../common/hooks/useDebouncedValue';
 import { useEffect } from 'react';
 import FilterResults from '../common/components/filter/FilterResults';
+import { Stack } from '@mui/material';
 
 export default function UserFilters() {
   const defaultFilters = { badge: [], search: '' };
@@ -28,16 +29,19 @@ export default function UserFilters() {
   };
   return (
     <FilterWidget>
-      <MultiSelect
-        label={'Badge'}
-        options={['bronze', 'silver', 'gold']}
-        placeholder={'Choose badge'}
-        onSelect={(newOptions) => {
-          onSelect(newOptions, 'badge');
-        }}
-        selectedOptions={queryParams['badge']}
-      />
-      <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Stack direction={{ xs: 'column', sm: 'row' }} gap={1}>
+        <MultiSelect
+          label={'Badge'}
+          options={['bronze', 'silver', 'gold']}
+          placeholder={'Choose badge'}
+          onSelect={(newOptions) => {
+            onSelect(newOptions, 'badge');
+          }}
+          selectedOptions={queryParams['badge']}
+        />
+        <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      </Stack>
+
       <FilterResults defaultFilters={defaultFilters} />
     </FilterWidget>
   );

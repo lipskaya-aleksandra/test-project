@@ -18,7 +18,7 @@ export default function EditActions({ onDelete, onEdit }) {
       <IconButton sx={{ ':focus': { outline: 'none' } }} onClick={onDelete}>
         <DeleteIcon />
       </IconButton>
-      <Checkbox icon={icon} checkedIcon={checkedIcon} />
+      {/* <Checkbox icon={icon} checkedIcon={checkedIcon} /> */}
     </Box>
   );
 }

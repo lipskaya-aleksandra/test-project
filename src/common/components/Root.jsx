@@ -1,28 +1,46 @@
 import { AppBar, Link, Toolbar } from '@mui/material';
-import { Outlet, redirect, Link as RouterLink } from 'react-router-dom';
+import { Outlet, redirect, NavLink } from 'react-router-dom';
 import { defaultValues } from '../hooks/usePagination';
+import { blue } from '@mui/material/colors';
+
+const linkStyle = {
+  color: 'white',
+  textDecoration: 'none',
+  fontSize: 16,
+  '&:hover': {
+    color: blue[200],
+  },
+  padding: '6px 12px',
+  borderRadius: 2,
+  marginRight: 6,
+  marginLeft: 6,
+
+  '&.active': {
+    backgroundColor: blue[400],
+  },
+};
 
 export default function Root() {
   const searchParams = new URLSearchParams(defaultValues);
   return (
     <>
-      <AppBar style={{ width: '100vw', marginTop: 0 }} position="fixed">
+      <AppBar sx={{ width: '100%', mb: 3 }} position="sticky">
         <Toolbar>
           <Link
-            sx={{ color: 'white', marginRight: 12, marginLeft: 6 }}
-            variant="body2"
-            color={'inherit'}
-            component={RouterLink}
+            className={({ isActive }) => (isActive ? 'active' : '')}
+            component={NavLink}
             to={'/users?' + searchParams.toString()}
+            end
+            sx={linkStyle}
           >
             Users
           </Link>
           <Link
-            style={{ color: 'white' }}
-            variant="body2"
-            color={'inherit'}
-            component={RouterLink}
+            className={({ isActive }) => (isActive ? 'active' : '')}
+            component={NavLink}
             to={'/posts?' + searchParams.toString()}
+            end
+            sx={linkStyle}
           >
             Posts
           </Link>

@@ -30,7 +30,7 @@ export default function MultiSelect({
 }) {
   return (
     <Autocomplete
-      sx={{ mt: 1, mb: 1 }}
+      sx={{ mt: 1, mb: 1, minWidth: '300px' }}
       defaultValue={selectedOptions}
       multiple
       {...autocompleteProps}
@@ -39,7 +39,6 @@ export default function MultiSelect({
       getOptionLabel={(option) => option}
       renderTags={() => null}
       renderOption={renderOption || defaultRenderOption}
-      style={{ width: 500 }}
       renderInput={(params) => (
         <TextField {...params} label={label} placeholder={placeholder} />
       )}

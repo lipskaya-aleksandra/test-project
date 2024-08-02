@@ -1,13 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { baseServerUrl } from '../../constants/server';
 import useApiClient from '../../common/hooks/useApiClient';
 
-export function useDeleteUser({ onSuccess }) {
+export function useDeleteManyUsers(options) {
   const queryClient = useQueryClient();
   const apiClient = useApiClient();
 
-  const deleteUserFn = async (id) => {
-    const response = await apiClient.delete(`/users/${id}`);
+  const deleteUserFn = async (ids) => {
+    const response = await apiClient.delete('/users', { data: ids });
 
     return response;
   };
@@ -17,12 +16,12 @@ export function useDeleteUser({ onSuccess }) {
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['users'] });
     },
-    onSuccess,
     onError: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
+    ...options,
   });
 }

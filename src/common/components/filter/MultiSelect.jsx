@@ -23,21 +23,15 @@ const defaultRenderOption = (props, option, { selected }) => {
 export default function MultiSelect({
   label,
   placeholder,
-  onSelect,
   renderOption,
-  selectedOptions,
   ...autocompleteProps
 }) {
   return (
     <Autocomplete
       sx={{ mt: 1, mb: 1, minWidth: '300px' }}
-      defaultValue={selectedOptions}
       multiple
       {...autocompleteProps}
       disableCloseOnSelect
-      onChange={(e, newVal) => onSelect(newVal)}
-      getOptionLabel={(option) => option}
-      renderTags={() => null}
       renderOption={renderOption || defaultRenderOption}
       renderInput={(params) => (
         <TextField {...params} label={label} placeholder={placeholder} />

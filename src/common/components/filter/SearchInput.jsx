@@ -24,7 +24,13 @@ export default function SearchInput({ searchTerm, setSearchTerm }) {
               setSearchTerm('');
             }}
           >
-            <IconButton>
+            <IconButton
+              sx={{
+                '&:focus': {
+                  outline: 'none',
+                },
+              }}
+            >
               <ClearIcon />
             </IconButton>
           </InputAdornment>

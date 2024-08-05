@@ -7,6 +7,7 @@ import {
 } from '@mui/icons-material';
 
 import EditUserCell from './EditUserCell.jsx';
+import { statusMap } from './statusMap.jsx';
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -32,6 +33,14 @@ export const columns = [
   columnHelper.accessor('lastName', {
     header: () => 'last name',
     cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor('role.name', {
+    header: () => 'role',
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor('status', {
+    header: () => 'status',
+    cell: (info) => statusMap[info.getValue()],
   }),
   columnHelper.accessor('createdAt', {
     header: () => <span>creation date</span>,

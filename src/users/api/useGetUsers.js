@@ -1,20 +1,23 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { baseServerUrl } from '../../constants/server';
 import useApiClient from '../../common/hooks/useApiClient';
 
-export function useGetUsers(pageParams) {
+export function useGetUsers(params, options) {
   const apiClient = useApiClient();
 
   const getUsersFn = async () => {
-    const response = await apiClient.get(
-      `/users?page=${pageParams.page}&perPage=${pageParams.perPage}`,
-    );
+    const response = await apiClient.get(`/users`, {
+      params,
+      paramsSerializer: {
+        indexes: null,
+      },
+    });
 
     return response.data;
   };
 
   return useSuspenseQuery({
-    queryKey: ['users', pageParams.page, pageParams.perPage],
+    queryKey: ['users', params],
     queryFn: getUsersFn,
+    ...options,
   });
 }

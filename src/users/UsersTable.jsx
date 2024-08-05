@@ -1,37 +1,31 @@
 import { usePagination } from '../common/hooks/usePagination';
-import { createColumnHelper } from '@tanstack/react-table';
-import EditCell from '../common/components/EditActions.jsx';
 import { useNavigate } from 'react-router-dom';
-import { useDeleteUserMutation } from './userApiSlice.js';
 import Table from '../common/components/table/Table.jsx';
-import { Link } from 'react-router-dom';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useGetUsers } from './api/useGetUsers.js';
 import { useState } from 'react';
-import {
-  Box,
-  Button,
-  Stack,
-  TablePagination,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { Button, Stack, TablePagination, Typography } from '@mui/material';
 import { columns } from './usersTableColumns.jsx';
 import { Delete } from '@mui/icons-material';
-import UserFilters from './UserFilters.jsx';
-import { Add } from '@mui/icons-material';
 import { useDeleteManyUsers } from './api/useDeleteManyUsers.js';
+import useQueryParams from '../common/hooks/useQueryParams.js';
+import useDebouncedValue from '../common/hooks/useDebouncedValue.js';
+import { useSearch } from '../common/hooks/useSearch.js';
 
-export default function UsersTable() {
+export default function UsersTable({ defaultFilters }) {
+  const { queryParams } = useQueryParams(defaultFilters);
+  const { search } = useSearch();
+  const debouncedSearchTerm = useDebouncedValue(search, 1000);
+
   const { pageParams, setPageParams } = usePagination();
-  const { data } = useGetUsers(pageParams);
-  const [selected, setSelected] = useState({});
-  const navigate = useNavigate();
-  const deleteMany = useDeleteManyUsers();
 
-  const onCreateUserClick = () => {
-    navigate('/users/create');
-  };
+  const { data } = useGetUsers({
+    ...pageParams,
+    ...queryParams,
+    search: debouncedSearchTerm,
+  });
+
+  const [selected, setSelected] = useState({});
+  const deleteMany = useDeleteManyUsers();
 
   const selectedCount = Object.entries(selected).length;
 
@@ -43,31 +37,6 @@ export default function UsersTable() {
 
   return (
     <>
-      <Box
-        sx={{
-          mt: 3,
-          mb: 2,
-          display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
-          alignItems: 'flex-start',
-        }}
-      >
-        <UserFilters />
-
-        <Button
-          variant="contained"
-          sx={{
-            textTransform: 'none',
-            textWrap: 'nowrap',
-            ml: { xs: 0, sm: 'auto' },
-          }}
-          onClick={onCreateUserClick}
-          startIcon={<Add />}
-        >
-          Create user
-        </Button>
-      </Box>
-
       <Stack direction="row" justifyContent={'space-between'}>
         {selectedCount > 0 && (
           <Typography>Selected: {selectedCount}</Typography>

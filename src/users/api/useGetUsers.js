@@ -7,9 +7,7 @@ export function useGetUsers(params, options) {
   const getUsersFn = async () => {
     const response = await apiClient.get(`/users`, {
       params,
-      paramsSerializer: {
-        indexes: null,
-      },
+      paramsSerializer: { indexes: null },
     });
 
     return response.data;

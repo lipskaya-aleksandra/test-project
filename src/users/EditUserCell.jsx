@@ -8,42 +8,32 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Snackbar,
 } from '@mui/material';
 import { useState } from 'react';
 import EditActions from '../common/components/EditActions';
 import { Delete } from '@mui/icons-material';
 import { Close } from '@mui/icons-material';
+import useAlertSnackbar from '../common/hooks/useAlertSnackbar.jsx';
+import { Dropdown, IconButton, Menu, MenuButton } from '@mui/joy';
+import { MoreVert } from '@mui/icons-material';
+import useOptimisticUpdate from '../common/hooks/useOptimisticUpdate.js';
+import useUsersTableQueryParams from './hooks/useUsersTableQueryParams.js';
 import { useSnackbar } from 'notistack';
 
 export default function EditUserCell({ cell }) {
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
 
+  const params = useUsersTableQueryParams();
+
+  const { startUpdate, cancelUpdate } = useOptimisticUpdate(['users', params]);
+
   const id = cell.row.getValue('id');
 
-  const onSuccess = () => {
-    enqueueSnackbar(`User with id ${id} deleted succesfully.`, {
-      anchorOrigin: {
-        vertical: 'top',
-        horizontal: 'center',
-      },
-      content: (key, message) => (
-        <Alert
-          onClose={() => {
-            closeSnackbar(key);
-          }}
-          severity="success"
-          sx={{ width: '100%' }}
-        >
-          {message}
-        </Alert>
-      ),
-    });
-  };
+  const displaySnackbar = useAlertSnackbar();
+  const { closeSnackbar } = useSnackbar();
 
-  const deleteMutation = useDeleteUser({ onSuccess });
+  const deleteMutation = useDeleteUser();
 
   const onDeleteInitiated = () => {
     setDialogOpen(true);
@@ -51,7 +41,32 @@ export default function EditUserCell({ cell }) {
 
   const onDeleteConfirmed = () => {
     setDialogOpen(false);
-    deleteMutation.mutateAsync(id);
+
+    startUpdate({
+      newData: (oldData) => ({
+        count: oldData.count,
+        rows: oldData.rows.filter((u) => u.id != id),
+      }),
+      delay: 5000,
+      updateFn: () => {
+        deleteMutation.mutateAsync(id);
+      },
+    });
+
+    displaySnackbar({
+      message: `User with id ${id} deleted succesfully.`,
+      Action: (snackbarKey) => (
+        <Button
+          sx={{ '&:focus': { outline: 'none' } }}
+          onClick={() => {
+            cancelUpdate();
+            closeSnackbar(snackbarKey);
+          }}
+        >
+          Undo
+        </Button>
+      ),
+    });
   };
 
   const onEdit = () => {
@@ -64,7 +79,18 @@ export default function EditUserCell({ cell }) {
 
   return (
     <>
-      <EditActions onDelete={onDeleteInitiated} onEdit={onEdit} />
+      <Dropdown>
+        <MenuButton
+          sx={{ '&:focus': { outline: 'none' } }}
+          slots={{ root: IconButton }}
+          slotProps={{ root: { variant: 'outlined', color: 'neutral' } }}
+        >
+          <MoreVert />
+        </MenuButton>
+        <Menu placement="right-start">
+          <EditActions onDelete={onDeleteInitiated} onEdit={onEdit} />
+        </Menu>
+      </Dropdown>
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle>
           Are you sure you want to delete a user with id {id}?

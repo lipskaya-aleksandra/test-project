@@ -1,5 +1,4 @@
 import { usePagination } from '../common/hooks/usePagination';
-import { useNavigate } from 'react-router-dom';
 import Table from '../common/components/table/Table.jsx';
 import { useGetUsers } from './api/useGetUsers.js';
 import { useState } from 'react';
@@ -7,32 +6,58 @@ import { Button, Stack, TablePagination, Typography } from '@mui/material';
 import { columns } from './usersTableColumns.jsx';
 import { Delete } from '@mui/icons-material';
 import { useDeleteManyUsers } from './api/useDeleteManyUsers.js';
-import useQueryParams from '../common/hooks/useQueryParams.js';
-import useDebouncedValue from '../common/hooks/useDebouncedValue.js';
-import { useSearch } from '../common/hooks/useSearch.js';
+import useOptimisticUpdate from '../common/hooks/useOptimisticUpdate.js';
+import useAlertSnackbar from '../common/hooks/useAlertSnackbar.jsx';
+import useUsersTableQueryParams from './hooks/useUsersTableQueryParams.js';
+import { useSnackbar } from 'notistack';
 
-export default function UsersTable({ defaultFilters }) {
-  const { queryParams } = useQueryParams(defaultFilters);
-  const { search } = useSearch();
-  const debouncedSearchTerm = useDebouncedValue(search, 1000);
-
+export default function UsersTable() {
   const { pageParams, setPageParams } = usePagination();
 
-  const { data } = useGetUsers({
-    ...pageParams,
-    ...queryParams,
-    search: debouncedSearchTerm,
-  });
+  const params = useUsersTableQueryParams();
+
+  const { data } = useGetUsers(params);
 
   const [selected, setSelected] = useState({});
   const deleteMany = useDeleteManyUsers();
+
+  const { startUpdate, cancelUpdate } = useOptimisticUpdate(['users', params]);
+  const displaySnackbar = useAlertSnackbar();
+  const { closeSnackbar } = useSnackbar();
 
   const selectedCount = Object.entries(selected).length;
 
   const onDeleteSelected = () => {
     const ids = Object.keys(selected);
     if (ids.length <= 0) return;
-    deleteMany.mutate(ids);
+    startUpdate({
+      newData: (oldData) => ({
+        count: oldData.count,
+        rows: oldData.rows.filter((u) => !ids.includes(u.id.toString())),
+      }),
+      delay: 5000,
+      updateFn: () => {
+        deleteMany.mutate(ids, {
+          onSuccess: () => {
+            setSelected({});
+          },
+        });
+      },
+    });
+    displaySnackbar({
+      message: `Users with ids ${ids} deleted successfully`,
+      Action: (snackbarKey) => (
+        <Button
+          sx={{ '&:focus': { outline: 'none' } }}
+          onClick={() => {
+            closeSnackbar(snackbarKey);
+            cancelUpdate();
+          }}
+        >
+          Undo
+        </Button>
+      ),
+    });
   };
 
   return (
@@ -45,7 +70,11 @@ export default function UsersTable({ defaultFilters }) {
         <Button
           variant="contained"
           color="error"
-          sx={{ textTransform: 'none', ml: 'auto' }}
+          sx={{
+            textTransform: 'none',
+            ml: 'auto',
+            '&:focus': { outline: 'none' },
+          }}
           onClick={onDeleteSelected}
           startIcon={<Delete />}
           disabled={selectedCount <= 0}

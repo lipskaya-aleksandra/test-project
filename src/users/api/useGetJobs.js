@@ -1,17 +1,18 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import useApiClient from '../../common/hooks/useApiClient';
 
-export function useGetRoles() {
+export function useGetJobs(options) {
   const apiClient = useApiClient();
 
-  const getRolesFn = async () => {
-    const response = await apiClient.get(`/roles`);
+  const getJobsFn = async () => {
+    const response = await apiClient.get(`/jobs`);
 
     return response.data;
   };
 
   return useSuspenseQuery({
-    queryKey: ['roles'],
-    queryFn: getRolesFn,
+    queryKey: ['jobs'],
+    queryFn: getJobsFn,
+    ...options,
   });
 }

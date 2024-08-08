@@ -1,5 +1,12 @@
 import { Link } from 'react-router-dom';
-import { Checkbox } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  Checkbox,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import { createColumnHelper } from '@tanstack/react-table';
 import {
   CheckBox as CheckBoxIcon,
@@ -8,6 +15,12 @@ import {
 
 import EditUserCell from './EditUserCell.jsx';
 import { statusMap } from './statusMap.jsx';
+import { useGetJobs } from './api/useGetJobs.js';
+import useOptimisticUpdate from '../common/hooks/useOptimisticUpdate.js';
+import useAlertSnackbar from '../common/hooks/useAlertSnackbar.jsx';
+import { useEditUserJob } from './api/useEditUserJob.js';
+import useUsersTableQueryParams from './hooks/useUsersTableQueryParams.js';
+import { useSnackbar } from 'notistack';
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -34,9 +47,68 @@ export const columns = [
     header: () => 'last name',
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor('role.name', {
-    header: () => 'role',
-    cell: (info) => info.getValue(),
+  columnHelper.accessor('job', {
+    header: () => 'job',
+    cell: (info) => {
+      const user = info.row.original;
+      const { data } = useGetJobs();
+
+      const params = useUsersTableQueryParams();
+      const { startUpdate, cancelUpdate } = useOptimisticUpdate([
+        'users',
+        params,
+      ]);
+      const displaySnackbar = useAlertSnackbar();
+      const { closeSnackbar } = useSnackbar();
+
+      const editJob = useEditUserJob(user.id);
+
+      return (
+        <Select
+          size="small"
+          value={info.getValue().id}
+          onChange={(e) => {
+            const jobId = e.target.value;
+            const jobName = data.filter((r) => r.id === jobId)[0].name;
+            startUpdate({
+              newData: (oldData) => ({
+                count: oldData.count,
+                rows: oldData.rows.map((u) => {
+                  if (u.id === user.id)
+                    return { ...user, job: { name: jobName, id: jobId } };
+                  return u;
+                }),
+              }),
+              delay: 5000,
+              updateFn: () => {
+                editJob.mutate(jobId);
+              },
+            });
+            displaySnackbar({
+              message: `Job for user ${user.firstName} ${user.lastName} changed from ${user.job.name} to ${jobName}`,
+              Action: (snackbarKey) => (
+                <Button
+                  sx={{ '&:focus': { outline: 'none' } }}
+                  onClick={() => {
+                    cancelUpdate();
+                    closeSnackbar(snackbarKey);
+                  }}
+                >
+                  Undo
+                </Button>
+              ),
+            });
+          }}
+          //label="job"
+        >
+          {data.map((job) => (
+            <MenuItem key={job.id} name={job.name} value={job.id}>
+              {job.name}
+            </MenuItem>
+          ))}
+        </Select>
+      );
+    },
   }),
   columnHelper.accessor('status', {
     header: () => 'status',

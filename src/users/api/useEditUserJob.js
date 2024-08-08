@@ -1,18 +1,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useApiClient from '../../common/hooks/useApiClient';
 
-export function useEditUser(id, options) {
+export function useEditUserJob(id, options) {
   const queryClient = useQueryClient();
   const apiClient = useApiClient();
 
-  const editUserFn = async (updatedUser) => {
-    const response = await apiClient.patch(`/users/${id}`, updatedUser);
+  const editJobFn = async (jobId) => {
+    const response = await apiClient.patch(`/users/${id}/job`, {
+      id: jobId,
+    });
 
     return response;
   };
 
   return useMutation({
-    mutationFn: editUserFn,
+    mutationKey: ['users', id, 'job'],
+    mutationFn: editJobFn,
     onSettled: () => {
       queryClient.invalidateQueries(['users', id]);
     },

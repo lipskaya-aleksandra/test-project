@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import FilterWidget from '../common/components/filter/FilterWidget';
+import FilterWidgetContainer from '../common/components/filter/FilterWidget';
 import MultiSelect from '../common/components/filter/MultiSelect';
 import SearchInput from '../common/components/filter/SearchInput';
 import useQueryParams from '../common/hooks/useQueryParams';
@@ -7,13 +7,14 @@ import useDebouncedValue from '../common/hooks/useDebouncedValue';
 import { useEffect } from 'react';
 import FilterResults from '../common/components/filter/FilterResults';
 import { Stack } from '@mui/material';
-import { useGetRoles } from './api/useGetRoles';
+import { useGetJobs } from './api/useGetJobs';
 import { useSearch } from '../common/hooks/useSearch';
+import { defaultFilters } from './pages/UsersPage';
 
-export default function UserFilters({ defaultFilters }) {
+export default function UserFilters() {
   const { queryParams, setQueryParams } = useQueryParams(defaultFilters);
   const { search, setSearch } = useSearch();
-  const { data } = useGetRoles();
+  const { data } = useGetJobs();
 
   const onSelect = (newOptions, filter) => {
     setQueryParams({
@@ -22,18 +23,20 @@ export default function UserFilters({ defaultFilters }) {
   };
 
   return (
-    <FilterWidget>
+    <FilterWidgetContainer>
       <Stack direction={{ xs: 'column', sm: 'row' }} gap={1}>
         <MultiSelect
-          label={'Role'}
+          label={'Job'}
           options={data.map((r) => r.name)}
-          placeholder={'Choose role'}
+          placeholder={'Choose job'}
           onChange={(e, newOptions) => {
-            onSelect(newOptions, 'role');
+            onSelect(newOptions, 'job');
           }}
           getOptionLabel={(option) => option}
-          value={queryParams['role']}
+          value={queryParams['job']}
+          renderTags={() => null}
         />
+
         <SearchInput
           searchTerm={search}
           setSearchTerm={(term) => {
@@ -43,6 +46,6 @@ export default function UserFilters({ defaultFilters }) {
       </Stack>
 
       <FilterResults defaultFilters={defaultFilters} />
-    </FilterWidget>
+    </FilterWidgetContainer>
   );
 }

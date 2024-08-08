@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { baseServerUrl } from '../../constants/server';
 import useApiClient from '../../common/hooks/useApiClient';
 
-export function useDeleteUser({ onSuccess }) {
+export function useDeleteUser(options) {
   const queryClient = useQueryClient();
   const apiClient = useApiClient();
 
@@ -17,12 +17,15 @@ export function useDeleteUser({ onSuccess }) {
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['users'] });
     },
-    onSuccess,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
     onError: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
+    ...options,
   });
 }

@@ -10,15 +10,21 @@ import { Stack } from '@mui/material';
 import { useGetJobs } from './api/useGetJobs';
 import { useSearch } from '../common/hooks/useSearch';
 import { defaultFilters } from './pages/UsersPage';
+import { defaultValues, usePagination } from '../common/hooks/usePagination';
 
 export default function UserFilters() {
-  const { queryParams, setQueryParams } = useQueryParams(defaultFilters);
+  const { pageParams } = usePagination();
+  const { queryParams, setQueryParams } = useQueryParams({
+    ...defaultFilters,
+    page: pageParams.page,
+  });
   const { search, setSearch } = useSearch();
   const { data } = useGetJobs();
 
   const onSelect = (newOptions, filter) => {
     setQueryParams({
       [filter]: [...newOptions],
+      page: defaultValues.page,
     });
   };
 

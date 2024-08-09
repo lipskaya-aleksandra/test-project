@@ -27,9 +27,14 @@ export default function useQueryParams(defaults = {}) {
           continue;
         }
 
-        const value = Array.isArray(defaults[key])
+        const getsValueAsArray =
+          (defaults[key] && Array.isArray(defaults[key])) || !defaults[key];
+
+        let value = getsValueAsArray
           ? searchParams.getAll(key)
           : searchParams.get(key);
+
+        if (!defaults[key]) value = value.length === 1 ? value[0] : value;
 
         params[key] = value;
       }

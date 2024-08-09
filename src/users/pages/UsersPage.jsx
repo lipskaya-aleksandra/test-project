@@ -16,11 +16,9 @@ import { columns } from '../usersTableColumns.jsx';
 import { Add } from '@mui/icons-material';
 import UserFilters from '../UserFilters.jsx';
 import { useNavigate } from 'react-router-dom';
-import useQueryParams from '../../common/hooks/useQueryParams.js';
-import { statusColorMap } from '../statusMap.jsx';
 import UsersTabs from '../UsersTabs.jsx';
 
-export const defaultFilters = { job: [], status: '' }; //, search: ''
+export const defaultFilters = { job: [], status: '' };
 
 export default function UsersPage() {
   const navigate = useNavigate();

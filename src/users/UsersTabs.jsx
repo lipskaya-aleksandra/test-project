@@ -17,10 +17,12 @@ const tabSx = {
 };
 
 export default function UsersTabs() {
+  const { pageParams } = usePagination();
   const { queryParams, setQueryParams } = useQueryParams({
     status: defaultFilters.status,
+    page: pageParams.page,
   });
-  const { setPageParams } = usePagination();
+
   return (
     <Tabs
       value={
@@ -49,9 +51,9 @@ export default function UsersTabs() {
       }}
       onChange={(e, value) => {
         if (value === 'all') {
-          setQueryParams({ status: '' });
+          setQueryParams({ status: '', page: defaultValues.page });
         } else {
-          setQueryParams({ status: value });
+          setQueryParams({ status: value, page: defaultValues.page });
         }
         //setPageParams({ page: defaultValues.page });
       }}

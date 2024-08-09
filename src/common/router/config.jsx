@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import Root, { rootLoader } from '../components/Root';
 import UsersPage from '../../users/pages/UsersPage';
-import PostsPage, { postsLoader } from '../../posts/PostsPage';
+import PostsPage from '../../posts/PostsPage';
 import UserDetailPage from '../../users/pages/UserDetailPage';
 import RedirectToCurrentPagination from '../components/RedirectToCurrentPagination';
 import LoginPage from '../../users/pages/LoginPage';
@@ -38,11 +38,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'posts',
-        loader: postsLoader,
+        //loader: postsLoader,
         element: (
-          <RedirectToCurrentPagination path="posts">
-            <PostsPage />
-          </RedirectToCurrentPagination>
+          //<RedirectToCurrentPagination path="posts">
+          <PostsPage />
+          //</RedirectToCurrentPagination>
         ),
       },
     ],

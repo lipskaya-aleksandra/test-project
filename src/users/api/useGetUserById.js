@@ -1,5 +1,4 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { baseServerUrl } from '../../constants/server';
 import useApiClient from '../../common/hooks/useApiClient';
 
 export function useGetUserById(id, options) {

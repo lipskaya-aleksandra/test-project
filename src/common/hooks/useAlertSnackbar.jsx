@@ -1,10 +1,11 @@
-import { Alert, Box } from '@mui/material';
+import { Alert, Box, Button } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import { Fragment } from 'react';
 
 export default function useAlertSnackbar() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  return ({ severity, message, Action }) =>
+  return ({ severity, message, onCancel, Action }) =>
     enqueueSnackbar(message, {
       anchorOrigin: {
         vertical: 'top',
@@ -15,9 +16,9 @@ export default function useAlertSnackbar() {
           onClose={() => {
             closeSnackbar(key);
           }}
-          severity={severity ? severity : 'success'}
+          severity={severity ?? 'success'}
           sx={{ width: '100%' }}
-          action={Action && <Action snackbarKey={key} />}
+          action={<Action snackbarKey={key} />}
         >
           {message}
         </Alert>

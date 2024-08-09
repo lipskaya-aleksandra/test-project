@@ -54,16 +54,11 @@ export default function EditUserCell({ cell }) {
     });
 
     displaySnackbar({
+      onCancel: cancelUpdate,
       message: `User with id ${id} deleted succesfully.`,
-      Action: (snackbarKey) => (
-        <Button
-          sx={{ '&:focus': { outline: 'none' } }}
-          onClick={() => {
-            cancelUpdate();
-            closeSnackbar(snackbarKey);
-          }}
-        >
-          Undo
+      Action: ({ onClose }) => (
+        <Button sx={{ '&:focus': { outline: 'none' } }} onClick={onClose}>
+          Dismiss
         </Button>
       ),
     });
@@ -87,17 +82,21 @@ export default function EditUserCell({ cell }) {
         >
           <MoreVert />
         </MenuButton>
+
         <Menu placement="right-start">
           <EditActions onDelete={onDeleteInitiated} onEdit={onEdit} />
         </Menu>
       </Dropdown>
+
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle>
           Are you sure you want to delete a user with id {id}?
         </DialogTitle>
+
         <DialogContent>
           <DialogContentText>This action is irreversible.</DialogContentText>
         </DialogContent>
+
         <DialogActions>
           <Button
             color="error"

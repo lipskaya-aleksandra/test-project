@@ -21,6 +21,7 @@ import useAlertSnackbar from '../common/hooks/useAlertSnackbar.jsx';
 import { useEditUserJob } from './api/useEditUserJob.js';
 import useUsersTableQueryParams from './hooks/useUsersTableQueryParams.js';
 import { useSnackbar } from 'notistack';
+import { Fragment } from 'react';
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -70,6 +71,7 @@ export const columns = [
           onChange={(e) => {
             const jobId = e.target.value;
             const jobName = data.filter((r) => r.id === jobId)[0].name;
+
             startUpdate({
               newData: (oldData) => ({
                 count: oldData.count,
@@ -84,22 +86,32 @@ export const columns = [
                 editJob.mutate(jobId);
               },
             });
+
             displaySnackbar({
               message: `Job for user ${user.firstName} ${user.lastName} changed from ${user.job.name} to ${jobName}`,
-              Action: (snackbarKey) => (
-                <Button
-                  sx={{ '&:focus': { outline: 'none' } }}
-                  onClick={() => {
-                    cancelUpdate();
-                    closeSnackbar(snackbarKey);
-                  }}
-                >
-                  Undo
-                </Button>
+              Action: ({ snackbarKey }) => (
+                <Fragment>
+                  <Button
+                    sx={{ '&:focus': { outline: 'none' } }}
+                    onClick={() => {
+                      cancelUpdate();
+                      closeSnackbar(snackbarKey);
+                    }}
+                  >
+                    Undo
+                  </Button>
+                  <Button
+                    sx={{ '&:focus': { outline: 'none' } }}
+                    onClick={() => {
+                      closeSnackbar(snackbarKey);
+                    }}
+                  >
+                    Dismiss
+                  </Button>
+                </Fragment>
               ),
             });
           }}
-          //label="job"
         >
           {data.map((job) => (
             <MenuItem key={job.id} name={job.name} value={job.id}>

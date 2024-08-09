@@ -1,40 +1,48 @@
-import { Card, CardHeader, Grid, Skeleton, Button } from '@mui/material';
+import { Edit } from '@mui/icons-material';
+import { ArrowBack } from '@mui/icons-material';
+import {
+  Card,
+  CardHeader,
+  Skeleton,
+  Button,
+  Container,
+  CardContent,
+  CardActions,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export default function UserCardFallback() {
   const navigate = useNavigate();
 
   return (
-    <Grid
-      container
-      spacing={0}
-      direction="column"
+    <Container
+      sx={{ width: 'fit-content' }}
       alignItems="center"
       justifyContent="center"
-      sx={{ minHeight: '100vh', minWidth: '100vw' }}
     >
-      <Button
-        variant="contained"
-        onClick={() => {
-          navigate(-1);
-        }}
-      >
-        Back
-      </Button>
-
-      <Card sx={{ minWidth: '400px' }}>
+      <Card sx={{ p: 1 }}>
         <CardHeader
-          avatar={<Skeleton variant="circular" width={40} height={40} />}
           title={<Skeleton variant="text" sx={{ fontSize: '1.5rem' }} />}
           subheader={<Skeleton variant="text" sx={{ fontSize: '1rem' }} />}
         />
-
-        <>
+        <CardContent>
           <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-          <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-          <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-        </>
+        </CardContent>
+        <CardActions sx={{ justifyContent: 'space-between' }}>
+          <Button
+            startIcon={<ArrowBack />}
+            variant="outlined"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            Back
+          </Button>
+          <Button startIcon={<Edit />} variant="outlined" disabled={true}>
+            Edit
+          </Button>
+        </CardActions>
       </Card>
-    </Grid>
+    </Container>
   );
 }

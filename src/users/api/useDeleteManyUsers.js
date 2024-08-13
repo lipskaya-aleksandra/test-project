@@ -16,9 +16,6 @@ export function useDeleteManyUsers(options) {
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['users'] });
     },
-    onError: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-    },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },

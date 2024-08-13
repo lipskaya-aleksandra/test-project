@@ -3,7 +3,9 @@ import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import useQueryParams from '../../hooks/useQueryParams';
 
 export default function FilterResults({ defaultFilters }) {
-  const { queryParams, setQueryParams } = useQueryParams(defaultFilters);
+  const { queryParams, setQueryParams } = useQueryParams({
+    defaults: defaultFilters,
+  });
   const filters = Object.entries(queryParams).map(([key, value]) => ({
     label: key,
     values: Array.isArray(value) ? [...value] : [value],
@@ -13,15 +15,14 @@ export default function FilterResults({ defaultFilters }) {
     setQueryParams(defaultFilters);
   };
 
-  const nonEmptyFiltersCount = filters.reduce((count, f) => {
-    if (f.values.length > 0) return count + 1;
-    else return count;
-  }, 0);
+  const nonEmptyFiltersCount = filters.filter(
+    ({ values }) => values.length > 0,
+  ).length;
 
   return (
     <Box sx={{ my: 1 }}>
       <Typography fontSize={18}>
-        Applied filters:{nonEmptyFiltersCount <= 0 && ' none.'}
+        Applied filters:{nonEmptyFiltersCount === 0 && ' none.'}
       </Typography>
       {nonEmptyFiltersCount > 0 && (
         <Stack

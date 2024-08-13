@@ -18,8 +18,6 @@ import UserFilters from '../UserFilters.jsx';
 import { useNavigate } from 'react-router-dom';
 import UsersTabs from '../UsersTabs.jsx';
 
-export const defaultFilters = { job: [], status: '' };
-
 export default function UsersPage() {
   const navigate = useNavigate();
 

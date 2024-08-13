@@ -3,10 +3,10 @@ import useDebouncedValue from '../../common/hooks/useDebouncedValue';
 import { usePagination } from '../../common/hooks/usePagination';
 import useQueryParams from '../../common/hooks/useQueryParams';
 import { useSearch } from '../../common/hooks/useSearch';
-import { defaultFilters } from '../pages/UsersPage';
+import { defaultFilters } from '../defaultUserFilters';
 
 export default function useUsersTableQueryParams() {
-  const { queryParams } = useQueryParams(defaultFilters);
+  const { queryParams } = useQueryParams({ defaults: defaultFilters });
   const { search } = useSearch();
   const debouncedSearchTerm = useDebouncedValue(search, 1000);
 

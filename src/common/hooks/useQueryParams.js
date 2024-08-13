@@ -14,7 +14,10 @@ const isArrayOfStrings = (source) =>
   Array.isArray(source) &&
   (source.filter((v) => typeof v === 'string') || source.length === 0);
 
-export default function useQueryParams(defaults = {}) {
+export default function useQueryParams({
+  defaults = {},
+  allowOverrideKeys = [],
+}) {
   const mappedDefaults = mapDefaults(defaults);
   const [searchParams, setSearchParams] = useSearchParams(mappedDefaults);
 
@@ -49,7 +52,7 @@ export default function useQueryParams(defaults = {}) {
       const updatedParams = {};
 
       for (const [key, value] of Object.entries(newParams)) {
-        if (key in defaults) {
+        if (key in defaults || allowOverrideKeys.includes(key)) {
           updatedParams[key] = value || mappedDefaults[key];
         }
       }

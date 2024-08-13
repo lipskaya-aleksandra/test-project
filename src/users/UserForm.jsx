@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function UserForm({ onSubmit, user }) {
   const { control, handleSubmit } = useForm({
-    defaultValues: {
+    values: {
       firstName: user ? user.firstName : '',
       lastName: user ? user.lastName : '',
       email: user ? user.email : '',
@@ -14,7 +14,11 @@ export default function UserForm({ onSubmit, user }) {
   });
   const navigate = useNavigate();
   return (
-    <Container sx={{ padding: '0 auto', width: '100vw' }}>
+    <Container
+      sx={{ width: 'fit-content' }}
+      alignItems="center"
+      justifyContent="center"
+    >
       <Typography fontWeight={300} fontSize={24} textAlign={'center'}>
         {user ? 'Edit user' : 'Create user'}
       </Typography>

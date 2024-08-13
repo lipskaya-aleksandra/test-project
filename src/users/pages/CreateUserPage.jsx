@@ -13,7 +13,6 @@ export default function CreateUserPage() {
   const navigate = useNavigate();
   const { pageParams } = usePagination();
   const onSubmit = (data) => {
-    console.log(data);
     createUser.mutate(data);
   };
 

@@ -14,7 +14,7 @@ import {
 } from '@mui/icons-material';
 
 import EditUserCell from './EditUserCell.jsx';
-import { statusMap } from './statusMap.jsx';
+import StatusLabel from './StatusLabel.jsx';
 import { useGetJobs } from './api/useGetJobs.js';
 import useOptimisticUpdate from '../common/hooks/useOptimisticUpdate.js';
 import useAlertSnackbar from '../common/hooks/useAlertSnackbar.jsx';
@@ -124,7 +124,7 @@ export const columns = [
   }),
   columnHelper.accessor('status', {
     header: () => 'status',
-    cell: (info) => statusMap[info.getValue()],
+    cell: (info) => <StatusLabel value={info.getValue()} />,
   }),
   columnHelper.accessor('createdAt', {
     header: () => <span>creation date</span>,

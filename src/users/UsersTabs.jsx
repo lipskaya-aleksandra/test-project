@@ -1,8 +1,8 @@
 import { Tab, Tabs } from '@mui/material';
-import { defaultFilters } from './pages/UsersPage';
-import { statusColorMap } from './statusMap';
+import { statusColorMap } from './StatusLabel';
 import useQueryParams from '../common/hooks/useQueryParams';
 import { defaultValues, usePagination } from '../common/hooks/usePagination';
+import { defaultFilters } from './defaultUserFilters';
 
 const tabSx = {
   textTransform: 'none',
@@ -19,8 +19,8 @@ const tabSx = {
 export default function UsersTabs() {
   const { pageParams } = usePagination();
   const { queryParams, setQueryParams } = useQueryParams({
-    status: defaultFilters.status,
-    page: pageParams.page,
+    defaults: { status: defaultFilters.status },
+    allowOverrideKeys: ['page'],
   });
 
   return (
@@ -55,7 +55,6 @@ export default function UsersTabs() {
         } else {
           setQueryParams({ status: value, page: defaultValues.page });
         }
-        //setPageParams({ page: defaultValues.page });
       }}
     >
       <Tab

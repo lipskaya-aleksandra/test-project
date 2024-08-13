@@ -1,18 +1,14 @@
 import { useCallback } from 'react';
 import useQueryParams from './useQueryParams';
 import { useMemo } from 'react';
-import {
-  usePagination,
-  defaultValues as paginationDefaultValues,
-} from './usePagination';
+import { defaultValues as paginationDefaultValues } from './usePagination';
 
 export const defaultValues = { search: '' };
 
 export function useSearch() {
-  const { pageParams } = usePagination();
   const { queryParams, setQueryParams } = useQueryParams({
-    ...defaultValues,
-    page: pageParams.page,
+    defaults: defaultValues,
+    allowOverrideKeys: ['page'],
   });
 
   const updateSearch = useCallback(

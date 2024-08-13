@@ -6,9 +6,6 @@ export default function useOptimisticUpdate(queryKey) {
   const queryClient = useQueryClient();
   let timer;
 
-  //   const prevData = queryClient.getQueryData(queryKey);
-  //   console.log(prevData);
-
   const startUpdate = useCallback(
     ({ newData, delay, updateFn }) => {
       queryClient.cancelQueries({ queryKey });

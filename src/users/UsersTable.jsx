@@ -46,7 +46,7 @@ export default function UsersTable() {
     });
     displaySnackbar({
       message: `Users with ids ${ids} deleted successfully`,
-      Action: (snackbarKey) => (
+      Action: ({ snackbarKey }) => (
         <Button
           sx={{ '&:focus': { outline: 'none' } }}
           onClick={() => {

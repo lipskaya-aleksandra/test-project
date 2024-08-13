@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 export const defaultValues = { page: '1', perPage: '10' };
 
 export function usePagination(defaults = defaultValues) {
-  const { queryParams, setQueryParams } = useQueryParams(defaults);
+  const { queryParams, setQueryParams } = useQueryParams({ defaults });
 
   const getCurrentParams = useCallback(() => {
     return {

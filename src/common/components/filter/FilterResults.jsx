@@ -3,47 +3,78 @@ import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import useQueryParams from '../../hooks/useQueryParams';
 
 export default function FilterResults({ defaultFilters }) {
-  const { queryParams, setQueryParams } = useQueryParams(defaultFilters);
+  const { queryParams, setQueryParams } = useQueryParams({
+    defaults: defaultFilters,
+  });
   const filters = Object.entries(queryParams).map(([key, value]) => ({
     label: key,
     values: Array.isArray(value) ? [...value] : [value],
   }));
+
   const onClearAllFilters = () => {
     setQueryParams(defaultFilters);
   };
+
+  const nonEmptyFiltersCount = filters.filter(
+    ({ values }) => values.length > 0,
+  ).length;
+
   return (
-    <Box>
-      <Typography>Applied filters:</Typography>
-
-      {filters.map(
-        (filter) =>
-          filter.values.length > 0 && (
-            <Stack key={filter} spacing={1} direction={'row'}>
-              <Typography>{filter.label}</Typography>
-              {filter.values.map((value) => (
-                <Chip
-                  key={value}
-                  label={value}
-                  variant="outlined"
-                  onDelete={() => {
-                    setQueryParams({
-                      [filter.label]: filter.values.filter((v) => v !== value),
-                    });
-                  }}
-                />
-              ))}
-            </Stack>
-          ),
+    <Box sx={{ my: 1 }}>
+      <Typography fontSize={18}>
+        Applied filters:{nonEmptyFiltersCount === 0 && ' none.'}
+      </Typography>
+      {nonEmptyFiltersCount > 0 && (
+        <Stack
+          direction={'row'}
+          gap={1}
+          flexWrap={{ xs: 'wrap', sm: 'nowrap' }}
+        >
+          {filters.map(
+            (filter) =>
+              filter.values.length > 0 && (
+                <Stack
+                  key={filter}
+                  spacing={1}
+                  direction={'row'}
+                  sx={{ mt: 1, mb: 1, flexWrap: 'wrap' }}
+                >
+                  <Typography>{filter.label}:</Typography>
+                  {filter.values.slice(0, 3).map((value) => (
+                    <Chip
+                      key={value}
+                      label={value}
+                      variant="outlined"
+                      sx={{ my: 1 }}
+                      onDelete={() => {
+                        setQueryParams({
+                          [filter.label]: filter.values.filter(
+                            (v) => v !== value,
+                          ),
+                        });
+                      }}
+                    />
+                  ))}
+                  {filter.values.length > 3 && <Typography>...</Typography>}
+                </Stack>
+              ),
+          )}
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<Delete />}
+            onClick={onClearAllFilters}
+            sx={{
+              float: 'right',
+              textWrap: 'nowrap',
+              textTransform: 'none',
+              ml: 'auto',
+            }}
+          >
+            Clear all
+          </Button>
+        </Stack>
       )}
-
-      <Button
-        variant="outlined"
-        color="error"
-        startIcon={<Delete />}
-        onClick={onClearAllFilters}
-      >
-        Clear all
-      </Button>
     </Box>
   );
 }

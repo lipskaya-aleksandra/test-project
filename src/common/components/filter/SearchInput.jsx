@@ -4,12 +4,13 @@ import { Search as SearchIcon, Clear as ClearIcon } from '@mui/icons-material';
 export default function SearchInput({ searchTerm, setSearchTerm }) {
   return (
     <TextField
-      size="small"
+      sx={{ mt: 1, mb: 1 }}
       variant="outlined"
       value={searchTerm}
       onChange={(e) => {
         setSearchTerm(e.target.value);
       }}
+      placeholder="Search..."
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
@@ -23,7 +24,13 @@ export default function SearchInput({ searchTerm, setSearchTerm }) {
               setSearchTerm('');
             }}
           >
-            <IconButton>
+            <IconButton
+              sx={{
+                '&:focus': {
+                  outline: 'none',
+                },
+              }}
+            >
               <ClearIcon />
             </IconButton>
           </InputAdornment>

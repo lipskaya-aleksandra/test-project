@@ -14,9 +14,12 @@ const isArrayOfStrings = (source) =>
   Array.isArray(source) &&
   (source.filter((v) => typeof v === 'string') || source.length === 0);
 
-export default function useQueryParams(defaults) {
+export default function useQueryParams({
+  defaults = {},
+  allowOverrideKeys = [],
+}) {
   const mappedDefaults = mapDefaults(defaults);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams(mappedDefaults);
 
   const getCurrentParams = useCallback(
     (includesAll) => {
@@ -27,9 +30,14 @@ export default function useQueryParams(defaults) {
           continue;
         }
 
-        const value = Array.isArray(defaults[key])
+        const getsValueAsArray =
+          (defaults[key] && Array.isArray(defaults[key])) || !defaults[key];
+
+        let value = getsValueAsArray
           ? searchParams.getAll(key)
           : searchParams.get(key);
+
+        if (!defaults[key]) value = value.length === 1 ? value[0] : value;
 
         params[key] = value;
       }
@@ -44,7 +52,7 @@ export default function useQueryParams(defaults) {
       const updatedParams = {};
 
       for (const [key, value] of Object.entries(newParams)) {
-        if (key in defaults) {
+        if (key in defaults || allowOverrideKeys.includes(key)) {
           updatedParams[key] = value || mappedDefaults[key];
         }
       }
@@ -57,5 +65,11 @@ export default function useQueryParams(defaults) {
     [getCurrentParams, setSearchParams, defaults],
   );
 
-  return { queryParams: getCurrentParams(false), setQueryParams: updateParams };
+  return useMemo(
+    () => ({
+      queryParams: getCurrentParams(false),
+      setQueryParams: updateParams,
+    }),
+    [getCurrentParams, updateParams],
+  );
 }

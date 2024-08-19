@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 import useQueryParams from './useQueryParams';
+import { useMemo } from 'react';
 
 export const defaultValues = { page: '1', perPage: '10' };
 
 export function usePagination(defaults = defaultValues) {
-  const { queryParams, setQueryParams } = useQueryParams(defaults);
+  const { queryParams, setQueryParams } = useQueryParams({ defaults });
 
   const getCurrentParams = useCallback(() => {
     return {
@@ -20,8 +21,11 @@ export function usePagination(defaults = defaultValues) {
     [getCurrentParams, setQueryParams],
   );
 
-  return {
-    pageParams: getCurrentParams(),
-    setPageParams: updatePageParams,
-  };
+  return useMemo(
+    () => ({
+      pageParams: getCurrentParams(),
+      setPageParams: updatePageParams,
+    }),
+    [getCurrentParams, updatePageParams],
+  );
 }

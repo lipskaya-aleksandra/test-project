@@ -19,26 +19,37 @@ export default function Table({
   loading,
   pageSize,
   renderFallback,
+  selected,
+  setSelected,
+  getRowId,
 }) {
   const table = useReactTable({
     data: data || Array(pageSize),
     columns,
     getCoreRowModel: getCoreRowModel(),
+    state: {
+      rowSelection: selected || {},
+    },
+    enableRowSelection: !!data,
+    onRowSelectionChange: setSelected,
+    getRowId,
   });
   return (
-    <TableContainer style={{ width: '100vw' }}>
+    <TableContainer>
       <MUITable>
         <TableHead>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <TableCell align="center" key={header.id}>
-                  {header.isPlaceholder &&
+                  {
+                    //header.isPlaceholder &&
                     flexRender(
                       header.column.columnDef.header,
                       header.getContext(),
-                    )}
-                  {!header.isPlaceholder && header.column.id}
+                    )
+                  }
+                  {/* {!header.isPlaceholder && header.column.id} */}
                 </TableCell>
               ))}
             </TableRow>

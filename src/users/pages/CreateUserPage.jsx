@@ -13,6 +13,9 @@ export default function CreateUserPage() {
   const navigate = useNavigate();
   const { pageParams } = usePagination();
   const onSubmit = (data) => {
+    if (data.jobId === 'null') {
+      data.jobId = null;
+    }
     createUser.mutate(data);
   };
 

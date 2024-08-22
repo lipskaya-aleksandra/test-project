@@ -22,10 +22,14 @@ export default function UserCard() {
   const { data: user } = useGetUserById(userId);
 
   return (
-    <Container
-      sx={{ width: 'fit-content' }}
-      alignItems="center"
-      justifyContent="center"
+    <Stack
+      sx={{
+        width: 'fit-content',
+        alignItems: 'center',
+        margin: '0 auto',
+        height: '100%',
+        justifyContent: 'center',
+      }}
     >
       <Card sx={{ p: 1 }}>
         <CardHeader
@@ -71,6 +75,6 @@ export default function UserCard() {
           </Button>
         </CardActions>
       </Card>
-    </Container>
+    </Stack>
   );
 }

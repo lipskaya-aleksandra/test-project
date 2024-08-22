@@ -1,11 +1,10 @@
 import {
-  Container,
+  Stack,
   Typography,
   Box,
   Grid,
   Link,
   TextField,
-  CssBaseline,
   Button,
 } from '@mui/material';
 
@@ -20,11 +19,17 @@ export default function LoginPage() {
   };
 
   return (
-    <Container sx={{ padding: '0 auto', width: '100vw' }}>
-      <CssBaseline />
+    <Stack
+      sx={{
+        width: 'fit-content',
+        alignItems: 'center',
+        margin: '0 auto',
+        height: '100%',
+        justifyContent: 'center',
+      }}
+    >
       <Box
         sx={{
-          marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -76,6 +81,6 @@ export default function LoginPage() {
           </Grid>
         </Box>
       </Box>
-    </Container>
+    </Stack>
   );
 }

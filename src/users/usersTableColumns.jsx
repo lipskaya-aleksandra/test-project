@@ -53,6 +53,8 @@ export const columns = [
     cell: (info) => {
       const user = info.row.original;
       const { data } = useGetJobs();
+      const noneJob = { name: 'none', id: 'null' };
+      const jobs = [noneJob, ...data];
 
       const params = useUsersTableQueryParams();
       const { startUpdate, cancelUpdate } = useOptimisticUpdate([
@@ -67,10 +69,10 @@ export const columns = [
       return (
         <Select
           size="small"
-          value={info.getValue().id}
+          value={info.getValue() ? info.getValue().id : noneJob.id}
           onChange={(e) => {
             const jobId = e.target.value;
-            const jobName = data.filter((r) => r.id === jobId)[0].name;
+            const jobName = jobs.filter((r) => r.id === jobId)[0].name;
 
             startUpdate({
               newData: (oldData) => ({
@@ -113,7 +115,7 @@ export const columns = [
             });
           }}
         >
-          {data.map((job) => (
+          {jobs.map((job) => (
             <MenuItem key={job.id} name={job.name} value={job.id}>
               {job.name}
             </MenuItem>

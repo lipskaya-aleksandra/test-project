@@ -1,4 +1,4 @@
-import { AppBar, Link, Toolbar } from '@mui/material';
+import { AppBar, Box, Link, Toolbar } from '@mui/material';
 import { Outlet, redirect, NavLink } from 'react-router-dom';
 import { defaultValues } from '../hooks/usePagination';
 import { blue } from '@mui/material/colors';
@@ -23,7 +23,7 @@ const linkStyle = {
 export default function Root() {
   const searchParams = new URLSearchParams(defaultValues);
   return (
-    <>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <AppBar sx={{ width: '100%', mb: 3 }} position="sticky">
         <Toolbar>
           <Link
@@ -46,12 +46,14 @@ export default function Root() {
           </Link>
         </Toolbar>
       </AppBar>
-      <Outlet />
-    </>
+      <Box flex={1}>
+        <Outlet />
+      </Box>
+    </Box>
   );
 }
 
 export function rootLoader() {
   const searchParams = new URLSearchParams(defaultValues);
-  return redirect('/users');
+  return redirect('/users' + searchParams.toString());
 }

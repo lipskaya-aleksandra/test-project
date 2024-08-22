@@ -1,23 +1,39 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import TextInput from '../common/components/form/TextInput';
-import { Button, Container, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  Container,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useGetJobs } from './api/useGetJobs';
 
 export default function UserForm({ onSubmit, user }) {
+  const { data } = useGetJobs();
+  const noneJob = { name: 'none', id: 'null' };
+  const jobs = [noneJob, ...data];
+
   const { control, handleSubmit } = useForm({
     values: {
       firstName: user ? user.firstName : '',
       lastName: user ? user.lastName : '',
       email: user ? user.email : '',
+      jobId: user ? user.job.id : noneJob.id,
     },
   });
   const navigate = useNavigate();
   return (
-    <Container
-      sx={{ width: 'fit-content' }}
-      alignItems="center"
-      justifyContent="center"
+    <Stack
+      sx={{
+        width: 'fit-content',
+        alignItems: 'center',
+        margin: '0 auto',
+        height: '100%',
+        justifyContent: 'center',
+      }}
     >
       <Typography fontWeight={300} fontSize={24} textAlign={'center'}>
         {user ? 'Edit user' : 'Create user'}
@@ -31,6 +47,20 @@ export default function UserForm({ onSubmit, user }) {
           />
           <TextInput control={control} name={'lastName'} label={'Last name'} />
           <TextInput control={control} name={'email'} label={'Email'} />
+          <Controller
+            render={({ field }) => (
+              <Select fullWidth {...field} label={'Job'}>
+                {jobs.map((job) => (
+                  <MenuItem key={job.id} name={job.name} value={job.id}>
+                    {job.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+            name={'jobId'}
+            control={control}
+            defaultValue={noneJob.id}
+          />
           <Stack direction={'row'} justifyContent={'space-between'} mt={1}>
             <Button
               onClick={() => {
@@ -46,6 +76,6 @@ export default function UserForm({ onSubmit, user }) {
           </Stack>
         </Container>
       </form>
-    </Container>
+    </Stack>
   );
 }

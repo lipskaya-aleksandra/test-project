@@ -1,21 +1,47 @@
 import {
   Stack,
   Typography,
-  Box,
   Grid,
   Link,
-  TextField,
   Button,
+  Container,
 } from '@mui/material';
+import { useForm } from 'react-hook-form';
+import { Link as RouterLink } from 'react-router-dom';
+import TextInput from '../../common/components/form/TextInput';
+import { useLogin } from '../api/useLogin';
 
 export default function LoginPage() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const login = useLogin();
+
+  const onSubmit = async (data) => {
+    try {
+      const tokens = await login(data);
+      console.log(tokens);
+    } catch (e) {
+      if (e.request.status === 401) {
+        setError('email', {
+          type: '401',
+          message: 'Incorrect email or password',
+        });
+        setError('password', {
+          type: '401',
+          message: 'Incorrect email or password',
+        });
+      }
+    }
   };
 
   return (
@@ -28,42 +54,33 @@ export default function LoginPage() {
         justifyContent: 'center',
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
+      <Typography component="h1" variant="h5">
+        Sign in
+      </Typography>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Container maxWidth="xs">
+          <TextInput
+            error={!!errors.email}
+            control={control}
+            name={'email'}
+            label={'Email'}
+            helperText={errors.email?.message}
+            rules={{ required: 'Email is required.' }}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
+          <TextInput
+            error={!!errors.password}
+            control={control}
+            type={'password'}
+            name={'password'}
+            label={'Password'}
+            helperText={errors.password?.message}
+            rules={{ required: 'Password is required.' }}
           />
           <Button
-            type="submit"
             fullWidth
+            type="submit"
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 1.5, mb: 1.5, '&:focus': { outline: 'none' } }}
           >
             Sign In
           </Button>
@@ -74,13 +91,13 @@ export default function LoginPage() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link component={RouterLink} to="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>
-        </Box>
-      </Box>
+        </Container>
+      </form>
     </Stack>
   );
 }

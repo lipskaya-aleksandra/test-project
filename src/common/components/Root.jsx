@@ -46,9 +46,7 @@ export default function Root() {
           </Link>
         </Toolbar>
       </AppBar>
-      <Box flex={1}>
-        <Outlet />
-      </Box>
+      <Outlet />
     </Box>
   );
 }

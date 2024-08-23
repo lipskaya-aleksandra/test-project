@@ -24,7 +24,8 @@ export default function UserCard() {
   return (
     <Stack
       sx={{
-        width: 'fit-content',
+        position: 'absolute',
+        width: '100%',
         alignItems: 'center',
         margin: '0 auto',
         height: '100%',

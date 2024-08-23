@@ -24,13 +24,14 @@ export default function UserForm({ onSubmit, user }) {
       jobId: user ? user.job.id : noneJob.id,
     },
   });
+
   const navigate = useNavigate();
   return (
     <Stack
       sx={{
-        width: 'fit-content',
+        position: 'absolute',
+        width: '100%',
         alignItems: 'center',
-        margin: '0 auto',
         height: '100%',
         justifyContent: 'center',
       }}
@@ -46,10 +47,21 @@ export default function UserForm({ onSubmit, user }) {
             label={'First name'}
           />
           <TextInput control={control} name={'lastName'} label={'Last name'} />
-          <TextInput control={control} name={'email'} label={'Email'} />
+          <TextInput
+            control={control}
+            name={'email'}
+            required={true}
+            label={'Email'}
+          />
           <Controller
             render={({ field }) => (
-              <Select fullWidth {...field} label={'Job'}>
+              <Select
+                sx={{ my: 1 }}
+                size="small"
+                fullWidth
+                {...field}
+                label={'Job'}
+              >
                 {jobs.map((job) => (
                   <MenuItem key={job.id} name={job.name} value={job.id}>
                     {job.name}

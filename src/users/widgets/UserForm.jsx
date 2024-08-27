@@ -1,4 +1,4 @@
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Alert,
   Button,
@@ -8,20 +8,23 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { Fragment } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import JobSelect, { noneJob } from './JobSelect';
-import QueryWrapper from '../common/components/QueryWrapper';
-import PasswordInput from '../common/components/form/PasswordInput';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { schema } from './userFormValidation';
-import PasswordValidationBox from './PasswordValidationBox';
+
 import {
   AT_LEAST_ONE_DIGIT,
   AT_LEAST_ONE_LOWERCASE_LETTER,
   AT_LEAST_ONE_SYMBOL,
   AT_LEAST_ONE_UPPERCASE_LETTER,
   MIN_LENGTH,
-} from './helpers/passwordValidation';
+} from '../../auth/utils/validation/passwordValidation';
+import PasswordValidationBox from '../../auth/widgets/PasswordValidationBox';
+import QueryWrapper from '../../common/components/QueryWrapper';
+import PasswordInput from '../../common/components/form/PasswordInput';
+import { schema } from '../utils/userFormValidation';
+
+import JobSelect, { noneJob } from './JobSelect';
 
 const textInputProps = {
   sx: {
@@ -57,18 +60,16 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
     resolver: zodResolver(schema),
   });
 
-  console.log({ errors });
-
   const password = useWatch({
     control,
     name: 'password',
   });
 
-  const onSubmitInterceptor = (data) => {
-    if (data.jobId === noneJob.id) {
-      data.jobId = null;
-    }
-    onSubmit(data, setError);
+  const onSubmitInterceptor = data => {
+    onSubmit(
+      { ...data, jobId: data.jobId === noneJob.id ? null : data.jobId },
+      setError,
+    );
   };
 
   const hasOneDigit = AT_LEAST_ONE_DIGIT.test(password);
@@ -78,6 +79,7 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
   const hasMinLength = password.length >= MIN_LENGTH;
 
   const navigate = useNavigate();
+
   return (
     <Stack
       sx={{
@@ -88,14 +90,14 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
         justifyContent: 'center',
       }}
     >
-      <Typography fontWeight={300} fontSize={24} textAlign={'center'}>
+      <Typography fontWeight={300} fontSize={24} textAlign="center">
         {title}
       </Typography>
 
       <form onSubmit={handleSubmit(onSubmitInterceptor)}>
         <Container maxWidth="xs">
           <Controller
-            name={'firstName'}
+            name="firstName"
             control={control}
             render={({ field }) => (
               <TextField label="First name" {...field} {...textInputProps} />
@@ -103,7 +105,7 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
           />
 
           <Controller
-            name={'lastName'}
+            name="lastName"
             control={control}
             render={({ field }) => (
               <TextField label="Last name" {...field} {...textInputProps} />
@@ -111,7 +113,7 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
           />
 
           <Controller
-            name={'email'}
+            name="email"
             control={control}
             render={({
               field: { ref, ...fieldProps },
@@ -129,9 +131,9 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
           />
 
           {withPassword && (
-            <>
+            <Fragment>
               <Controller
-                name={'password'}
+                name="password"
                 control={control}
                 render={({ field: { ref, ...fieldProps } }) => (
                   <PasswordInput
@@ -154,7 +156,7 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
               />
 
               <Controller
-                name={'confirmedPassword'}
+                name="confirmedPassword"
                 control={control}
                 render={({ field: { ref, ...fieldProps } }) => (
                   <PasswordInput
@@ -167,34 +169,36 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
                   />
                 )}
               />
-            </>
+            </Fragment>
           )}
 
           <QueryWrapper
             suspenseFallback={
               <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
             }
-            errorFallback={<Alert severity="error">Couldn't load jobs</Alert>}
+            errorFallback={
+              <Alert severity="error">Couldn&apos;t load jobs</Alert>
+            }
           >
             <Controller
               render={({ field }) => <JobSelect {...field} />}
-              name={'jobId'}
+              name="jobId"
               control={control}
               defaultValue={noneJob.id}
             />
           </QueryWrapper>
 
-          <Stack direction={'row'} justifyContent={'space-between'} mt={1}>
+          <Stack direction="row" justifyContent="space-between" mt={1}>
             <Button
               onClick={() => {
                 navigate(-1);
               }}
-              variant={'outlined'}
+              variant="outlined"
             >
               Cancel
             </Button>
 
-            <Button onClick={handleSubmit(onSubmit)} variant={'contained'}>
+            <Button onClick={handleSubmit(onSubmit)} variant="contained">
               Submit
             </Button>
           </Stack>

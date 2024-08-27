@@ -1,15 +1,14 @@
 import { Stack } from '@mui/material';
 
-import FilterResults from '../common/components/filter/FilterResults';
-import FilterWidgetContainer from '../common/components/filter/FilterWidget';
-import MultiSelect from '../common/components/filter/MultiSelect';
-import SearchInput from '../common/components/filter/SearchInput';
-import { defaultValues } from '../common/hooks/usePagination';
-import useQueryParams from '../common/hooks/useQueryParams';
-import { useSearch } from '../common/hooks/useSearch';
-
-import { useGetJobs } from './api/useGetJobs';
-import { defaultFilters } from './defaultUserFilters';
+import FilterResults from '../../common/components/filter/FilterResults';
+import FilterWidgetContainer from '../../common/components/filter/FilterWidget';
+import MultiSelect from '../../common/components/filter/MultiSelect';
+import SearchInput from '../../common/components/filter/SearchInput';
+import { defaultValues } from '../../common/hooks/usePagination';
+import useQueryParams from '../../common/hooks/useQueryParams';
+import { useSearch } from '../../common/hooks/useSearch';
+import { useGetJobs } from '../api/useGetJobs';
+import { defaultFilters } from '../defaultUserFilters';
 
 export default function UserFilters() {
   const { queryParams, setQueryParams } = useQueryParams({

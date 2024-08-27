@@ -1,22 +1,14 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Container,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-} from '@mui/material';
-import Table from '../../common/components/table/Table.jsx';
-import { usePagination } from '../../common/hooks/usePagination.js';
-import UsersTable from '../UsersTable.jsx';
-import QueryWrapper from '../../common/components/QueryWrapper.jsx';
-import { columns } from '../usersTableColumns.jsx';
 import { Add } from '@mui/icons-material';
-import UserFilters from '../UserFilters.jsx';
+import { Alert, Button, Container, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import UsersTabs from '../UsersTabs.jsx';
+
+import QueryWrapper from '../../common/components/QueryWrapper';
+import Table from '../../common/components/table/Table';
+import { usePagination } from '../../common/hooks/usePagination';
+import { columns } from '../usersTableColumns';
+import UserFilters from '../widgets/UserFilters';
+import UsersTable from '../widgets/UsersTable';
+import UsersTabs from '../widgets/UsersTabs';
 
 export default function UsersPage() {
   const navigate = useNavigate();
@@ -59,11 +51,7 @@ export default function UsersPage() {
 
       <QueryWrapper
         suspenseFallback={
-          <Table
-            columns={columns}
-            pageSize={pageParams.perPage}
-            loading={true}
-          />
+          <Table columns={columns} pageSize={pageParams.perPage} loading />
         }
         errorFallback={<Alert severity="error">Could not load users</Alert>}
       >

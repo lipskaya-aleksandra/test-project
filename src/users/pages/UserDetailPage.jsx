@@ -1,7 +1,8 @@
 import { Alert } from '@mui/material';
-import UserCard from '../UserCard';
+
 import QueryWrapper from '../../common/components/QueryWrapper';
-import UserCardFallback from '../UserCardFallback';
+import UserCard from '../components/UserCard';
+import UserCardFallback from '../components/UserCardFallback';
 
 export default function UserDetailPage() {
   return (

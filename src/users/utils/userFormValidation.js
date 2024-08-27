@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
-import { emailValidationString } from './helpers/emailValidation';
-import { passwordValidationString } from './helpers/passwordValidation';
+import { emailValidationString } from '../../auth/utils/validation/emailValidation';
+import { passwordValidationString } from '../../auth/utils/validation/passwordValidation';
 
 export const schema = z
   .object({

@@ -13,11 +13,12 @@ export default function useUsersTableQueryParams() {
 
   const { pageParams } = usePagination();
 
-  const params = {
-    ...pageParams,
-    ...queryParams,
-    search: debouncedSearchTerm,
-  };
-
-  return useMemo(() => params, [pageParams, queryParams, debouncedSearchTerm]);
+  return useMemo(
+    () => ({
+      ...pageParams,
+      ...queryParams,
+      search: debouncedSearchTerm,
+    }),
+    [pageParams, queryParams, debouncedSearchTerm],
+  );
 }

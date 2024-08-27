@@ -1,17 +1,35 @@
 import { Delete } from '@mui/icons-material';
 import { Button, Stack, TablePagination, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 
-import Table from '../common/components/table/Table';
-import useAlertSnackbar from '../common/hooks/useAlertSnackbar';
-import useOptimisticUpdate from '../common/hooks/useOptimisticUpdate';
-import { usePagination } from '../common/hooks/usePagination';
+import Table from '../../common/components/table/Table';
+import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
+import useOptimisticUpdate from '../../common/hooks/useOptimisticUpdate';
+import { usePagination } from '../../common/hooks/usePagination';
+import { useDeleteManyUsers } from '../api/useDeleteManyUsers';
+import { useGetUsers } from '../api/useGetUsers';
+import useUsersTableQueryParams from '../hooks/useUsersTableQueryParams';
+import { columns } from '../usersTableColumns';
 
-import { useDeleteManyUsers } from './api/useDeleteManyUsers';
-import { useGetUsers } from './api/useGetUsers';
-import useUsersTableQueryParams from './hooks/useUsersTableQueryParams';
-import { columns } from './usersTableColumns';
+function UndoButton({ snackbarKey }) {
+  const params = useUsersTableQueryParams();
+  const { cancelUpdate } = useOptimisticUpdate(['users', params]);
+
+  const { closeSnackbar } = useSnackbar();
+
+  return (
+    <Button
+      sx={{ '&:focus': { outline: 'none' } }}
+      onClick={() => {
+        closeSnackbar(snackbarKey);
+        cancelUpdate();
+      }}
+    >
+      Undo
+    </Button>
+  );
+}
 
 export default function UsersTable() {
   const { pageParams, setPageParams } = usePagination();
@@ -23,9 +41,8 @@ export default function UsersTable() {
   const [selected, setSelected] = useState({});
   const deleteMany = useDeleteManyUsers();
 
-  const { startUpdate, cancelUpdate } = useOptimisticUpdate(['users', params]);
+  const { startUpdate } = useOptimisticUpdate(['users', params]);
   const displaySnackbar = useAlertSnackbar();
-  const { closeSnackbar } = useSnackbar();
 
   const selectedCount = Object.entries(selected).length;
 
@@ -49,22 +66,12 @@ export default function UsersTable() {
     });
     displaySnackbar({
       message: `Users with ids ${ids} deleted successfully`,
-      Action: ({ snackbarKey }) => (
-        <Button
-          sx={{ '&:focus': { outline: 'none' } }}
-          onClick={() => {
-            closeSnackbar(snackbarKey);
-            cancelUpdate();
-          }}
-        >
-          Undo
-        </Button>
-      ),
+      Action: <UndoButton />,
     });
   };
 
   return (
-    <React.Fragment>
+    <Fragment>
       <Stack direction="row" justifyContent="space-between">
         {selectedCount > 0 && (
           <Typography>Selected: {selectedCount}</Typography>
@@ -120,6 +127,6 @@ export default function UsersTable() {
           setPageParams({ perPage: e.target.value, page: 1 });
         }}
       />
-    </React.Fragment>
+    </Fragment>
   );
 }

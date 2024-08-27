@@ -138,6 +138,7 @@ module.exports = {
     'newline-before-return': ['error'],
 
     'no-console': production ? 'error' : 'warn',
+    'no-continue': 'off',
     'no-debugger': production ? 'error' : 'warn',
 
     'no-param-reassign': [
@@ -146,6 +147,13 @@ module.exports = {
         props: true,
         ignorePropertyModificationsFor: allowedToReassignParams,
       },
+    ],
+
+    'no-restricted-syntax': [
+      'error',
+      'ForInStatement',
+      'LabeledStatement',
+      'WithStatement',
     ],
 
     'require-await': 'error',
@@ -167,6 +175,7 @@ module.exports = {
     'react/jsx-fragments': [2, 'element'],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    'react/prop-types': 'off',
 
     // 'prettier/prettier': ['error'],
   },

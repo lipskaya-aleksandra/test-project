@@ -7,10 +7,6 @@ function mapDefaults(params) {
   );
 }
 
-const isArrayOfStrings = source =>
-  Array.isArray(source) &&
-  (source.filter(v => typeof v === 'string') || source.length === 0);
-
 export default function useQueryParams({
   defaults = {},
   allowOverrideKeys = [],
@@ -41,7 +37,7 @@ export default function useQueryParams({
 
       return { ...mappedDefaults, ...params };
     },
-    [defaults, searchParams],
+    [defaults, searchParams, mappedDefaults],
   );
 
   const updateParams = useCallback(
@@ -59,7 +55,13 @@ export default function useQueryParams({
         ...updatedParams,
       });
     },
-    [getCurrentParams, setSearchParams, defaults],
+    [
+      getCurrentParams,
+      setSearchParams,
+      defaults,
+      mappedDefaults,
+      allowOverrideKeys,
+    ],
   );
 
   return useMemo(

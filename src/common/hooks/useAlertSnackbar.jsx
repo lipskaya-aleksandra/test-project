@@ -1,17 +1,16 @@
-import { Alert, Box, Button } from '@mui/material';
+import { Alert } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { Fragment } from 'react';
 
 export default function useAlertSnackbar() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  return ({ severity, message, onCancel, Action }) =>
+  return ({ severity, message, Action }) =>
     enqueueSnackbar(message, {
       anchorOrigin: {
         vertical: 'top',
         horizontal: 'center',
       },
-      content: (key, message) => (
+      content: (key, msg) => (
         <Alert
           onClose={() => {
             closeSnackbar(key);
@@ -20,7 +19,7 @@ export default function useAlertSnackbar() {
           sx={{ width: '100%' }}
           action={Action && <Action snackbarKey={key} />}
         >
-          {message}
+          {msg}
         </Alert>
       ),
     });

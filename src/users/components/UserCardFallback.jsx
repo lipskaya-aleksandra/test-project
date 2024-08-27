@@ -1,11 +1,9 @@
-import { Edit } from '@mui/icons-material';
-import { ArrowBack } from '@mui/icons-material';
+import { Edit, ArrowBack } from '@mui/icons-material';
 import {
   Card,
   CardHeader,
   Skeleton,
   Button,
-  Container,
   CardContent,
   CardActions,
   Stack,
@@ -44,7 +42,7 @@ export default function UserCardFallback() {
           >
             Back
           </Button>
-          <Button startIcon={<Edit />} variant="outlined" disabled={true}>
+          <Button startIcon={<Edit />} variant="outlined" disabled>
             Edit
           </Button>
         </CardActions>

@@ -1,6 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useMemo , useCallback } from 'react';
-
+import { useMemo, useCallback } from 'react';
 
 export default function useOptimisticUpdate(queryKey) {
   const queryClient = useQueryClient();
@@ -16,7 +15,6 @@ export default function useOptimisticUpdate(queryKey) {
   );
 
   const cancelUpdate = useCallback(() => {
-    // queryClient.setQueryData(queryKey, prevData);
     clearTimeout(timer);
     queryClient.invalidateQueries({ queryKey });
   }, [queryKey, timer]);

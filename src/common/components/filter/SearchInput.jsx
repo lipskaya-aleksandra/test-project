@@ -1,5 +1,5 @@
-import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Search as SearchIcon, Clear as ClearIcon } from '@mui/icons-material';
+import { IconButton, InputAdornment, TextField } from '@mui/material';
 
 export default function SearchInput({ searchTerm, setSearchTerm }) {
   return (
@@ -7,7 +7,7 @@ export default function SearchInput({ searchTerm, setSearchTerm }) {
       sx={{ mt: 1, mb: 1 }}
       variant="outlined"
       value={searchTerm}
-      onChange={(e) => {
+      onChange={e => {
         setSearchTerm(e.target.value);
       }}
       placeholder="Search..."

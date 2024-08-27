@@ -1,7 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { useDeleteUser } from './api/useDeleteUser';
+import { Delete, Close, MoreVert } from '@mui/icons-material';
+import { Dropdown, IconButton, Menu, MenuButton } from '@mui/joy';
 import {
-  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -9,16 +8,15 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
-import { useState } from 'react';
-import EditActions from '../common/components/EditActions';
-import { Delete } from '@mui/icons-material';
-import { Close } from '@mui/icons-material';
-import useAlertSnackbar from '../common/hooks/useAlertSnackbar.jsx';
-import { Dropdown, IconButton, Menu, MenuButton } from '@mui/joy';
-import { MoreVert } from '@mui/icons-material';
-import useOptimisticUpdate from '../common/hooks/useOptimisticUpdate.js';
-import useUsersTableQueryParams from './hooks/useUsersTableQueryParams.js';
-import { useSnackbar } from 'notistack';
+import { useState, Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import DismissButton from '../../common/components/DismissButton';
+import EditActions from '../../common/components/EditActions';
+import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
+import useOptimisticUpdate from '../../common/hooks/useOptimisticUpdate';
+import { useDeleteUser } from '../api/useDeleteUser';
+import useUsersTableQueryParams from '../hooks/useUsersTableQueryParams';
 
 export default function EditUserCell({ cell }) {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -31,7 +29,6 @@ export default function EditUserCell({ cell }) {
   const id = cell.row.getValue('id');
 
   const displaySnackbar = useAlertSnackbar();
-  const { closeSnackbar } = useSnackbar();
 
   const deleteMutation = useDeleteUser();
 
@@ -43,9 +40,9 @@ export default function EditUserCell({ cell }) {
     setDialogOpen(false);
 
     startUpdate({
-      newData: (oldData) => ({
+      newData: oldData => ({
         count: oldData.count,
-        rows: oldData.rows.filter((u) => u.id != id),
+        rows: oldData.rows.filter(u => u.id !== id),
       }),
       delay: 5000,
       updateFn: () => {
@@ -56,11 +53,7 @@ export default function EditUserCell({ cell }) {
     displaySnackbar({
       onCancel: cancelUpdate,
       message: `User with id ${id} deleted succesfully.`,
-      Action: ({ onClose }) => (
-        <Button sx={{ '&:focus': { outline: 'none' } }} onClick={onClose}>
-          Dismiss
-        </Button>
-      ),
+      Action: <DismissButton />,
     });
   };
 
@@ -73,7 +66,7 @@ export default function EditUserCell({ cell }) {
   };
 
   return (
-    <>
+    <Fragment>
       <Dropdown>
         <MenuButton
           sx={{ '&:focus': { outline: 'none' } }}
@@ -110,6 +103,6 @@ export default function EditUserCell({ cell }) {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Fragment>
   );
 }

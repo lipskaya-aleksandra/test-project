@@ -1,20 +1,16 @@
+import { Email, Edit, ArrowBack } from '@mui/icons-material';
 import {
   Card,
   CardHeader,
-  Grid,
   Typography,
   Stack,
   Button,
-  Container,
   CardContent,
   CardActions,
 } from '@mui/material';
-import { Email } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import { Edit } from '@mui/icons-material';
-import { useParams } from 'react-router-dom';
-import { useGetUserById } from './api/useGetUserById';
-import { ArrowBack } from '@mui/icons-material';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { useGetUserById } from '../api/useGetUserById';
 
 export default function UserCard() {
   const navigate = useNavigate();

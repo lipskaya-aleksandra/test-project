@@ -1,15 +1,15 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import Root, { rootLoader } from '../components/Root';
-import UsersPage from '../../users/pages/UsersPage';
+import LoginPage from '../../auth/pages/LoginPage';
+import PasswordResetPage from '../../auth/pages/PasswordResetPage';
+import RequestPasswordResetPage from '../../auth/pages/RequestPasswordResetPage';
+import SignUpPage from '../../auth/pages/SignUpPage';
 import PostsPage from '../../posts/PostsPage';
-import UserDetailPage from '../../users/pages/UserDetailPage';
-import LoginPage from '../../users/pages/LoginPage';
 import CreateUserPage from '../../users/pages/CreateUserPage';
 import EditUserPage from '../../users/pages/EditUserPage';
-import SignUpPage from '../../users/pages/SignUpPage';
-import RequestPasswordResetPage from '../../users/pages/RequestPasswordResetPage';
-import PasswordResetPage from '../../users/pages/PasswordResetPage';
+import UserDetailPage from '../../users/pages/UserDetailPage';
+import UsersPage from '../../users/pages/UsersPage';
+import Root, { rootLoader } from '../components/Root';
 
 const router = createBrowserRouter([
   {
@@ -40,11 +40,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'posts',
-        //loader: postsLoader,
+        // loader: postsLoader,
         element: (
-          //<RedirectToCurrentPagination path="posts">
+          // <RedirectToCurrentPagination path="posts">
           <PostsPage />
-          //</RedirectToCurrentPagination>
+          // </RedirectToCurrentPagination>
         ),
       },
     ],

@@ -1,7 +1,8 @@
 import { AppBar, Box, Link, Toolbar } from '@mui/material';
-import { Outlet, redirect, NavLink } from 'react-router-dom';
-import { defaultValues } from '../hooks/usePagination';
 import { blue } from '@mui/material/colors';
+import { Outlet, redirect, NavLink } from 'react-router-dom';
+
+import { defaultValues } from '../hooks/usePagination';
 
 const linkStyle = {
   color: 'white',
@@ -22,6 +23,7 @@ const linkStyle = {
 
 export default function Root() {
   const searchParams = new URLSearchParams(defaultValues);
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <AppBar sx={{ width: '100%', mb: 3 }} position="sticky">
@@ -29,7 +31,7 @@ export default function Root() {
           <Link
             className={({ isActive }) => (isActive ? 'active' : '')}
             component={NavLink}
-            to={'/users?' + searchParams.toString()}
+            to={`/users?${searchParams.toString()}`}
             end
             sx={linkStyle}
           >
@@ -38,7 +40,7 @@ export default function Root() {
           <Link
             className={({ isActive }) => (isActive ? 'active' : '')}
             component={NavLink}
-            to={'/posts?' + searchParams.toString()}
+            to={`/posts?${searchParams.toString()}`}
             end
             sx={linkStyle}
           >
@@ -53,5 +55,6 @@ export default function Root() {
 
 export function rootLoader() {
   const searchParams = new URLSearchParams(defaultValues);
-  return redirect('/users?' + searchParams.toString());
+
+  return redirect(`/users?${searchParams.toString()}`);
 }

@@ -1,8 +1,9 @@
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { useEditUser } from './api/useUpdateUser';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { useGetUserById } from '../api/useGetUserById';
+import { useEditUser } from '../api/useUpdateUser';
+
 import UserForm from './UserForm';
-import { useGetUserById } from './api/useGetUserById';
 
 export default function EditUserForm() {
   const { userId } = useParams();
@@ -15,9 +16,9 @@ export default function EditUserForm() {
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = data => {
     mutate(data);
   };
 
-  return <UserForm title={'Edit user'} user={user} onSubmit={onSubmit} />;
+  return <UserForm title="Edit user" user={user} onSubmit={onSubmit} />;
 }

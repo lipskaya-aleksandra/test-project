@@ -1,5 +1,6 @@
 import { Delete } from '@mui/icons-material';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+
 import useQueryParams from '../../hooks/useQueryParams';
 
 export default function FilterResults({ defaultFilters }) {
@@ -25,22 +26,18 @@ export default function FilterResults({ defaultFilters }) {
         Applied filters:{nonEmptyFiltersCount === 0 && ' none.'}
       </Typography>
       {nonEmptyFiltersCount > 0 && (
-        <Stack
-          direction={'row'}
-          gap={1}
-          flexWrap={{ xs: 'wrap', sm: 'nowrap' }}
-        >
+        <Stack direction="row" gap={1} flexWrap={{ xs: 'wrap', sm: 'nowrap' }}>
           {filters.map(
-            (filter) =>
+            filter =>
               filter.values.length > 0 && (
                 <Stack
                   key={filter}
                   spacing={1}
-                  direction={'row'}
+                  direction="row"
                   sx={{ mt: 1, mb: 1, flexWrap: 'wrap' }}
                 >
                   <Typography>{filter.label}:</Typography>
-                  {filter.values.slice(0, 3).map((value) => (
+                  {filter.values.slice(0, 3).map(value => (
                     <Chip
                       key={value}
                       label={value}
@@ -49,7 +46,7 @@ export default function FilterResults({ defaultFilters }) {
                       onDelete={() => {
                         setQueryParams({
                           [filter.label]: filter.values.filter(
-                            (v) => v !== value,
+                            v => v !== value,
                           ),
                         });
                       }}

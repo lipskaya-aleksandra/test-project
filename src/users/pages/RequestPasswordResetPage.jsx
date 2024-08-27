@@ -1,10 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { Button, Container, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import TextInput from '../../common/components/form/TextInput';
 import { useRequestPasswordReset } from '../api/useRequestPasswordReset';
 import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
-import { redirect } from 'react-router-dom';
 
 export default function RequestPasswordResetPage() {
   const requestPasswordReset = useRequestPasswordReset();
@@ -52,7 +50,7 @@ export default function RequestPasswordResetPage() {
           <Typography fontWeight={300} fontSize={24} textAlign={'center'}>
             Request password reset
           </Typography>
-          <TextInput
+          {/* <TextInput
             error={!!errors.email}
             control={control}
             name={'email'}
@@ -60,7 +58,7 @@ export default function RequestPasswordResetPage() {
             helperText={errors.email?.message}
             rules={{ required: 'Email is required.' }}
             fullWidth
-          />
+          /> */}
           <Stack direction={'row'} justifyContent={'space-between'} mt={1}>
             <Button
               onClick={() => {

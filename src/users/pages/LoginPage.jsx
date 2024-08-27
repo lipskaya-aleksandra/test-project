@@ -5,12 +5,23 @@ import {
   Link,
   Button,
   Container,
+  TextField,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { Link as RouterLink } from 'react-router-dom';
 import { useLogin } from '../api/useLogin';
 import { useNavigate } from 'react-router-dom';
 import PasswordInput from '../../common/components/form/PasswordInput';
+
+const textInputProps = {
+  sx: {
+    mt: 1,
+    mb: 1,
+  },
+  size: 'small',
+  fullWidth: true,
+  variant: 'outlined',
+};
 
 export default function LoginPage() {
   const {
@@ -79,7 +90,7 @@ export default function LoginPage() {
             )}
           />
           <Controller
-            name={'email'}
+            name={'password'}
             control={control}
             rules={{ required: 'Password is required.' }}
             render={({ field: { ref, ...fieldProps } }) => (

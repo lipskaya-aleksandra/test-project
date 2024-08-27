@@ -13,14 +13,15 @@ import JobSelect, { noneJob } from './JobSelect';
 import QueryWrapper from '../common/components/QueryWrapper';
 import PasswordInput from '../common/components/form/PasswordInput';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { schema } from './userFormValidation';
+import PasswordValidationBox from './PasswordValidationBox';
 import {
   AT_LEAST_ONE_DIGIT,
   AT_LEAST_ONE_LOWERCASE_LETTER,
   AT_LEAST_ONE_SYMBOL,
   AT_LEAST_ONE_UPPERCASE_LETTER,
-  schema,
-} from './userFormValidation';
-import PasswordValidationBox from './PasswordValidationBox';
+  MIN_LENGTH,
+} from './helpers/passwordValidation';
 
 const textInputProps = {
   sx: {
@@ -56,6 +57,8 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
     resolver: zodResolver(schema),
   });
 
+  console.log({ errors });
+
   const password = useWatch({
     control,
     name: 'password',
@@ -72,7 +75,7 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
   const hasOneLowercaseLetter = AT_LEAST_ONE_LOWERCASE_LETTER.test(password);
   const hasOneUppercaseLetter = AT_LEAST_ONE_UPPERCASE_LETTER.test(password);
   const hasOneSymbol = AT_LEAST_ONE_SYMBOL.test(password);
-  const hasMinLength8 = password.length >= 8;
+  const hasMinLength = password.length >= MIN_LENGTH;
 
   const navigate = useNavigate();
   return (
@@ -110,10 +113,13 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
           <Controller
             name={'email'}
             control={control}
-            render={({ field: { ref, ...fieldProps } }) => (
+            render={({
+              field: { ref, ...fieldProps },
+              fieldState: { error },
+            }) => (
               <TextField
-                error={!!errors.email}
-                helperText={errors.email?.message}
+                error={!!error}
+                helperText={error?.message}
                 label="Email"
                 {...fieldProps}
                 {...textInputProps}
@@ -144,7 +150,7 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
                 hasOneLowercaseLetter={hasOneLowercaseLetter}
                 hasOneUppercaseLetter={hasOneUppercaseLetter}
                 hasOneSymbol={hasOneSymbol}
-                hasMinLength8={hasMinLength8}
+                hasMinLength={hasMinLength}
               />
 
               <Controller

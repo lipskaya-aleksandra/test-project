@@ -16,12 +16,12 @@ export default function PasswordValidationBox({
   hasOneLowercaseLetter,
   hasOneUppercaseLetter,
   hasOneSymbol,
-  hasMinLength8,
+  hasMinLength,
 }) {
   return (
     <Stack sx={{ my: 0.5 }}>
       <Typography
-        sx={{ ...typographySx, color: hasMinLength8 ? green[800] : red[800] }}
+        sx={{ ...typographySx, color: hasMinLength ? green[800] : red[800] }}
       >
         {hasMinLength8 ? (
           <DoneOutlined fontSize="small" />

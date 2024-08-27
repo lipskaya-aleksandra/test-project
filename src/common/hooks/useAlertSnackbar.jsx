@@ -18,7 +18,7 @@ export default function useAlertSnackbar() {
           }}
           severity={severity ?? 'success'}
           sx={{ width: '100%' }}
-          action={<Action snackbarKey={key} />}
+          action={Action && <Action snackbarKey={key} />}
         >
           {message}
         </Alert>

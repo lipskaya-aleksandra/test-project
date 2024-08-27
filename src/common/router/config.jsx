@@ -8,6 +8,8 @@ import LoginPage from '../../users/pages/LoginPage';
 import CreateUserPage from '../../users/pages/CreateUserPage';
 import EditUserPage from '../../users/pages/EditUserPage';
 import SignUpPage from '../../users/pages/SignUpPage';
+import RequestPasswordResetPage from '../../users/pages/RequestPasswordResetPage';
+import PasswordResetPage from '../../users/pages/PasswordResetPage';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +56,14 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <SignUpPage />,
+  },
+  {
+    path: '/request-password-reset',
+    element: <RequestPasswordResetPage />,
+  },
+  {
+    path: '/password-reset',
+    element: <PasswordResetPage />,
   },
 ]);
 

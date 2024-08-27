@@ -6,10 +6,11 @@ import {
   Button,
   Container,
 } from '@mui/material';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Link as RouterLink } from 'react-router-dom';
-import TextInput from '../../common/components/form/TextInput';
 import { useLogin } from '../api/useLogin';
+import { useNavigate } from 'react-router-dom';
+import PasswordInput from '../../common/components/form/PasswordInput';
 
 export default function LoginPage() {
   const {
@@ -25,11 +26,14 @@ export default function LoginPage() {
   });
 
   const login = useLogin();
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      const tokens = await login(data);
-      console.log(tokens);
+      const response = await login(data);
+      if (response.status === 201) {
+        navigate('/');
+      }
     } catch (e) {
       if (e.request.status === 401) {
         setError('email', {
@@ -59,23 +63,37 @@ export default function LoginPage() {
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Container maxWidth="xs">
-          <TextInput
-            error={!!errors.email}
-            control={control}
+          <Controller
             name={'email'}
-            label={'Email'}
-            helperText={errors.email?.message}
-            rules={{ required: 'Email is required.' }}
-          />
-          <TextInput
-            error={!!errors.password}
             control={control}
-            type={'password'}
-            name={'password'}
-            label={'Password'}
-            helperText={errors.password?.message}
-            rules={{ required: 'Password is required.' }}
+            rules={{ required: 'Email is required.' }}
+            render={({ field: { ref, ...fieldProps } }) => (
+              <TextField
+                error={!!errors.email}
+                helperText={errors.email?.message}
+                label="Email"
+                {...fieldProps}
+                {...textInputProps}
+                inputRef={ref}
+              />
+            )}
           />
+          <Controller
+            name={'email'}
+            control={control}
+            rules={{ required: 'Password is required.' }}
+            render={({ field: { ref, ...fieldProps } }) => (
+              <PasswordInput
+                error={!!errors.password}
+                helperText={errors.password?.message}
+                label="Password"
+                {...fieldProps}
+                {...textInputProps}
+                inputRef={ref}
+              />
+            )}
+          />
+
           <Button
             fullWidth
             type="submit"
@@ -84,9 +102,14 @@ export default function LoginPage() {
           >
             Sign In
           </Button>
+
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link
+                component={RouterLink}
+                to="/request-password-reset"
+                variant="body2"
+              >
                 Forgot password?
               </Link>
             </Grid>

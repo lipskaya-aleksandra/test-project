@@ -19,5 +19,5 @@ export default function EditUserForm() {
     mutate(data);
   };
 
-  return <UserForm user={user} onSubmit={onSubmit} />;
+  return <UserForm title={'Edit user'} user={user} onSubmit={onSubmit} />;
 }

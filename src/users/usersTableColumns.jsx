@@ -22,6 +22,7 @@ import { useEditUserJob } from './api/useEditUserJob.js';
 import useUsersTableQueryParams from './hooks/useUsersTableQueryParams.js';
 import { useSnackbar } from 'notistack';
 import { Fragment } from 'react';
+import JobSelect from './JobSelect.jsx';
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -67,8 +68,7 @@ export const columns = [
       const editJob = useEditUserJob(user.id);
 
       return (
-        <Select
-          size="small"
+        <JobSelect
           value={info.getValue() ? info.getValue().id : noneJob.id}
           onChange={(e) => {
             const jobId = e.target.value;
@@ -114,13 +114,7 @@ export const columns = [
               ),
             });
           }}
-        >
-          {jobs.map((job) => (
-            <MenuItem key={job.id} name={job.name} value={job.id}>
-              {job.name}
-            </MenuItem>
-          ))}
-        </Select>
+        />
       );
     },
   }),

@@ -1,7 +1,9 @@
 import { Tab, Tabs } from '@mui/material';
-import { statusColorMap } from './StatusLabel';
-import useQueryParams from '../common/hooks/useQueryParams';
+
 import { defaultValues, usePagination } from '../common/hooks/usePagination';
+import useQueryParams from '../common/hooks/useQueryParams';
+
+import { statusColorMap } from './StatusLabel';
 import { defaultFilters } from './defaultUserFilters';
 
 const tabSx = {
@@ -61,40 +63,40 @@ export default function UsersTabs() {
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap['all'],
+            color: statusColorMap.all,
           },
         }}
-        value={'all'}
+        value="all"
         label="All"
       />
       <Tab
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap['active'],
+            color: statusColorMap.active,
           },
         }}
-        value={'active'}
+        value="active"
         label="Active"
       />
       <Tab
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap['pending'],
+            color: statusColorMap.pending,
           },
         }}
-        value={'pending'}
+        value="pending"
         label="Pending"
       />
       <Tab
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap['blocked'],
+            color: statusColorMap.blocked,
           },
         }}
-        value={'blocked'}
+        value="blocked"
         label="Blocked"
       />
     </Tabs>

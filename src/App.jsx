@@ -1,10 +1,8 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SnackbarProvider } from 'notistack';
 import { RouterProvider } from 'react-router-dom';
 
-import { SnackbarProvider } from 'notistack';
-
-import { router } from './common/router/config.jsx';
-
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { router } from './common/router/config';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: Infinity } },

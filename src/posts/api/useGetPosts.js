@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import useApiClient from '../../common/hooks/useApiClient';
 import axios from 'axios';
+
+import useApiClient from '../../common/hooks/useApiClient';
 
 export function useGetPosts(params, options) {
   const getPostsFn = async () => {

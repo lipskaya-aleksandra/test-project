@@ -1,18 +1,15 @@
-import { useMemo } from 'react';
-import { useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 function mapDefaults(params) {
-  const defaults = {};
-  for (const [key, value] of Object.entries(params)) {
-    defaults[key] = value || [];
-  }
-  return defaults;
+  return Object.fromEntries(
+    Object.entries(params).map(([key, value]) => [key, value || []]),
+  );
 }
 
-const isArrayOfStrings = (source) =>
+const isArrayOfStrings = source =>
   Array.isArray(source) &&
-  (source.filter((v) => typeof v === 'string') || source.length === 0);
+  (source.filter(v => typeof v === 'string') || source.length === 0);
 
 export default function useQueryParams({
   defaults = {},
@@ -22,7 +19,7 @@ export default function useQueryParams({
   const [searchParams, setSearchParams] = useSearchParams(mappedDefaults);
 
   const getCurrentParams = useCallback(
-    (includesAll) => {
+    includesAll => {
       const params = {};
 
       for (const key of searchParams.keys()) {
@@ -48,7 +45,7 @@ export default function useQueryParams({
   );
 
   const updateParams = useCallback(
-    (newParams) => {
+    newParams => {
       const updatedParams = {};
 
       for (const [key, value] of Object.entries(newParams)) {

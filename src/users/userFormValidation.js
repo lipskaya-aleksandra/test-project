@@ -1,6 +1,5 @@
 import * as z from 'zod';
 
-import { hehe } from './haha';
 import { emailValidationString } from './helpers/emailValidation';
 import { passwordValidationString } from './helpers/passwordValidation';
 
@@ -18,5 +17,3 @@ export const schema = z
     message: "Passwords don't match",
     path: ['confirmedPassword'],
   });
-
-const a = 1;

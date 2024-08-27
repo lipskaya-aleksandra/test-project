@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { baseServerUrl } from '../../common/constants/server';
 import useApiClient from '../../common/hooks/useApiClient';
 
@@ -6,7 +7,7 @@ export function useDeleteUser(options) {
   const queryClient = useQueryClient();
   const apiClient = useApiClient();
 
-  const deleteUserFn = async (id) => {
+  const deleteUserFn = async id => {
     const response = await apiClient.delete(`/users/${id}`);
 
     return response;

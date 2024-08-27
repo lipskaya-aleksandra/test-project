@@ -4,7 +4,7 @@ import useQueryParams from '../../common/hooks/useQueryParams';
 export function useResetPassword() {
   const apiClient = useApiClient();
 
-  const resetPassword = async (data) => {
+  const resetPassword = async data => {
     const { queryParams } = useQueryParams({
       defaults: { resetPasswordToken: '' },
     });
@@ -13,7 +13,8 @@ export function useResetPassword() {
       resetPasswordToken: queryParams.resetPasswordToken,
       ...data,
     });
-    return response;
+    
+return response;
   };
 
   return resetPassword;

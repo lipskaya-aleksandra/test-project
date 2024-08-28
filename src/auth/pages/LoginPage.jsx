@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Stack,
   Typography,
@@ -12,6 +13,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import PasswordInput from '../../common/components/form/PasswordInput';
 import { useLogin } from '../api/useLogin';
+import { loginFormSchema } from '../utils/validation/loginFormValidation';
 
 const textInputProps = {
   sx: {
@@ -24,16 +26,12 @@ const textInputProps = {
 };
 
 export default function LoginPage() {
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit, setError } = useForm({
     defaultValues: {
       email: '',
       password: '',
     },
+    resolver: zodResolver(loginFormSchema),
   });
 
   const login = useLogin();
@@ -79,10 +77,13 @@ export default function LoginPage() {
             name="email"
             control={control}
             rules={{ required: 'Email is required.' }}
-            render={({ field: { ref, ...fieldProps } }) => (
+            render={({
+              field: { ref, ...fieldProps },
+              fieldState: { error },
+            }) => (
               <TextField
-                error={!!errors.email}
-                helperText={errors.email?.message}
+                error={!!error}
+                helperText={error?.message}
                 label="Email"
                 {...fieldProps}
                 {...textInputProps}
@@ -94,10 +95,13 @@ export default function LoginPage() {
             name="password"
             control={control}
             rules={{ required: 'Password is required.' }}
-            render={({ field: { ref, ...fieldProps } }) => (
+            render={({
+              field: { ref, ...fieldProps },
+              fieldState: { error },
+            }) => (
               <PasswordInput
-                error={!!errors.password}
-                helperText={errors.password?.message}
+                error={!!error}
+                helperText={error?.message}
                 label="Password"
                 {...fieldProps}
                 {...textInputProps}

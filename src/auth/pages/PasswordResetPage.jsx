@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Container, Stack, Typography } from '@mui/material';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -5,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import PasswordInput from '../../common/components/form/PasswordInput';
 import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
 import { useResetPassword } from '../api/useResetPassword';
+import { passwordResetFormSchema } from '../utils/validation/passwordResetFormValidation';
 import {
   AT_LEAST_ONE_DIGIT,
   AT_LEAST_ONE_LOWERCASE_LETTER,
@@ -29,15 +31,12 @@ export default function PasswordResetPage() {
   const navigate = useNavigate();
   const displaySnackbar = useAlertSnackbar();
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
       password: '',
       confirmedPassword: '',
     },
+    resolver: zodResolver(passwordResetFormSchema),
   });
 
   const onSubmit = async data => {
@@ -83,10 +82,13 @@ export default function PasswordResetPage() {
           <Controller
             name="password"
             control={control}
-            render={({ field: { ref, ...fieldProps } }) => (
+            render={({
+              field: { ref, ...fieldProps },
+              fieldState: { error },
+            }) => (
               <PasswordInput
-                error={!!errors.password}
-                helperText={errors.password?.message}
+                error={!!error}
+                helperText={error?.message}
                 label="Password"
                 {...fieldProps}
                 {...textInputProps}
@@ -106,10 +108,13 @@ export default function PasswordResetPage() {
           <Controller
             name="confirmedPassword"
             control={control}
-            render={({ field: { ref, ...fieldProps } }) => (
+            render={({
+              field: { ref, ...fieldProps },
+              fieldState: { error },
+            }) => (
               <PasswordInput
-                error={!!errors.confirmedPassword}
-                helperText={errors.confirmedPassword?.message}
+                error={!!error}
+                helperText={error?.message}
                 label="Confirm password"
                 {...fieldProps}
                 {...textInputProps}

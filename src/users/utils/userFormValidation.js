@@ -3,7 +3,7 @@ import * as z from 'zod';
 import { emailValidationString } from '../../auth/utils/validation/emailValidation';
 import { passwordValidationString } from '../../auth/utils/validation/passwordValidation';
 
-export const schema = z
+export const userFormSchema = z
   .object({
     firstName: z.string().optional(),
     lastName: z.string().optional(),

@@ -22,7 +22,7 @@ import {
 import PasswordValidationBox from '../../auth/widgets/PasswordValidationBox';
 import QueryWrapper from '../../common/components/QueryWrapper';
 import PasswordInput from '../../common/components/form/PasswordInput';
-import { schema } from '../utils/userFormValidation';
+import { userFormSchema } from '../utils/userFormValidation';
 
 import JobSelect, { noneJob } from './JobSelect';
 
@@ -37,12 +37,7 @@ const textInputProps = {
 };
 
 export default function UserForm({ onSubmit, user, withPassword, title }) {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm({
+  const { control, handleSubmit, setError } = useForm({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -57,7 +52,7 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
       email: user?.email,
       jobId: user?.job.id,
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(userFormSchema),
   });
 
   const password = useWatch({
@@ -135,10 +130,13 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
               <Controller
                 name="password"
                 control={control}
-                render={({ field: { ref, ...fieldProps } }) => (
+                render={({
+                  field: { ref, ...fieldProps },
+                  fieldState: { error },
+                }) => (
                   <PasswordInput
-                    error={!!errors.password}
-                    helperText={errors.password?.message}
+                    error={!!error}
+                    helperText={error?.message}
                     label="Password"
                     {...fieldProps}
                     {...textInputProps}
@@ -158,10 +156,13 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
               <Controller
                 name="confirmedPassword"
                 control={control}
-                render={({ field: { ref, ...fieldProps } }) => (
+                render={({
+                  field: { ref, ...fieldProps },
+                  fieldState: { error },
+                }) => (
                   <PasswordInput
-                    error={!!errors.confirmedPassword}
-                    helperText={errors.confirmedPassword?.message}
+                    error={!!error}
+                    helperText={error?.message}
                     label="Confirm password"
                     {...fieldProps}
                     {...textInputProps}
@@ -181,7 +182,9 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
             }
           >
             <Controller
-              render={({ field }) => <JobSelect {...field} />}
+              render={({ field: { ref, ...fieldProps } }) => (
+                <JobSelect {...fieldProps} />
+              )}
               name="jobId"
               control={control}
               defaultValue={noneJob.id}

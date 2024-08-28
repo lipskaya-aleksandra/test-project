@@ -1,9 +1,11 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Container, Stack, TextField, Typography } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
 import { useRequestPasswordReset } from '../api/useRequestPasswordReset';
+import { requestPasswordResetFormSchema } from '../utils/validation/requestPasswordResetFormValidation';
 
 const textInputProps = {
   sx: {
@@ -24,6 +26,7 @@ export default function RequestPasswordResetPage() {
     defaultValues: {
       email: '',
     },
+    resolver: zodResolver(requestPasswordResetFormSchema),
   });
 
   const onSubmit = async data => {
@@ -55,7 +58,7 @@ export default function RequestPasswordResetPage() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Container>
           <Typography fontWeight={300} fontSize={24} textAlign="center">
-            Request password reset
+            Password reset
           </Typography>
           <Controller
             name="email"

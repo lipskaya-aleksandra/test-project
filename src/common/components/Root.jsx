@@ -2,6 +2,7 @@ import { AppBar, Box, Link, Toolbar } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { Outlet, redirect, NavLink } from 'react-router-dom';
 
+import useUnauthorizedInterceptor from '../../auth/hooks/useUnauthorizedInterceptor';
 import { defaultValues } from '../hooks/usePagination';
 
 const linkStyle = {
@@ -23,6 +24,8 @@ const linkStyle = {
 
 export default function Root() {
   const searchParams = new URLSearchParams(defaultValues);
+
+  useUnauthorizedInterceptor();
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { baseServerUrl } from '../../common/constants/server';
 import useApiClient from '../../common/hooks/useApiClient';
 
 export function useDeleteUser(options) {

@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import useApiClient from '../../common/hooks/useApiClient';
 import { useRefreshTokens } from '../api/useRefreshTokens';
@@ -10,8 +10,8 @@ export default function useUnauthorizedInterceptor() {
   const refreshTokens = useRefreshTokens();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const interceptorId = apiClient.interceptors.response.use(
+  const interceptorRef = useRef(
+    apiClient.interceptors.response.use(
       undefined,
       async error => {
         if (
@@ -26,10 +26,13 @@ export default function useUnauthorizedInterceptor() {
         return Promise.reject(error);
       },
       { synchronous: true },
-    );
+    ),
+  );
 
-    return () => {
-      apiClient.interceptors.response.eject(interceptorId);
-    };
-  }, [apiClient, refreshTokens, queryClient]);
+  useEffect(
+    () => () => {
+      apiClient.interceptors.response.eject(interceptorRef.current);
+    },
+    [apiClient, refreshTokens, queryClient],
+  );
 }

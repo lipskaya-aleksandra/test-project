@@ -4,4 +4,5 @@ export const ALLOWED_UNAUTHORIZED_URLS = [
   '/auth/signup',
   '/auth/request-password-reset',
   '/auth/reset-password',
+  // '/account',
 ];

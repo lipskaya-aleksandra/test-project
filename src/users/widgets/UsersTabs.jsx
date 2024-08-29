@@ -1,4 +1,5 @@
 import { Tab, Tabs } from '@mui/material';
+import { useTransition } from 'react';
 
 import { defaultValues } from '../../common/hooks/usePagination';
 import useQueryParams from '../../common/hooks/useQueryParams';
@@ -23,6 +24,8 @@ export default function UsersTabs() {
     allowOverrideKeys: ['page'],
   });
 
+  const [, startTransition] = useTransition();
+
   return (
     <Tabs
       value={
@@ -46,22 +49,24 @@ export default function UsersTabs() {
               queryParams.status && queryParams.status.length > 0
                 ? queryParams.status
                 : 'all'
-            ],
+            ].color,
         },
       }}
       onChange={(e, value) => {
-        if (value === 'all') {
-          setQueryParams({ status: '', page: defaultValues.page });
-        } else {
-          setQueryParams({ status: value, page: defaultValues.page });
-        }
+        startTransition(() => {
+          if (value === 'all') {
+            setQueryParams({ status: '', page: defaultValues.page });
+          } else {
+            setQueryParams({ status: value, page: defaultValues.page });
+          }
+        });
       }}
     >
       <Tab
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap.all,
+            color: statusColorMap.all.color,
           },
         }}
         value="all"
@@ -71,7 +76,7 @@ export default function UsersTabs() {
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap.active,
+            color: statusColorMap.active.color,
           },
         }}
         value="active"
@@ -81,7 +86,7 @@ export default function UsersTabs() {
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap.pending,
+            color: statusColorMap.pending.color,
           },
         }}
         value="pending"
@@ -91,7 +96,7 @@ export default function UsersTabs() {
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap.blocked,
+            color: statusColorMap.blocked.color,
           },
         }}
         value="blocked"

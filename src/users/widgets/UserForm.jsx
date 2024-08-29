@@ -22,7 +22,10 @@ import {
 import PasswordValidationBox from '../../auth/widgets/PasswordValidationBox';
 import QueryWrapper from '../../common/components/QueryWrapper';
 import PasswordInput from '../../common/components/form/PasswordInput';
-import { userFormSchema } from '../utils/userFormValidation';
+import {
+  userFormSchema,
+  userFormWithPasswordSchema,
+} from '../utils/userFormValidation';
 
 import JobSelect, { noneJob } from './JobSelect';
 
@@ -50,9 +53,11 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
       firstName: user?.firstName,
       lastName: user?.lastName,
       email: user?.email,
-      jobId: user?.job.id,
+      jobId: user?.job?.id || noneJob.id,
     },
-    resolver: zodResolver(userFormSchema),
+    resolver: zodResolver(
+      withPassword ? userFormWithPasswordSchema : userFormSchema,
+    ),
   });
 
   const password = useWatch({
@@ -201,7 +206,11 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
               Cancel
             </Button>
 
-            <Button onClick={handleSubmit(onSubmit)} variant="contained">
+            <Button
+              sx={{ '&:focus': { outline: 'none' } }}
+              type="submit"
+              variant="contained"
+            >
               Submit
             </Button>
           </Stack>

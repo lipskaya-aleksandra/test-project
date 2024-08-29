@@ -3,10 +3,10 @@ import * as z from 'zod';
 import { emailValidationString } from '../../auth/utils/validation/emailValidation';
 import { passwordValidationString } from '../../auth/utils/validation/passwordValidation';
 
-export const userFormSchema = z
+export const userFormWithPasswordSchema = z
   .object({
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
+    firstName: z.string().optional().nullable(),
+    lastName: z.string().optional().nullable(),
     email: emailValidationString,
     password: passwordValidationString,
     confirmedPassword: z
@@ -17,3 +17,9 @@ export const userFormSchema = z
     message: "Passwords don't match",
     path: ['confirmedPassword'],
   });
+
+export const userFormSchema = z.object({
+  firstName: z.string().optional().nullable(),
+  lastName: z.string().optional().nullable(),
+  email: emailValidationString,
+});

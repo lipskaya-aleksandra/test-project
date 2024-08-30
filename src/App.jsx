@@ -5,7 +5,7 @@ import { RouterProvider } from 'react-router-dom';
 import { ALLOWED_UNAUTHORIZED_URLS } from './auth/constants';
 import { router } from './common/router/config';
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: Infinity,

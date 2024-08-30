@@ -1,10 +1,11 @@
-import { AppBar, Box, Link, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Link, Stack, Toolbar } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import { Outlet, redirect, NavLink } from 'react-router-dom';
-import stc from 'string-to-color';
+import { Outlet, redirect, NavLink, useNavigate } from 'react-router-dom';
 
 import { useGetAccount } from '../../auth/api/useGetAccount';
+import { useSignout } from '../../auth/api/useSignout';
 import useUnauthorizedInterceptor from '../../auth/hooks/useUnauthorizedInterceptor';
+import UserInitialsLabel from '../../users/components/UserInitialsLabel';
 import { defaultValues } from '../hooks/usePagination';
 
 const linkStyle = {
@@ -24,69 +25,78 @@ const linkStyle = {
   },
 };
 
-export default function Root() {
+function AppNavBar() {
+  const { isFetching, data } = useGetAccount();
+  const signout = useSignout();
+  const navigate = useNavigate();
+
   const searchParams = new URLSearchParams(defaultValues);
+
+  if (isFetching) return null;
+
+  return (
+    <AppBar
+      sx={{
+        width: '100%',
+        mb: 3,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+      position="sticky"
+    >
+      <Toolbar>
+        <Link
+          className={({ isActive }) => (isActive ? 'active' : '')}
+          component={NavLink}
+          to={`/users?${searchParams.toString()}`}
+          end
+          sx={linkStyle}
+        >
+          Users
+        </Link>
+        <Link
+          className={({ isActive }) => (isActive ? 'active' : '')}
+          component={NavLink}
+          to={`/posts?${searchParams.toString()}`}
+          end
+          sx={linkStyle}
+        >
+          Posts
+        </Link>
+      </Toolbar>
+      <Stack direction="row">
+        <UserInitialsLabel user={data} />
+        <Button
+          onClick={() => {
+            signout();
+            navigate('/login');
+          }}
+          sx={{
+            textTransform: 'none',
+            color: 'white',
+            backgroundColor: blue[400],
+            mr: 2,
+            '&:focus': { outline: 'none' },
+          }}
+        >
+          Sign out
+        </Button>
+      </Stack>
+    </AppBar>
+  );
+}
+
+export default function Root() {
+  const { isSuccess } = useGetAccount({ enabled: false });
 
   useUnauthorizedInterceptor();
 
-  const { data } = useGetAccount();
-  let userInitials;
-
-  if (data.firstName && data.lastName) {
-    userInitials = data.firstName[0] + data.lastName[0];
-  } else {
-    userInitials = data.email.slice(0, 2);
-  }
-  const userColor = stc(userInitials);
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <AppBar
-        sx={{
-          width: '100%',
-          mb: 3,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-        position="sticky"
-      >
-        <Toolbar>
-          <Link
-            className={({ isActive }) => (isActive ? 'active' : '')}
-            component={NavLink}
-            to={`/users?${searchParams.toString()}`}
-            end
-            sx={linkStyle}
-          >
-            Users
-          </Link>
-          <Link
-            className={({ isActive }) => (isActive ? 'active' : '')}
-            component={NavLink}
-            to={`/posts?${searchParams.toString()}`}
-            end
-            sx={linkStyle}
-          >
-            Posts
-          </Link>
-        </Toolbar>
-        <Box
-          sx={{
-            borderRadius: '50%',
-            backgroundColor: userColor,
-            width: 40,
-            height: 40,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            mr: 2,
-          }}
-        >
-          <Typography>{userInitials}</Typography>
-        </Box>
-      </AppBar>
-      <Outlet />
+      <AppNavBar />
+
+      {isSuccess && <Outlet />}
     </Box>
   );
 }

@@ -31,7 +31,11 @@ export default function UsersPage() {
           alignItems: 'flex-start',
         }}
       >
-        <UserFilters />
+        <QueryWrapper
+          errorFallback={<Alert severity="error">Could not load filters</Alert>}
+        >
+          <UserFilters />
+        </QueryWrapper>
 
         <Button
           variant="contained"

@@ -39,7 +39,7 @@ export default function LoginPage() {
 
   const onSubmit = async data => {
     try {
-      const response = await login(data);
+      const response = await login.mutateAsync(data);
 
       if (response.status === 201) {
         navigate('/');
@@ -111,6 +111,7 @@ export default function LoginPage() {
           />
 
           <Button
+            loading={login.status === 'loading'}
             fullWidth
             type="submit"
             variant="contained"

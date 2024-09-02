@@ -1,3 +1,5 @@
+import { useMutation } from '@tanstack/react-query';
+
 import useApiClient from '../../common/hooks/useApiClient';
 
 export function useLogin() {
@@ -9,5 +11,5 @@ export function useLogin() {
     return response;
   };
 
-  return login;
+  return useMutation({ mutationKey: ['users', 'login'], mutationFn: login });
 }

@@ -1,5 +1,5 @@
 import { AccountCircle } from '@mui/icons-material';
-import { MenuButton, Dropdown, IconButton, Menu, MenuItem } from '@mui/joy';
+import { MenuButton, Dropdown, IconButton, Menu } from '@mui/joy';
 import {
   AppBar,
   Box,
@@ -9,11 +9,13 @@ import {
   Toolbar,
   Typography,
   ClickAwayListener,
+  Skeleton,
 } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import loadingGif from '../../assets/1200x1200.gif';
 import { useGetAccount } from '../../auth/api/useGetAccount';
 import { useSignout } from '../../auth/api/useSignout';
 import UserInitialsLabel from '../../users/components/UserInitialsLabel';
@@ -46,89 +48,117 @@ export default function NavBar() {
 
   const searchParams = new URLSearchParams(defaultValues);
 
-  if (isFetching) return null;
-
   return (
-    <AppBar
-      sx={{
-        width: '100%',
-        mb: 3,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}
-      position="sticky"
-    >
-      <Toolbar>
-        <Link
-          component={NavLink}
-          to={`/users?${searchParams.toString()}`}
-          sx={linkStyle}
-        >
-          Users
-        </Link>
-        <Link
-          component={NavLink}
-          to={`/posts?${searchParams.toString()}`}
-          sx={linkStyle}
-        >
-          Posts
-        </Link>
-      </Toolbar>
-      <Stack direction="row">
-        <Dropdown>
-          <ClickAwayListener
-            onClickAway={() => {
-              setIsMenuOpen(false);
+    <Fragment>
+      <AppBar
+        sx={{
+          width: '100%',
+          mb: 3,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+        position="sticky"
+      >
+        <Toolbar>
+          <Link
+            component={NavLink}
+            to={`/users?${searchParams.toString()}`}
+            sx={linkStyle}
+          >
+            Users
+          </Link>
+          <Link
+            component={NavLink}
+            to={`/posts?${searchParams.toString()}`}
+            sx={linkStyle}
+          >
+            Posts
+          </Link>
+        </Toolbar>
+
+        <Stack direction="row">
+          {isFetching && (
+            <Skeleton
+              height={40}
+              width={40}
+              sx={{ mr: 2 }}
+              animation="pulse"
+              variant="circular"
+            />
+          )}
+          {!isFetching && (
+            <Dropdown>
+              <ClickAwayListener
+                onClickAway={() => {
+                  setIsMenuOpen(false);
+                }}
+              >
+                <Box>
+                  <MenuButton
+                    onClick={() => {
+                      setIsMenuOpen(prev => !prev);
+                    }}
+                    sx={{
+                      mr: 2,
+                      '&:focus': { outline: 'none' },
+                      '&:hover': {
+                        backgroundColor: 'inherit',
+                        filter:
+                          'drop-shadow(0px 2px 8px rgba(255,255,255,0.32))',
+                      },
+                    }}
+                    slots={{ root: IconButton }}
+                    slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
+                  >
+                    <UserInitialsLabel user={data} />
+                  </MenuButton>
+                  <Menu
+                    open={isMenuOpen}
+                    sx={{ zIndex: 5000 }}
+                    placement="bottom"
+                  >
+                    <Stack>
+                      <IconButton sx={{ color: 'gray', mx: 1 }}>
+                        <AccountCircle sx={{ mr: 1 }} />
+                        <Typography>Account</Typography>
+                      </IconButton>
+                    </Stack>
+                  </Menu>
+                </Box>
+              </ClickAwayListener>
+            </Dropdown>
+          )}
+
+          <Button
+            onClick={() => {
+              signout();
+              navigate('/login');
+            }}
+            sx={{
+              textTransform: 'none',
+              color: 'white',
+              backgroundColor: blue[400],
+              mr: 2,
+              '&:focus': { outline: 'none' },
             }}
           >
-            <Box>
-              <MenuButton
-                onClick={() => {
-                  setIsMenuOpen(prev => !prev);
-                }}
-                sx={{
-                  mr: 2,
-                  '&:focus': { outline: 'none' },
-                  '&:hover': {
-                    backgroundColor: 'inherit',
-                    filter: 'drop-shadow(0px 2px 8px rgba(255,255,255,0.32))',
-                  },
-                }}
-                slots={{ root: IconButton }}
-                slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
-              >
-                <UserInitialsLabel user={data} />
-              </MenuButton>
-              <Menu open={isMenuOpen} sx={{ zIndex: 5000 }} placement="bottom">
-                <Stack>
-                  {/* <MenuItem> */}
-                  <IconButton sx={{ color: 'gray', mx: 1 }}>
-                    <AccountCircle sx={{ mr: 1 }} />
-                    <Typography>Account</Typography>
-                  </IconButton>
-                  {/* </MenuItem> */}
-                </Stack>
-              </Menu>
-            </Box>
-          </ClickAwayListener>
-        </Dropdown>
-        <Button
-          onClick={() => {
-            signout();
-            navigate('/login');
+            Sign out
+          </Button>
+        </Stack>
+      </AppBar>
+      {isFetching && (
+        <img
+          style={{
+            height: '100%',
+            margin: '0 auto',
+            position: 'absolute',
+            alignSelf: 'center',
           }}
-          sx={{
-            textTransform: 'none',
-            color: 'white',
-            backgroundColor: blue[400],
-            mr: 2,
-            '&:focus': { outline: 'none' },
-          }}
-        >
-          Sign out
-        </Button>
-      </Stack>
-    </AppBar>
+          src={loadingGif}
+          alt="loading..."
+        />
+      )}
+    </Fragment>
   );
 }

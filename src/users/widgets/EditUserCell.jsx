@@ -7,6 +7,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  ClickAwayListener,
+  Box,
 } from '@mui/material';
 import { useState, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +22,7 @@ import useUsersTableQueryParams from '../hooks/useUsersTableQueryParams';
 
 export default function EditUserCell({ cell }) {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const params = useUsersTableQueryParams();
@@ -68,17 +71,28 @@ export default function EditUserCell({ cell }) {
   return (
     <Fragment>
       <Dropdown>
-        <MenuButton
-          sx={{ '&:focus': { outline: 'none' } }}
-          slots={{ root: IconButton }}
-          slotProps={{ root: { variant: 'outlined', color: 'neutral' } }}
+        <ClickAwayListener
+          onClickAway={() => {
+            setMenuOpen(false);
+          }}
         >
-          <MoreVert />
-        </MenuButton>
+          <Box>
+            <MenuButton
+              onClick={() => {
+                setMenuOpen(prev => !prev);
+              }}
+              sx={{ '&:focus': { outline: 'none' } }}
+              slots={{ root: IconButton }}
+              slotProps={{ root: { variant: 'outlined', color: 'neutral' } }}
+            >
+              <MoreVert />
+            </MenuButton>
 
-        <Menu placement="right-start">
-          <EditActions onDelete={onDeleteInitiated} onEdit={onEdit} />
-        </Menu>
+            <Menu open={menuOpen} placement="right-start">
+              <EditActions onDelete={onDeleteInitiated} onEdit={onEdit} />
+            </Menu>
+          </Box>
+        </ClickAwayListener>
       </Dropdown>
 
       <Dialog open={dialogOpen} onClose={handleDialogClose}>

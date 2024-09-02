@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Avatar, Box, Typography } from '@mui/material';
 import stc from 'string-to-color';
 
 export default function UserInitialsLabel({ user }) {
@@ -12,19 +12,19 @@ export default function UserInitialsLabel({ user }) {
   const userColor = stc(userInitials);
 
   return (
-    <Box
+    <Avatar
       sx={{
-        borderRadius: '50%',
+        // borderRadius: '50%',
         backgroundColor: userColor,
         width: 40,
         height: 40,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        mr: 2,
+        // display: 'flex',
+        // alignItems: 'center',
+        // justifyContent: 'center',
       }}
     >
-      <Typography>{userInitials}</Typography>
-    </Box>
+      {/* <Typography>{userInitials}</Typography> */}
+      {userInitials}
+    </Avatar>
   );
 }

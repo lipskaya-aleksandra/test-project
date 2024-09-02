@@ -4,13 +4,13 @@ import {
   Typography,
   Grid,
   Link,
-  Button,
   Container,
   TextField,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
+import LoadingButton from '../../common/components/LoadingButton';
 import PasswordInput from '../../common/components/form/PasswordInput';
 import { useLogin } from '../api/useLogin';
 import { loginFormSchema } from '../utils/validation/loginFormValidation';
@@ -110,15 +110,15 @@ export default function LoginPage() {
             )}
           />
 
-          <Button
-            loading={login.status === 'loading'}
+          <LoadingButton
+            loading={login.isPending}
             fullWidth
             type="submit"
             variant="contained"
             sx={{ mt: 1.5, mb: 1.5, '&:focus': { outline: 'none' } }}
           >
             Sign In
-          </Button>
+          </LoadingButton>
 
           <Grid container>
             <Grid item xs>

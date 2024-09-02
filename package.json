@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^3.9.0",
     "@mui/icons-material": "^5.15.20",
     "@mui/joy": "5.0.0-beta.48",
+    "@mui/lab": "5.0.0-alpha.173",
     "@mui/material": "^5.15.19",
     "@reduxjs/toolkit": "^2.2.5",
     "@tanstack/react-query": "^5.51.11",

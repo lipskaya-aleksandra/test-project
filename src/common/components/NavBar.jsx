@@ -1,15 +1,15 @@
-import { AccountCircle } from '@mui/icons-material';
+import { AccountCircle, ExitToApp } from '@mui/icons-material';
 import { MenuButton, Dropdown, IconButton, Menu } from '@mui/joy';
 import {
   AppBar,
   Box,
-  Button,
   Link,
   Stack,
   Toolbar,
   Typography,
   ClickAwayListener,
   Skeleton,
+  Tooltip,
 } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { useState, Fragment } from 'react';
@@ -95,33 +95,50 @@ export default function NavBar() {
                 }}
               >
                 <Box>
-                  <MenuButton
-                    onClick={() => {
-                      setIsMenuOpen(prev => !prev);
-                    }}
-                    sx={{
-                      mr: 2,
-                      '&:focus': { outline: 'none' },
-                      '&:hover': {
-                        backgroundColor: 'inherit',
-                        filter:
-                          'drop-shadow(0px 2px 8px rgba(255,255,255,0.32))',
-                      },
-                    }}
-                    slots={{ root: IconButton }}
-                    slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
-                  >
-                    <UserInitialsLabel user={data} />
-                  </MenuButton>
+                  <Tooltip title="Open account menu" arrow>
+                    <MenuButton
+                      onClick={() => {
+                        setIsMenuOpen(prev => !prev);
+                      }}
+                      sx={{
+                        mr: 2,
+                        '&:focus': { outline: 'none' },
+                        '&:hover': {
+                          backgroundColor: 'inherit',
+                          filter:
+                            'drop-shadow(0px 2px 8px rgba(255,255,255,0.32))',
+                        },
+                      }}
+                      slots={{ root: IconButton }}
+                      slotProps={{
+                        root: { variant: 'plain', color: 'neutral' },
+                      }}
+                    >
+                      <UserInitialsLabel user={data} />
+                    </MenuButton>
+                  </Tooltip>
                   <Menu
                     open={isMenuOpen}
                     sx={{ zIndex: 5000 }}
                     placement="bottom"
                   >
-                    <Stack>
-                      <IconButton sx={{ color: 'gray', mx: 1 }}>
+                    <Stack sx={{ px: 1 }}>
+                      <IconButton sx={{ color: 'gray' }}>
                         <AccountCircle sx={{ mr: 1 }} />
                         <Typography>Account</Typography>
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          signout();
+                          navigate('/login');
+                        }}
+                        sx={{
+                          color: 'red',
+                          '&:focus': { outline: 'none' },
+                        }}
+                      >
+                        <ExitToApp sx={{ mr: 1 }} />
+                        <Typography>Sign out</Typography>
                       </IconButton>
                     </Stack>
                   </Menu>
@@ -129,22 +146,6 @@ export default function NavBar() {
               </ClickAwayListener>
             </Dropdown>
           )}
-
-          <Button
-            onClick={() => {
-              signout();
-              navigate('/login');
-            }}
-            sx={{
-              textTransform: 'none',
-              color: 'white',
-              backgroundColor: blue[400],
-              mr: 2,
-              '&:focus': { outline: 'none' },
-            }}
-          >
-            Sign out
-          </Button>
         </Stack>
       </AppBar>
       {isFetching && (

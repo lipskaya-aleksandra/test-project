@@ -9,6 +9,7 @@ import {
   DialogTitle,
   ClickAwayListener,
   Box,
+  Tooltip,
 } from '@mui/material';
 import { useState, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -77,16 +78,18 @@ export default function EditUserCell({ cell }) {
           }}
         >
           <Box>
-            <MenuButton
-              onClick={() => {
-                setMenuOpen(prev => !prev);
-              }}
-              sx={{ '&:focus': { outline: 'none' } }}
-              slots={{ root: IconButton }}
-              slotProps={{ root: { variant: 'outlined', color: 'neutral' } }}
-            >
-              <MoreVert />
-            </MenuButton>
+            <Tooltip title="Open edit menu" arrow>
+              <MenuButton
+                onClick={() => {
+                  setMenuOpen(prev => !prev);
+                }}
+                sx={{ '&:focus': { outline: 'none' } }}
+                slots={{ root: IconButton }}
+                slotProps={{ root: { variant: 'outlined', color: 'neutral' } }}
+              >
+                <MoreVert />
+              </MenuButton>
+            </Tooltip>
 
             <Menu open={menuOpen} placement="right-start">
               <EditActions onDelete={onDeleteInitiated} onEdit={onEdit} />

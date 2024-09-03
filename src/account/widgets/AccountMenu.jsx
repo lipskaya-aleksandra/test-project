@@ -1,26 +1,53 @@
 import { AccountCircle, ExitToApp } from '@mui/icons-material';
-import {
-  IconButton,
-  ListItemIcon,
-  Menu,
-  MenuItem,
-  Tooltip,
-} from '@mui/material';
+import { ListItemIcon, MenuItem } from '@mui/material';
 import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useSignout } from '../../auth/api/useSignout';
-import useMenu from '../../common/hooks/useMenu';
+import BaseMenu from '../../common/components/menu/BaseMenu';
 import UserInitialsLabel from '../../users/components/UserInitialsLabel';
 
 export default function AccountMenu({ user }) {
   const signout = useSignout();
   const navigate = useNavigate();
-  const { anchorEl, isOpen, onClick, onClose } = useMenu();
 
   return (
     <Fragment>
-      <Tooltip title="Open account menu" arrow>
+      <BaseMenu
+        tooltipTitle="Open account menu"
+        id="account-menu"
+        MenuIcon={<UserInitialsLabel user={user} />}
+        iconSx={{
+          mr: 2,
+          '&:focus': { outline: 'none' },
+          '&:hover': {
+            backgroundColor: 'inherit',
+            filter: 'drop-shadow(0px 2px 8px rgba(255,255,255,0.32))',
+          },
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            navigate('/users/account');
+          }}
+        >
+          <ListItemIcon>
+            <AccountCircle />
+          </ListItemIcon>
+          Account
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            signout();
+          }}
+        >
+          <ListItemIcon>
+            <ExitToApp />
+          </ListItemIcon>
+          Sign out
+        </MenuItem>
+      </BaseMenu>
+      {/* <Tooltip title="Open account menu" arrow>
         <IconButton
           onClick={onClick}
           aria-controls={isOpen ? 'account-menu' : undefined}
@@ -44,6 +71,7 @@ export default function AccountMenu({ user }) {
         open={isOpen}
         onClose={onClose}
         onClick={onClose}
+        disableScrollLock
         slotProps={{
           paper: {
             elevation: 0,
@@ -94,8 +122,8 @@ export default function AccountMenu({ user }) {
             <ExitToApp />
           </ListItemIcon>
           Sign out
-        </MenuItem>
-        {/* <Stack sx={{ px: 1 }}>
+        </MenuItem> */}
+      {/* <Stack sx={{ px: 1 }}>
                <IconButton sx={{ color: 'gray' }}>
                  <AccountCircle sx={{ mr: 1 }} />
                  <Typography>Account</Typography>
@@ -114,7 +142,7 @@ export default function AccountMenu({ user }) {
                 <Typography>Sign out</Typography>
               </IconButton>
             </Stack> */}
-      </Menu>
+      {/* </Menu> */}
       {/* <Menu
         anchorEl={anchorEl}
         id="account-menu"

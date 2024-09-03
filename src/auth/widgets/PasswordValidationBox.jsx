@@ -1,6 +1,15 @@
 import { CloseOutlined, DoneOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { green, red } from '@mui/material/colors';
+import { useFormContext, useWatch } from 'react-hook-form';
+
+import {
+  AT_LEAST_ONE_DIGIT,
+  AT_LEAST_ONE_LOWERCASE_LETTER,
+  AT_LEAST_ONE_SYMBOL,
+  AT_LEAST_ONE_UPPERCASE_LETTER,
+  MIN_LENGTH,
+} from '../utils/validation/passwordValidation';
 
 const typographySx = {
   verticalAlign: 'middle',
@@ -8,13 +17,20 @@ const typographySx = {
   fontSize: 14,
 };
 
-export default function PasswordValidationBox({
-  hasOneDigit,
-  hasOneLowercaseLetter,
-  hasOneUppercaseLetter,
-  hasOneSymbol,
-  hasMinLength,
-}) {
+export default function PasswordValidationBox() {
+  const { control } = useFormContext();
+
+  const password = useWatch({
+    control,
+    name: 'password',
+  });
+
+  const hasOneDigit = AT_LEAST_ONE_DIGIT.test(password);
+  const hasOneLowercaseLetter = AT_LEAST_ONE_LOWERCASE_LETTER.test(password);
+  const hasOneUppercaseLetter = AT_LEAST_ONE_UPPERCASE_LETTER.test(password);
+  const hasOneSymbol = AT_LEAST_ONE_SYMBOL.test(password);
+  const hasMinLength = password.length >= MIN_LENGTH;
+
   return (
     <Stack sx={{ my: 0.5 }}>
       <Typography

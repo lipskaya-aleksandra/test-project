@@ -20,5 +20,7 @@ export default function EditUserForm() {
     mutate(data);
   };
 
-  return <UserForm title="Edit user" user={user} onSubmit={onSubmit} />;
+  return (
+    <UserForm key="123" title="Edit user" user={user} onSubmit={onSubmit} />
+  );
 }

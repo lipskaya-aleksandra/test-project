@@ -18,8 +18,10 @@ export const userFormWithPasswordSchema = z
     path: ['confirmedPassword'],
   });
 
-export const userFormSchema = z.object({
-  firstName: z.string().optional().nullable(),
-  lastName: z.string().optional().nullable(),
-  email: emailValidationString,
-});
+export const userFormSchema = z
+  .object({
+    firstName: z.string().optional().nullable(),
+    lastName: z.string().optional().nullable(),
+    email: emailValidationString,
+  })
+  .passthrough();

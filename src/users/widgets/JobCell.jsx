@@ -8,7 +8,7 @@ import { useEditUserJob } from '../api/useEditUserJob';
 import { useGetJobs } from '../api/useGetJobs';
 import useUsersTableQueryParams from '../hooks/useUsersTableQueryParams';
 
-import JobSelect from './JobSelect';
+import { JobSelect } from './JobSelect';
 
 function UndoAndDismissButtons({ snackbarKey }) {
   const params = useUsersTableQueryParams();
@@ -55,7 +55,8 @@ export default function JobCell({ info }) {
       value={info.getValue() ? info.getValue().id : noneJob.id}
       onChange={e => {
         const jobId = e.target.value;
-        const jobName = jobs.filter(r => r.id === jobId)[0].name;
+        const jobName =
+          jobs.filter(r => r.id === jobId)[0]?.name || noneJob.name;
 
         startUpdate({
           newData: oldData => ({

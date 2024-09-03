@@ -1,4 +1,10 @@
-import { Email, Edit, ArrowBack } from '@mui/icons-material';
+import {
+  Email,
+  Edit,
+  ArrowBack,
+  WorkOutlineOutlined,
+  MoreVert,
+} from '@mui/icons-material';
 import {
   Card,
   CardHeader,
@@ -7,14 +13,17 @@ import {
   Button,
   CardContent,
   CardActions,
+  Box,
 } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+import BaseMenu from '../../common/components/menu/BaseMenu';
 import { useGetUserById } from '../api/useGetUserById';
 
-export default function UserCard() {
+import StatusLabel from './StatusLabel';
+
+export default function UserCard({ userId, menuOptions }) {
   const navigate = useNavigate();
-  const { userId } = useParams();
   const { data: user } = useGetUserById(userId);
 
   return (
@@ -31,9 +40,29 @@ export default function UserCard() {
       <Card sx={{ p: 1 }}>
         <CardHeader
           title={
-            <Typography gutterBottom variant="h5">
-              {`${user.firstName} ${user.lastName}`}
-            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Typography gutterBottom variant="h5">
+                {`${user.firstName} ${user.lastName}`}
+              </Typography>
+              <StatusLabel value={user.status} />
+            </Box>
+          }
+          action={
+            menuOptions && (
+              <BaseMenu
+                tooltipTitle="Open edit menu"
+                id="edit-menu"
+                MenuIcon={<MoreVert />}
+              >
+                {menuOptions}
+              </BaseMenu>
+            )
           }
           subheader={
             <Typography variant="caption" display="block" gutterBottom>
@@ -46,6 +75,12 @@ export default function UserCard() {
             <Email />
             <Typography>{user.email}</Typography>
           </Stack>
+          {user.job && (
+            <Stack alignItems="center" direction="row" gap={2}>
+              <WorkOutlineOutlined />
+              <Typography>{user.job.name}</Typography>
+            </Stack>
+          )}
         </CardContent>
         <CardActions sx={{ justifyContent: 'space-between' }}>
           <Button

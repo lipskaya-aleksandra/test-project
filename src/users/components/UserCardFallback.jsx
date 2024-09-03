@@ -31,6 +31,7 @@ export default function UserCardFallback() {
         />
         <CardContent>
           <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+          <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
         </CardContent>
         <CardActions sx={{ justifyContent: 'space-between' }}>
           <Button

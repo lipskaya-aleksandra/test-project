@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import AccountPage from '../../account/pages/AccountPage';
 import LoginPage from '../../auth/pages/LoginPage';
 import PasswordResetPage from '../../auth/pages/PasswordResetPage';
 import RequestPasswordResetPage from '../../auth/pages/RequestPasswordResetPage';
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
           {
             path: 'create',
             element: <CreateUserPage />,
+          },
+          {
+            path: 'account',
+            element: <AccountPage />,
           },
         ],
       },

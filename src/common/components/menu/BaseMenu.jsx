@@ -9,6 +9,7 @@ export default function BaseMenu({
   id,
   MenuIcon,
   iconSx,
+  arrowPosition,
   ...props
 }) {
   const { anchorEl, isOpen, onClick, onClose } = useMenu();
@@ -52,6 +53,7 @@ export default function BaseMenu({
                 bgcolor: 'background.paper',
                 transform: 'translateY(-50%) rotate(45deg)',
                 zIndex: 0,
+                ...arrowPosition,
               },
             },
           },

@@ -59,6 +59,9 @@ export default function UserCard({ userId, menuOptions }) {
                 tooltipTitle="Open edit menu"
                 id="edit-menu"
                 MenuIcon={<MoreVert />}
+                transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+                arrowPosition={{ left: -4, top: 14 }}
               >
                 {menuOptions}
               </BaseMenu>

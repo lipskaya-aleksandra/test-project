@@ -1,24 +1,10 @@
-import { AccountCircle, ExitToApp } from '@mui/icons-material';
-import { MenuButton, Dropdown, IconButton, Menu } from '@mui/joy';
-import {
-  AppBar,
-  Box,
-  Link,
-  Stack,
-  Toolbar,
-  Typography,
-  ClickAwayListener,
-  Skeleton,
-  Tooltip,
-} from '@mui/material';
+import { AppBar, Link, Stack, Toolbar, Skeleton } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import { useState, Fragment } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Fragment } from 'react';
 
+import AccountMenu from '../../account/widgets/AccountMenu';
 import loadingGif from '../../assets/1200x1200.gif';
 import { useGetAccount } from '../../auth/api/useGetAccount';
-import { useSignout } from '../../auth/api/useSignout';
-import UserInitialsLabel from '../../users/components/UserInitialsLabel';
 import { defaultValues } from '../hooks/usePagination';
 
 import NavLink from './NavLink';
@@ -42,9 +28,6 @@ const linkStyle = {
 
 export default function NavBar() {
   const { isFetching, data } = useGetAccount();
-  const signout = useSignout();
-  const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const searchParams = new URLSearchParams(defaultValues);
 
@@ -87,65 +70,7 @@ export default function NavBar() {
               variant="circular"
             />
           )}
-          {!isFetching && (
-            <Dropdown>
-              <ClickAwayListener
-                onClickAway={() => {
-                  setIsMenuOpen(false);
-                }}
-              >
-                <Box>
-                  <Tooltip title="Open account menu" arrow>
-                    <MenuButton
-                      onClick={() => {
-                        setIsMenuOpen(prev => !prev);
-                      }}
-                      sx={{
-                        mr: 2,
-                        '&:focus': { outline: 'none' },
-                        '&:hover': {
-                          backgroundColor: 'inherit',
-                          filter:
-                            'drop-shadow(0px 2px 8px rgba(255,255,255,0.32))',
-                        },
-                      }}
-                      slots={{ root: IconButton }}
-                      slotProps={{
-                        root: { variant: 'plain', color: 'neutral' },
-                      }}
-                    >
-                      <UserInitialsLabel user={data} />
-                    </MenuButton>
-                  </Tooltip>
-                  <Menu
-                    open={isMenuOpen}
-                    sx={{ zIndex: 5000 }}
-                    placement="bottom"
-                  >
-                    <Stack sx={{ px: 1 }}>
-                      <IconButton sx={{ color: 'gray' }}>
-                        <AccountCircle sx={{ mr: 1 }} />
-                        <Typography>Account</Typography>
-                      </IconButton>
-                      <IconButton
-                        onClick={() => {
-                          signout();
-                          navigate('/login');
-                        }}
-                        sx={{
-                          color: 'red',
-                          '&:focus': { outline: 'none' },
-                        }}
-                      >
-                        <ExitToApp sx={{ mr: 1 }} />
-                        <Typography>Sign out</Typography>
-                      </IconButton>
-                    </Stack>
-                  </Menu>
-                </Box>
-              </ClickAwayListener>
-            </Dropdown>
-          )}
+          {!isFetching && <AccountMenu user={data} />}
         </Stack>
       </AppBar>
       {isFetching && (

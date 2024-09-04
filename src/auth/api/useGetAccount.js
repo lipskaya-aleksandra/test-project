@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 import useApiClient from '../../common/hooks/useApiClient';
 
@@ -11,7 +11,7 @@ export function useGetAccount(options) {
     return response.data;
   };
 
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['users', 'account'],
     queryFn: getAccount,
     ...options,

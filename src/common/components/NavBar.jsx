@@ -1,4 +1,4 @@
-import { AppBar, Link, Stack, Toolbar, Skeleton } from '@mui/material';
+import { AppBar, Toolbar, Skeleton, Box } from '@mui/material';
 import { blue } from '@mui/material/colors';
 
 import AccountMenu from '../../account/widgets/AccountMenu';
@@ -14,11 +14,10 @@ const linkStyle = {
   '&:hover': {
     color: blue[200],
   },
-  padding: '6px 12px',
-  borderRadius: 2,
-  marginRight: 6,
-  marginLeft: 6,
 
+  borderRadius: 2,
+
+  padding: '6px 12px',
   '&.active': {
     backgroundColor: blue[400],
   },
@@ -40,35 +39,29 @@ export default function NavBar() {
       }}
       position="sticky"
     >
-      <Toolbar>
-        <Link
-          component={NavLink}
-          to={`/users?${searchParams.toString()}`}
-          sx={linkStyle}
-        >
-          Users
-        </Link>
-        <Link
-          component={NavLink}
-          to={`/posts?${searchParams.toString()}`}
-          sx={linkStyle}
-        >
-          Posts
-        </Link>
-      </Toolbar>
+      <Toolbar sx={{ width: '100%' }}>
+        <Box display="flex" gap={4}>
+          <NavLink to={`/users?${searchParams.toString()}`} sx={linkStyle}>
+            Users
+          </NavLink>
 
-      <Stack direction="row">
-        {isFetching && (
-          <Skeleton
-            height={40}
-            width={40}
-            sx={{ mr: 2 }}
-            animation="pulse"
-            variant="circular"
-          />
-        )}
-        {!isFetching && <AccountMenu user={data} />}
-      </Stack>
+          <NavLink to={`/posts?${searchParams.toString()}`} sx={linkStyle}>
+            Posts
+          </NavLink>
+        </Box>
+
+        <Box sx={{ ml: 'auto' }}>
+          {isFetching && (
+            <Skeleton
+              height={40}
+              width={40}
+              animation="pulse"
+              variant="circular"
+            />
+          )}
+          {!isFetching && <AccountMenu user={data} />}
+        </Box>
+      </Toolbar>
     </AppBar>
   );
 }

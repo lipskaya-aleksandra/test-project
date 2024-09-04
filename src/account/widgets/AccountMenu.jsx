@@ -16,7 +16,7 @@ export default function AccountMenu({ user }) {
       id="account-menu"
       MenuIcon={<UserInitialsLabel user={user} />}
       iconSx={{
-        mr: 2,
+        p: 0,
         '&:focus': { outline: 'none' },
         '&:hover': {
           backgroundColor: 'inherit',

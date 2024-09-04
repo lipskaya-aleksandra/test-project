@@ -27,6 +27,7 @@ export default function BaseMenu({
           {MenuIcon}
         </IconButton>
       </Tooltip>
+
       <Menu
         disableScrollLock
         slotProps={{

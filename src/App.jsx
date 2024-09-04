@@ -18,7 +18,19 @@ export const queryClient = new QueryClient({
           return false;
         }
 
-        return 4;
+        return 4 - failureCount;
+      },
+    },
+    mutations: {
+      retry: (failureCount, error) => {
+        if (
+          error.response.status === 401 &&
+          ALLOWED_UNAUTHORIZED_URLS.includes(error.config.url)
+        ) {
+          return false;
+        }
+
+        return 4 - failureCount;
       },
     },
   },

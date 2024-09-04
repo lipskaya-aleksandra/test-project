@@ -6,6 +6,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import LoadingButton from '../../common/components/LoadingButton';
 import PasswordInput from '../../common/components/form/PasswordInput';
+import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
 import { useLogin } from '../api/useLogin';
 import { loginFormSchema } from '../utils/validation/loginFormValidation';
 
@@ -28,6 +29,8 @@ export default function LoginPage() {
     resolver: zodResolver(loginFormSchema),
   });
 
+  const displaySnackbar = useAlertSnackbar();
+
   const login = useLogin();
   const navigate = useNavigate();
 
@@ -47,6 +50,11 @@ export default function LoginPage() {
         setError('password', {
           type: '401',
           message: 'Incorrect email or password',
+        });
+      } else {
+        displaySnackbar({
+          severity: 'error',
+          message: 'Something went wrong, please try again later.',
         });
       }
     }

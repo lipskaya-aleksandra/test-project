@@ -20,6 +20,11 @@ export default function SignUpPage() {
     } catch (e) {
       if (e.response.status === 409) {
         setError('email', { type: '409', message: 'Email already in use.' });
+      } else {
+        displaySnackbar({
+          severity: 'error',
+          message: 'Something went wrong, please try again.',
+        });
       }
     }
   };

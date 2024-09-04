@@ -18,7 +18,10 @@ export default function PasswordResetPage() {
         navigate('/login');
       }
     } catch (e) {
-      //
+      displaySnackbar({
+        severity: 'error',
+        message: 'Something went wrong, please try again.',
+      });
     }
   };
 

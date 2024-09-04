@@ -18,7 +18,10 @@ export default function AuthedPasswordResetPage() {
         navigate(-1);
       }
     } catch (e) {
-      //
+      displaySnackbar({
+        severity: 'error',
+        message: 'Something went wrong, please try again.',
+      });
     }
   };
 

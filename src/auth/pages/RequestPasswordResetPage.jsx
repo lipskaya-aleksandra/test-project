@@ -39,7 +39,6 @@ export default function RequestPasswordResetPage() {
       navigate(url);
     } catch (e) {
       if (e.response.status === 401) {
-        // setError('email', { message: 'Incorrect email provided.' });
         navigate('/login');
       }
     }

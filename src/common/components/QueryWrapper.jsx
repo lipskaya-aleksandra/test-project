@@ -10,7 +10,7 @@ export default function QueryWrapper({
   return (
     <QueryErrorResetBoundary>
       {({ reset }) => (
-        <ErrorBoundary onReset={reset} fallbackRender={errorFallback}>
+        <ErrorBoundary onReset={reset} fallback={errorFallback}>
           <Suspense fallback={suspenseFallback}>{children}</Suspense>
         </ErrorBoundary>
       )}

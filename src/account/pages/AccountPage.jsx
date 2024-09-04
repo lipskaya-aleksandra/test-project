@@ -1,38 +1,39 @@
 import { EditOutlined } from '@mui/icons-material';
-import { Alert, ListItemIcon, MenuItem } from '@mui/material';
+import { ListItemIcon, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetAccount } from '../../auth/api/useGetAccount';
-import QueryWrapper from '../../common/components/QueryWrapper';
+import ErrorFallback from '../../common/components/fallbacks/ErrorFallback';
 import UserCard from '../../users/components/UserCard';
 import UserCardFallback from '../../users/components/UserCardFallback';
 
 export default function AccountPage() {
-  const { data } = useGetAccount();
+  const { data, isFetching, isError } = useGetAccount();
   const navigate = useNavigate();
 
+  if (isFetching) {
+    return <UserCardFallback />;
+  }
+
+  if (isError) {
+    return <ErrorFallback />;
+  }
+
   return (
-    <QueryWrapper
-      suspenseFallback={<UserCardFallback />}
-      errorFallback={
-        <Alert severity="error">Could not load account details</Alert>
+    <UserCard
+      menuOptions={
+        <MenuItem
+          onClick={() => {
+            navigate('/account/reset-password');
+          }}
+        >
+          <ListItemIcon>
+            <EditOutlined />
+          </ListItemIcon>
+          Reset password
+        </MenuItem>
       }
-    >
-      <UserCard
-        menuOptions={
-          <MenuItem
-            onClick={() => {
-              navigate('/account/reset-password');
-            }}
-          >
-            <ListItemIcon>
-              <EditOutlined />
-            </ListItemIcon>
-            Reset password
-          </MenuItem>
-        }
-        userId={data.id}
-      />
-    </QueryWrapper>
+      user={data}
+    />
   );
 }

@@ -3,7 +3,7 @@ import { Button, Container, Stack, Typography } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import LoadingButton from '../../common/components/LoadingButton';
+import LoadingButton from '../../common/components/form/LoadingButton';
 import PasswordInput from '../../common/components/form/PasswordInput';
 import { passwordResetFormSchema } from '../utils/validation/passwordResetFormValidation';
 

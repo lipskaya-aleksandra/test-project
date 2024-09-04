@@ -1,10 +1,9 @@
-import { Box, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
-import errorImg from '../../assets/pngwing.com.png';
 import QueryWrapper from '../../common/components/QueryWrapper';
-import UserCard from '../components/UserCard';
+import Error404Fallback from '../../common/components/fallbacks/Error404Fallback';
 import UserCardFallback from '../components/UserCardFallback';
+import UserDataWrapper from '../components/UserDataWrapper';
 
 export default function UserDetailPage() {
   const { userId } = useParams();
@@ -12,16 +11,9 @@ export default function UserDetailPage() {
   return (
     <QueryWrapper
       suspenseFallback={<UserCardFallback />}
-      errorFallback={
-        <Box sx={{ textAlign: 'center' }}>
-          <img style={{ height: 300 }} src={errorImg} alt="ERROR 404" />
-          <Typography color="#5893b0" variant="h5">
-            Record not found.
-          </Typography>
-        </Box>
-      }
+      errorFallback={<Error404Fallback />}
     >
-      <UserCard userId={userId} />
+      <UserDataWrapper userId={userId} />
     </QueryWrapper>
   );
 }

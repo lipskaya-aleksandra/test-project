@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
-import LoadingButton from '../../common/components/LoadingButton';
+import LoadingButton from '../../common/components/form/LoadingButton';
 import PasswordInput from '../../common/components/form/PasswordInput';
 import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
 import { useLogin } from '../api/useLogin';

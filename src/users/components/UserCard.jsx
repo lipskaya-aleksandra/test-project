@@ -18,13 +18,11 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import BaseMenu from '../../common/components/menu/BaseMenu';
-import { useGetUserById } from '../api/useGetUserById';
 
 import StatusLabel from './StatusLabel';
 
-export default function UserCard({ userId, menuOptions }) {
+export default function UserCard({ user, menuOptions }) {
   const navigate = useNavigate();
-  const { data: user } = useGetUserById(userId);
 
   return (
     <Card sx={{ p: 1 }}>

@@ -11,6 +11,7 @@ import CreateUserPage from '../../users/pages/CreateUserPage';
 import EditUserPage from '../../users/pages/EditUserPage';
 import UserDetailPage from '../../users/pages/UserDetailPage';
 import UsersPage from '../../users/pages/UsersPage';
+import CenteredContentLayout from '../components/CenteredContentLayout';
 import Root, { rootLoader } from '../components/Root';
 
 const router = createBrowserRouter([
@@ -27,21 +28,27 @@ const router = createBrowserRouter([
             element: <UsersPage />,
           },
           {
-            path: ':userId',
-            element: <UserDetailPage />,
-          },
-          {
-            path: 'edit/:userId',
-            element: <EditUserPage />,
-          },
-          {
-            path: 'create',
-            element: <CreateUserPage />,
+            element: <CenteredContentLayout />,
+            children: [
+              {
+                path: ':userId',
+                element: <UserDetailPage />,
+              },
+              {
+                path: 'edit/:userId',
+                element: <EditUserPage />,
+              },
+              {
+                path: 'create',
+                element: <CreateUserPage />,
+              },
+            ],
           },
         ],
       },
       {
         path: 'account',
+        element: <CenteredContentLayout />,
         children: [
           {
             index: true,
@@ -60,20 +67,25 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/signup',
-    element: <SignUpPage />,
-  },
-  {
-    path: '/request-password-reset',
-    element: <RequestPasswordResetPage />,
-  },
-  {
-    path: '/password-reset',
-    element: <PasswordResetPage />,
+    element: <CenteredContentLayout />,
+    children: [
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/signup',
+        element: <SignUpPage />,
+      },
+      {
+        path: '/request-password-reset',
+        element: <RequestPasswordResetPage />,
+      },
+      {
+        path: '/password-reset',
+        element: <PasswordResetPage />,
+      },
+    ],
   },
 ]);
 

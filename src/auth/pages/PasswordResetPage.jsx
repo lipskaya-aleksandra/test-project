@@ -1,4 +1,3 @@
-import { Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
@@ -23,17 +22,5 @@ export default function PasswordResetPage() {
     }
   };
 
-  return (
-    <Stack
-      sx={{
-        width: 'fit-content',
-        alignItems: 'center',
-        margin: '0 auto',
-        height: '100%',
-        justifyContent: 'center',
-      }}
-    >
-      <PasswordResetForm onSubmit={onSubmit} />
-    </Stack>
-  );
+  return <PasswordResetForm onSubmit={onSubmit} />;
 }

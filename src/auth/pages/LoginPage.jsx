@@ -1,12 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Stack,
-  Typography,
-  Grid,
-  Link,
-  Container,
-  TextField,
-} from '@mui/material';
+import { Typography, Grid, Link, Container, TextField } from '@mui/material';
+import { Fragment } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
@@ -59,15 +53,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Stack
-      sx={{
-        width: 'fit-content',
-        alignItems: 'center',
-        margin: '0 auto',
-        height: '100%',
-        justifyContent: 'center',
-      }}
-    >
+    <Fragment>
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
@@ -138,6 +124,6 @@ export default function LoginPage() {
           </Grid>
         </Container>
       </form>
-    </Stack>
+    </Fragment>
   );
 }

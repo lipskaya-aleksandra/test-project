@@ -46,58 +46,48 @@ export default function RequestPasswordResetPage() {
   };
 
   return (
-    <Stack
-      sx={{
-        width: 'fit-content',
-        alignItems: 'center',
-        margin: '0 auto',
-        height: '100%',
-        justifyContent: 'center',
-      }}
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Container>
-          <Typography fontWeight={300} fontSize={24} textAlign="center">
-            Password reset
-          </Typography>
-          <Controller
-            name="email"
-            control={control}
-            render={({
-              field: { ref, ...fieldProps },
-              fieldState: { error },
-            }) => (
-              <TextField
-                error={!!error}
-                helperText={error?.message}
-                label="Email"
-                {...fieldProps}
-                {...textInputProps}
-                inputRef={ref}
-              />
-            )}
-          />
-          <Stack direction="row" justifyContent="space-between" mt={1}>
-            <Button
-              onClick={() => {
-                navigate(-1);
-              }}
-              sx={{ '&:focus': { outline: 'none' } }}
-              variant="outlined"
-            >
-              Cancel
-            </Button>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Container>
+        <Typography fontWeight={300} fontSize={24} textAlign="center">
+          Password reset
+        </Typography>
+        <Controller
+          name="email"
+          control={control}
+          render={({
+            field: { ref, ...fieldProps },
+            fieldState: { error },
+          }) => (
+            <TextField
+              error={!!error}
+              helperText={error?.message}
+              label="Email"
+              {...fieldProps}
+              {...textInputProps}
+              inputRef={ref}
+            />
+          )}
+        />
+        <Stack direction="row" justifyContent="space-between" mt={1}>
+          <Button
+            onClick={() => {
+              navigate(-1);
+            }}
+            sx={{ '&:focus': { outline: 'none' } }}
+            variant="outlined"
+          >
+            Cancel
+          </Button>
 
-            <Button
-              sx={{ '&:focus': { outline: 'none' } }}
-              onClick={handleSubmit(onSubmit)}
-              variant="contained"
-            >
-              Submit
-            </Button>
-          </Stack>
-        </Container>
-      </form>
-    </Stack>
+          <Button
+            sx={{ '&:focus': { outline: 'none' } }}
+            onClick={handleSubmit(onSubmit)}
+            variant="contained"
+          >
+            Submit
+          </Button>
+        </Stack>
+      </Container>
+    </form>
   );
 }

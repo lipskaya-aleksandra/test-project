@@ -60,15 +60,7 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
   const navigate = useNavigate();
 
   return (
-    <Stack
-      sx={{
-        position: 'absolute',
-        width: '100%',
-        alignItems: 'center',
-        height: '100%',
-        justifyContent: 'center',
-      }}
-    >
+    <Fragment>
       <Typography fontWeight={300} fontSize={24} textAlign="center">
         {title}
       </Typography>
@@ -190,6 +182,6 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
           </Container>
         </form>
       </FormProvider>
-    </Stack>
+    </Fragment>
   );
 }

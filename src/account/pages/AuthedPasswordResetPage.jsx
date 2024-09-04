@@ -1,4 +1,3 @@
-import { Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuthedResetPassword } from '../../auth/api/useAuthedResetPassword';
@@ -24,19 +23,6 @@ export default function AuthedPasswordResetPage() {
   };
 
   return (
-    <Stack
-      sx={{
-        position: 'absolute',
-        width: '100%',
-        alignItems: 'center',
-        height: '100%',
-        justifyContent: 'center',
-      }}
-    >
-      <PasswordResetForm
-        loading={resetPassword.isPending}
-        onSubmit={onSubmit}
-      />
-    </Stack>
+    <PasswordResetForm loading={resetPassword.isPending} onSubmit={onSubmit} />
   );
 }

@@ -1,22 +1,22 @@
-import { Stack } from '@mui/material';
+import { Stack, Alert, Autocomplete, TextField } from '@mui/material';
 
+import QueryWrapper from '../../common/components/QueryWrapper';
 import FilterResults from '../../common/components/filter/FilterResults';
 import FilterWidgetContainer from '../../common/components/filter/FilterWidget';
-import MultiSelect from '../../common/components/filter/MultiSelect';
 import SearchInput from '../../common/components/filter/SearchInput';
 import { defaultValues } from '../../common/hooks/usePagination';
 import useQueryParams from '../../common/hooks/useQueryParams';
 import { useSearch } from '../../common/hooks/useSearch';
-import { useGetJobs } from '../api/useGetJobs';
 import { defaultFilters } from '../defaultUserFilters';
 
+import JobMultiSelect from './JobMultiSelect';
+
 export default function UserFilters() {
-  const { queryParams, setQueryParams } = useQueryParams({
+  const { setQueryParams } = useQueryParams({
     defaults: defaultFilters,
     allowOverrideKeys: ['page'],
   });
   const { search, setSearch } = useSearch();
-  const { data } = useGetJobs();
 
   const onSelect = (newOptions, filter) => {
     setQueryParams({
@@ -28,17 +28,25 @@ export default function UserFilters() {
   return (
     <FilterWidgetContainer>
       <Stack direction={{ xs: 'column', sm: 'row' }} gap={1}>
-        <MultiSelect
-          label="Job"
-          options={data.map(r => r.name)}
-          placeholder="Choose job"
-          onChange={(e, newOptions) => {
-            onSelect(newOptions, 'job');
-          }}
-          getOptionLabel={option => option}
-          value={queryParams.job}
-          renderTags={() => null}
-        />
+        <QueryWrapper
+          suspenseFallback={
+            <Autocomplete
+              sx={{ mt: 1, mb: 1, minWidth: '300px' }}
+              options={[]}
+              loading
+              renderInput={params => (
+                <TextField {...params} label="Job" placeholder="Choose job" />
+              )}
+            />
+          }
+          errorFallback={<Alert severity="error">Could not load jobs</Alert>}
+        >
+          <JobMultiSelect
+            onChange={(e, newOptions) => {
+              onSelect(newOptions, 'job');
+            }}
+          />
+        </QueryWrapper>
 
         <SearchInput
           searchTerm={search}

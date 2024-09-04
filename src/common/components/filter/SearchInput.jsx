@@ -4,7 +4,7 @@ import { IconButton, InputAdornment, TextField } from '@mui/material';
 export default function SearchInput({ searchTerm, setSearchTerm }) {
   return (
     <TextField
-      sx={{ mt: 1, mb: 1 }}
+      sx={{ mt: 1, mb: 1, minWidth: '250px' }}
       variant="outlined"
       value={searchTerm}
       onChange={e => {

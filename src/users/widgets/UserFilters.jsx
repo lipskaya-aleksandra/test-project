@@ -27,7 +27,7 @@ export default function UserFilters() {
 
   return (
     <FilterWidgetContainer>
-      <Stack direction={{ xs: 'column', sm: 'row' }} gap={1}>
+      <Stack direction={{ xs: 'column', md: 'row' }} gap={1}>
         <QueryWrapper
           suspenseFallback={
             <Autocomplete

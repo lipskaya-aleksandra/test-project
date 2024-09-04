@@ -3,6 +3,7 @@ import { Button, Container, Stack, Typography } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import LoadingButton from '../../common/components/LoadingButton';
 import PasswordInput from '../../common/components/form/PasswordInput';
 import { passwordResetFormSchema } from '../utils/validation/passwordResetFormValidation';
 
@@ -18,7 +19,7 @@ const textInputProps = {
   variant: 'outlined',
 };
 
-export default function PasswordResetForm({ onSubmit }) {
+export default function PasswordResetForm({ loading, onSubmit }) {
   const navigate = useNavigate();
 
   const formMethods = useForm({
@@ -86,13 +87,14 @@ export default function PasswordResetForm({ onSubmit }) {
               Cancel
             </Button>
 
-            <Button
+            <LoadingButton
+              loading={loading}
               sx={{ '&:focus': { outline: 'none' } }}
               onClick={formMethods.handleSubmit(onSubmit)}
               variant="contained"
             >
               Submit
-            </Button>
+            </LoadingButton>
           </Stack>
         </Container>
       </form>

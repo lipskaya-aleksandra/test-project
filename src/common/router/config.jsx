@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import AccountPage from '../../account/pages/AccountPage';
+import AuthedPasswordResetPage from '../../account/pages/AuthedPasswordResetPage';
 import LoginPage from '../../auth/pages/LoginPage';
 import PasswordResetPage from '../../auth/pages/PasswordResetPage';
 import RequestPasswordResetPage from '../../auth/pages/RequestPasswordResetPage';
@@ -39,7 +40,16 @@ const router = createBrowserRouter([
           },
           {
             path: 'account',
-            element: <AccountPage />,
+            children: [
+              {
+                index: true,
+                element: <AccountPage />,
+              },
+              {
+                path: 'reset-password',
+                element: <AuthedPasswordResetPage />,
+              },
+            ],
           },
         ],
       },

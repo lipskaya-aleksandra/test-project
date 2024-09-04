@@ -26,7 +26,7 @@ export default function AccountMenu({ user }) {
     >
       <MenuItem
         onClick={() => {
-          navigate('/users/account');
+          navigate('/account');
         }}
       >
         <ListItemIcon>

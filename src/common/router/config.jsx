@@ -38,29 +38,24 @@ const router = createBrowserRouter([
             path: 'create',
             element: <CreateUserPage />,
           },
+        ],
+      },
+      {
+        path: 'account',
+        children: [
           {
-            path: 'account',
-            children: [
-              {
-                index: true,
-                element: <AccountPage />,
-              },
-              {
-                path: 'reset-password',
-                element: <AuthedPasswordResetPage />,
-              },
-            ],
+            index: true,
+            element: <AccountPage />,
+          },
+          {
+            path: 'reset-password',
+            element: <AuthedPasswordResetPage />,
           },
         ],
       },
       {
         path: 'posts',
-        // loader: postsLoader,
-        element: (
-          // <RedirectToCurrentPagination path="posts">
-          <PostsPage />
-          // </RedirectToCurrentPagination>
-        ),
+        element: <PostsPage />,
       },
     ],
   },

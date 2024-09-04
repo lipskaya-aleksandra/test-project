@@ -22,7 +22,7 @@ export default function AccountPage() {
         menuOptions={
           <MenuItem
             onClick={() => {
-              navigate('/users/account/reset-password');
+              navigate('/account/reset-password');
             }}
           >
             <ListItemIcon>

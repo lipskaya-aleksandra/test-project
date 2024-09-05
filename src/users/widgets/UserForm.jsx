@@ -44,6 +44,7 @@ export default function UserForm({
     defaultValues: {
       firstName: '',
       lastName: '',
+      email: '',
       password: '',
       confirmPassword: '',
       jobId: noneJob.id,

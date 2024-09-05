@@ -1,7 +1,4 @@
-import { Button } from '@mui/material';
-import { useSnackbar } from 'notistack';
-import { Fragment } from 'react';
-
+import { UndoAndDismissButtons } from '../../common/components/snackbar/SnackbarActions.';
 import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
 import useOptimisticUpdate from '../../common/hooks/useOptimisticUpdate';
 import { useEditUserJob } from '../api/useEditUserJob';
@@ -10,34 +7,6 @@ import useUsersTableQueryParams from '../hooks/useUsersTableQueryParams';
 
 import { JobSelect } from './JobSelect';
 
-function UndoAndDismissButtons({ snackbarKey }) {
-  const params = useUsersTableQueryParams();
-  const { cancelUpdate } = useOptimisticUpdate(['users', params]);
-  const { closeSnackbar } = useSnackbar();
-
-  return (
-    <Fragment>
-      <Button
-        sx={{ '&:focus': { outline: 'none' } }}
-        onClick={() => {
-          cancelUpdate();
-          closeSnackbar(snackbarKey);
-        }}
-      >
-        Undo
-      </Button>
-      <Button
-        sx={{ '&:focus': { outline: 'none' } }}
-        onClick={() => {
-          closeSnackbar(snackbarKey);
-        }}
-      >
-        Dismiss
-      </Button>
-    </Fragment>
-  );
-}
-
 export default function JobCell({ info }) {
   const user = info.row.original;
   const { data } = useGetJobs();
@@ -45,7 +14,7 @@ export default function JobCell({ info }) {
   const jobs = [noneJob, ...data];
 
   const params = useUsersTableQueryParams();
-  const { startUpdate } = useOptimisticUpdate(['users', params]);
+  const { startUpdate, cancelUpdate } = useOptimisticUpdate(['users', params]);
   const displaySnackbar = useAlertSnackbar();
 
   const editJob = useEditUserJob(user.id);
@@ -76,7 +45,7 @@ export default function JobCell({ info }) {
 
         displaySnackbar({
           message: `Job for user ${user.firstName} ${user.lastName} changed from ${user.job.name} to ${jobName}`,
-          Action: <UndoAndDismissButtons />,
+          Action: <UndoAndDismissButtons onUndo={cancelUpdate} />,
         });
       }}
     />

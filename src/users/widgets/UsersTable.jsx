@@ -66,7 +66,7 @@ export default function UsersTable() {
     });
     displaySnackbar({
       message: `Users with ids ${ids} deleted successfully`,
-      Action: <UndoButton />,
+      Action: UndoButton,
     });
   };
 

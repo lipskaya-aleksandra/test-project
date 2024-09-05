@@ -10,9 +10,9 @@ import {
 import { useState, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import DismissButton from '../../common/components/DismissButton';
 import EditActions from '../../common/components/EditActions';
 import BaseMenu from '../../common/components/menu/BaseMenu';
+import { DismissButton } from '../../common/components/snackbar/SnackbarActions.';
 import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
 import useOptimisticUpdate from '../../common/hooks/useOptimisticUpdate';
 import { useDeleteUser } from '../api/useDeleteUser';

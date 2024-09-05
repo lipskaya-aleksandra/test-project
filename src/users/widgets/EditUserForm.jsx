@@ -12,7 +12,7 @@ export default function EditUserForm() {
   const navigate = useNavigate();
   const displaySnackbar = useAlertSnackbar();
 
-  const { mutate } = useEditUser(userId, {
+  const { mutate, isPending } = useEditUser(userId, {
     onSuccess: () => {
       navigate(`/users/${userId}`, { replace: true });
     },
@@ -29,6 +29,11 @@ export default function EditUserForm() {
   };
 
   return (
-    <UserForm key="123" title="Edit user" user={user} onSubmit={onSubmit} />
+    <UserForm
+      loading={isPending}
+      title="Edit user"
+      user={user}
+      onSubmit={onSubmit}
+    />
   );
 }

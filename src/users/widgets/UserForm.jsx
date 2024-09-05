@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 import PasswordValidationBox from '../../auth/widgets/PasswordValidationBox';
 import QueryWrapper from '../../common/components/QueryWrapper';
+import LoadingButton from '../../common/components/form/LoadingButton';
 import PasswordInput from '../../common/components/form/PasswordInput';
 import {
   userFormSchema,
@@ -32,7 +33,13 @@ const textInputProps = {
   variant: 'outlined',
 };
 
-export default function UserForm({ onSubmit, user, withPassword, title }) {
+export default function UserForm({
+  onSubmit,
+  user,
+  withPassword,
+  title,
+  loading,
+}) {
   const formMethods = useForm({
     defaultValues: {
       firstName: '',
@@ -171,13 +178,14 @@ export default function UserForm({ onSubmit, user, withPassword, title }) {
                 Cancel
               </Button>
 
-              <Button
+              <LoadingButton
                 sx={{ '&:focus': { outline: 'none' } }}
                 type="submit"
                 variant="contained"
+                loading={loading}
               >
                 Submit
-              </Button>
+              </LoadingButton>
             </Stack>
           </Container>
         </form>

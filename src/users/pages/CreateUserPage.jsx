@@ -24,5 +24,11 @@ export default function CreateUserPage() {
     createUser.mutate(data);
   };
 
-  return <UserForm title="Create user" onSubmit={onSubmit} />;
+  return (
+    <UserForm
+      loading={createUser.isPending}
+      title="Create user"
+      onSubmit={onSubmit}
+    />
+  );
 }

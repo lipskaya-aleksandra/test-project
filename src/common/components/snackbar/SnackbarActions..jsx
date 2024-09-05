@@ -43,3 +43,19 @@ export function UndoAndDismissButtons({ onUndo, onDismiss }) {
     </Fragment>
   );
 }
+
+export function UndoButton({ onUndo }) {
+  const { key: snackbarKey, onClose: closeSnackbar } = useSnackbarContext();
+
+  return (
+    <Button
+      sx={{ '&:focus': { outline: 'none' } }}
+      onClick={() => {
+        closeSnackbar(snackbarKey);
+        onUndo?.();
+      }}
+    >
+      Undo
+    </Button>
+  );
+}

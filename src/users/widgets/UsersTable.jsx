@@ -1,8 +1,8 @@
 import { Delete } from '@mui/icons-material';
 import { Button, Stack, TablePagination, Typography } from '@mui/material';
-import { useSnackbar } from 'notistack';
 import { useState, Fragment } from 'react';
 
+import { UndoButton } from '../../common/components/snackbar/SnackbarActions.';
 import Table from '../../common/components/table/Table';
 import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
 import useOptimisticUpdate from '../../common/hooks/useOptimisticUpdate';
@@ -11,25 +11,6 @@ import { useDeleteManyUsers } from '../api/useDeleteManyUsers';
 import { useGetUsers } from '../api/useGetUsers';
 import useUsersTableQueryParams from '../hooks/useUsersTableQueryParams';
 import { columns } from '../usersTableColumns';
-
-function UndoButton({ snackbarKey }) {
-  const params = useUsersTableQueryParams();
-  const { cancelUpdate } = useOptimisticUpdate(['users', params]);
-
-  const { closeSnackbar } = useSnackbar();
-
-  return (
-    <Button
-      sx={{ '&:focus': { outline: 'none' } }}
-      onClick={() => {
-        closeSnackbar(snackbarKey);
-        cancelUpdate();
-      }}
-    >
-      Undo
-    </Button>
-  );
-}
 
 export default function UsersTable() {
   const { pageParams, setPageParams } = usePagination();
@@ -41,7 +22,7 @@ export default function UsersTable() {
   const [selected, setSelected] = useState({});
   const deleteMany = useDeleteManyUsers();
 
-  const { startUpdate } = useOptimisticUpdate(['users', params]);
+  const { startUpdate, cancelUpdate } = useOptimisticUpdate(['users', params]);
   const displaySnackbar = useAlertSnackbar();
 
   const selectedCount = Object.entries(selected).length;
@@ -66,7 +47,7 @@ export default function UsersTable() {
     });
     displaySnackbar({
       message: `Users with ids ${ids} deleted successfully`,
-      Action: UndoButton,
+      Action: <UndoButton onUndo={cancelUpdate} />,
     });
   };
 

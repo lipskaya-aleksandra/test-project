@@ -45,7 +45,11 @@ export const columns = [
   }),
   columnHelper.accessor('createdAt', {
     header: () => <span>creation date</span>,
-    cell: info => new Date(info.getValue()).toUTCString(),
+    cell: info => {
+      const date = new Date(info.getValue());
+
+      return new Intl.DateTimeFormat('en-US').format(date);
+    },
   }),
   columnHelper.display({
     id: 'edit',

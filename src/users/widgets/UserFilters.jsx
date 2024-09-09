@@ -1,4 +1,10 @@
-import { Stack, Alert, Autocomplete, TextField } from '@mui/material';
+import {
+  Stack,
+  Alert,
+  Autocomplete,
+  TextField,
+  CircularProgress,
+} from '@mui/material';
 
 import QueryWrapper from '../../common/components/QueryWrapper';
 import FilterResults from '../../common/components/filter/FilterResults';
@@ -35,7 +41,12 @@ export default function UserFilters() {
               options={[]}
               loading
               renderInput={params => (
-                <TextField {...params} label="Job" placeholder="Choose job" />
+                <TextField
+                  InputProps={{ endAdornment: <CircularProgress size={20} /> }}
+                  {...params}
+                  label="Job"
+                  placeholder="Choose job"
+                />
               )}
             />
           }

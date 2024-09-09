@@ -2,10 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Container, Stack, Typography } from '@mui/material';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import * as z from 'zod';
 
 import LoadingButton from '../../common/components/form/LoadingButton';
 import PasswordInput from '../../common/components/form/PasswordInput';
-import { passwordResetFormSchema } from '../utils/validation/passwordResetFormValidation';
+import { passwordValidationString } from '../utils/validation/passwordValidation';
 
 import PasswordValidationBox from './PasswordValidationBox';
 
@@ -18,6 +19,18 @@ const textInputProps = {
   fullWidth: true,
   variant: 'outlined',
 };
+
+const passwordResetFormSchema = z
+  .object({
+    password: passwordValidationString,
+    confirmedPassword: z
+      .string()
+      .min(1, { message: 'Confirmed password is required' }),
+  })
+  .refine(data => data.password === data.confirmedPassword, {
+    message: "Passwords don't match",
+    path: ['confirmedPassword'],
+  });
 
 export default function PasswordResetForm({ loading, onSubmit }) {
   const navigate = useNavigate();

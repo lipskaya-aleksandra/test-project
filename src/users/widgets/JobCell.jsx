@@ -1,4 +1,9 @@
-import { UndoAndDismissButtons } from '../../common/components/snackbar/SnackbarActions.';
+import { Fragment } from 'react';
+
+import {
+  DismissButton,
+  UndoButton,
+} from '../../common/components/snackbar/SnackbarActions.';
 import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
 import useOptimisticUpdate from '../../common/hooks/useOptimisticUpdate';
 import { useEditUserJob } from '../api/useEditUserJob';
@@ -45,7 +50,12 @@ export default function JobCell({ info }) {
 
         displaySnackbar({
           message: `Job for user ${user.firstName} ${user.lastName} changed from ${user.job.name} to ${jobName}`,
-          Action: <UndoAndDismissButtons onUndo={cancelUpdate} />,
+          Action: (
+            <Fragment>
+              <UndoButton onUndo={cancelUpdate} />
+              <DismissButton />
+            </Fragment>
+          ),
         });
       }}
     />

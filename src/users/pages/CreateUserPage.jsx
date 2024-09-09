@@ -9,13 +9,15 @@ export default function CreateUserPage() {
   const displaySnackbar = useAlertSnackbar();
 
   const createUser = useCreateUser({
-    onSuccess: () => {
-      navigate(-1);
+    onSuccess: ({ data }) => {
+      navigate(`/users/${data.id}`);
     },
-    onError: () => {
+    onError: error => {
       displaySnackbar({
         severity: 'error',
-        message: 'Something went wrong, please try again later.',
+        message:
+          error.response.data?.message ??
+          'Something went wrong, please try again later.',
       });
     },
   });

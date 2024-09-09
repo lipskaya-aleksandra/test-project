@@ -1,14 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Typography, Grid, Link, Container, TextField } from '@mui/material';
-import { Fragment } from 'react';
+import {
+  Typography,
+  Grid,
+  Link,
+  Container,
+  TextField,
+  Stack,
+} from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import * as z from 'zod';
 
 import LoadingButton from '../../common/components/form/LoadingButton';
 import PasswordInput from '../../common/components/form/PasswordInput';
 import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
 import { useLogin } from '../api/useLogin';
-import { loginFormSchema } from '../utils/validation/loginFormValidation';
+import { emailValidationString } from '../utils/validation/emailValidation';
+import { passwordValidationString } from '../utils/validation/passwordValidation';
 
 const textInputProps = {
   sx: {
@@ -19,6 +27,11 @@ const textInputProps = {
   fullWidth: true,
   variant: 'outlined',
 };
+
+const loginFormSchema = z.object({
+  email: emailValidationString,
+  password: passwordValidationString,
+});
 
 export default function LoginPage() {
   const { control, handleSubmit, setError } = useForm({
@@ -34,6 +47,15 @@ export default function LoginPage() {
   const login = useLogin();
   const navigate = useNavigate();
 
+  const onUnauthorizedError = () => {
+    setError('email', {
+      message: 'Incorrect email or password',
+    });
+    setError('password', {
+      message: 'Incorrect email or password',
+    });
+  };
+
   const onSubmit = async data => {
     try {
       const response = await login.mutateAsync(data);
@@ -43,14 +65,7 @@ export default function LoginPage() {
       }
     } catch (e) {
       if (e.request.status === 401) {
-        setError('email', {
-          type: '401',
-          message: 'Incorrect email or password',
-        });
-        setError('password', {
-          type: '401',
-          message: 'Incorrect email or password',
-        });
+        onUnauthorizedError();
       } else {
         displaySnackbar({
           severity: 'error',
@@ -61,7 +76,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Fragment>
+    <Stack sx={{ textAlign: 'center' }}>
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
@@ -70,7 +85,6 @@ export default function LoginPage() {
           <Controller
             name="email"
             control={control}
-            rules={{ required: 'Email is required.' }}
             render={({
               field: { ref, ...fieldProps },
               fieldState: { error },
@@ -132,6 +146,6 @@ export default function LoginPage() {
           </Grid>
         </Container>
       </form>
-    </Fragment>
+    </Stack>
   );
 }

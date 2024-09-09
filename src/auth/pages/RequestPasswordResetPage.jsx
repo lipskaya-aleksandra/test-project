@@ -2,10 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Container, Stack, TextField, Typography } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import * as z from 'zod';
 
 import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
 import { useRequestPasswordReset } from '../api/useRequestPasswordReset';
-import { requestPasswordResetFormSchema } from '../utils/validation/requestPasswordResetFormValidation';
+import { emailValidationString } from '../utils/validation/emailValidation';
 
 const textInputProps = {
   sx: {
@@ -16,6 +17,10 @@ const textInputProps = {
   fullWidth: true,
   variant: 'outlined',
 };
+
+const requestPasswordResetFormSchema = z.object({
+  email: emailValidationString,
+});
 
 export default function RequestPasswordResetPage() {
   const requestPasswordReset = useRequestPasswordReset();

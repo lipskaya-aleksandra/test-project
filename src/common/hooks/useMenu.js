@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 
 export default function useMenu() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -10,5 +10,8 @@ export default function useMenu() {
     setAnchorEl(null);
   }, []);
 
-  return { anchorEl, isOpen, onClick, onClose };
+  return useMemo(
+    () => ({ anchorEl, isOpen, onClick, onClose }),
+    [anchorEl, isOpen, onClick, onClose],
+  );
 }

@@ -68,7 +68,7 @@ export default function UserForm({
   const navigate = useNavigate();
 
   return (
-    <Fragment>
+    <Stack>
       <Typography fontWeight={300} fontSize={24} textAlign="center">
         {title}
       </Typography>
@@ -191,6 +191,6 @@ export default function UserForm({
           </Container>
         </form>
       </FormProvider>
-    </Fragment>
+    </Stack>
   );
 }

@@ -1,31 +1,3 @@
-// module.exports = {
-//   root: true,
-//   env: { browser: true, es2020: true },
-//   // parser: '@typescript-eslint/parser',
-
-//   extends: [
-//     'plugin:react/recommended',
-//     'plugin:react/jsx-runtime',
-//     'plugin:react-hooks/recommended',
-//     'airbnb',
-//     'airbnb-typescript',
-//     'airbnb/hooks',
-//     'plugin:import/recommended',
-//   ],
-//   ignorePatterns: ['dist', '.eslintrc.cjs'],
-//   // parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-//   // settings: { react: { version: '18.2' } },
-//   plugins: ['react-refresh', 'react', 'import' /* , 'prettier' */],
-//   rules: {
-//     'react/jsx-no-target-blank': 'off',
-//     'react/prop-types': 'off',
-//     'react-refresh/only-export-components': [
-//       'warn',
-//       { allowConstantExport: true },
-//     ],
-//   },
-// };
-
 const production = process.env.NODE_ENV === 'production';
 
 const allowedToReassignParams = [
@@ -61,14 +33,7 @@ module.exports = {
     'prettier',
   ],
 
-  // settings: {
-  //   'import/resolver': {
-  //     node: {
-  //       paths: ['src'],
-  //       extensions: ['.js', '.jsx'],
-  //     },
-  //   },
-  // },
+  ignorePatterns: ['dist', '.eslintrc.js'],
 
   rules: {
     'arrow-parens': ['error', 'as-needed'],
@@ -120,7 +85,7 @@ module.exports = {
         ],
       },
     ],
-    // indent: ['error', 2, { SwitchCase: 1 }],
+
     'import/prefer-default-export': 0,
 
     'linebreak-style': ['error', 'unix'],
@@ -166,17 +131,14 @@ module.exports = {
       },
     ],
 
-    'react/jsx-uses-react': 'off', // #1
-    'react/react-in-jsx-scope': 'off', // #1
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
     'react/jsx-indent': ['error', 2],
-    // 'react/jsx-indent-props': ['error', 2],
     'react/jsx-props-no-spreading': [1, { custom: 'ignore' }],
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/jsx-fragments': [2, 'element'],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'react/prop-types': 'off',
-
-    // 'prettier/prettier': ['error'],
   },
 };

@@ -16,6 +16,12 @@ export default function FilterResults({ defaultFilters }) {
     setQueryParams(defaultFilters);
   };
 
+  const onDeleteChip = (filter, value) => {
+    setQueryParams({
+      [filter.label]: filter.values.filter(v => v !== value),
+    });
+  };
+
   const nonEmptyFiltersCount = filters.filter(
     ({ values }) => values.length > 0,
   ).length;
@@ -27,35 +33,28 @@ export default function FilterResults({ defaultFilters }) {
       </Typography>
       {nonEmptyFiltersCount > 0 && (
         <Stack direction="row" gap={1} flexWrap={{ xs: 'wrap', sm: 'nowrap' }}>
-          {filters.map(
-            filter =>
-              filter.values.length > 0 && (
-                <Stack
-                  key={filter}
-                  spacing={1}
-                  direction="row"
-                  sx={{ mt: 1, mb: 1, flexWrap: 'wrap' }}
-                >
-                  <Typography>{filter.label}:</Typography>
-                  {filter.values.slice(0, 3).map(value => (
-                    <Chip
-                      key={value}
-                      label={value}
-                      variant="outlined"
-                      sx={{ my: 1 }}
-                      onDelete={() => {
-                        setQueryParams({
-                          [filter.label]: filter.values.filter(
-                            v => v !== value,
-                          ),
-                        });
-                      }}
-                    />
-                  ))}
-                  {filter.values.length > 3 && <Typography>...</Typography>}
-                </Stack>
-              ),
-          )}
+          {filters
+            .filter(f => f.values.length > 0)
+            .map(filter => (
+              <Stack
+                key={filter}
+                spacing={1}
+                direction="row"
+                sx={{ mt: 1, mb: 1, flexWrap: 'wrap' }}
+              >
+                <Typography>{filter.label}:</Typography>
+                {filter.values.slice(0, 3).map(value => (
+                  <Chip
+                    key={value}
+                    label={value}
+                    variant="outlined"
+                    sx={{ my: 1 }}
+                    onDelete={() => onDeleteChip(filter, value)}
+                  />
+                ))}
+                {filter.values.length > 3 && <Typography>...</Typography>}
+              </Stack>
+            ))}
           <Button
             variant="outlined"
             color="error"

@@ -1,14 +1,9 @@
-import {
-  Stack,
-  Alert,
-  Autocomplete,
-  TextField,
-  CircularProgress,
-} from '@mui/material';
+import { Stack, Alert } from '@mui/material';
 
 import QueryWrapper from '../../common/components/QueryWrapper';
 import FilterResults from '../../common/components/filter/FilterResults';
 import FilterWidgetContainer from '../../common/components/filter/FilterWidget';
+import MultiSelect from '../../common/components/filter/MultiSelect';
 import SearchInput from '../../common/components/filter/SearchInput';
 import { defaultValues } from '../../common/hooks/usePagination';
 import useQueryParams from '../../common/hooks/useQueryParams';
@@ -33,26 +28,15 @@ export default function UserFilters() {
 
   return (
     <FilterWidgetContainer>
-      <Stack direction={{ xs: 'column', md: 'row' }} gap={1}>
+      <Stack direction={{ xs: 'column', md: 'row' }} gap={1.5}>
         <QueryWrapper
           suspenseFallback={
-            <Autocomplete
-              sx={{ mt: 1, mb: 1, minWidth: '300px' }}
-              options={[]}
-              loading
-              renderInput={params => (
-                <TextField
-                  InputProps={{ endAdornment: <CircularProgress size={20} /> }}
-                  {...params}
-                  label="Job"
-                  placeholder="Choose job"
-                />
-              )}
-            />
+            <MultiSelect sx={{ minWidth: '300px' }} options={[]} loading />
           }
           errorFallback={<Alert severity="error">Could not load jobs</Alert>}
         >
           <JobMultiSelect
+            sx={{ minWidth: '300px' }}
             onChange={(e, newOptions) => {
               onSelect(newOptions, 'job');
             }}

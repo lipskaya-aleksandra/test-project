@@ -1,8 +1,8 @@
-import { CloseOutlined, DoneOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import RequirementIcon from '../../common/components/RequirementIcon';
 import {
   AT_LEAST_ONE_DIGIT,
   AT_LEAST_ONE_LOWERCASE_LETTER,
@@ -36,22 +36,14 @@ export default function PasswordValidationBox() {
       <Typography
         sx={{ ...typographySx, color: hasMinLength ? green[800] : red[800] }}
       >
-        {hasMinLength ? (
-          <DoneOutlined fontSize="small" />
-        ) : (
-          <CloseOutlined fontSize="small" />
-        )}
+        <RequirementIcon isFulfilled={hasMinLength} />
         At least 8 characters long
       </Typography>
 
       <Typography
         sx={{ ...typographySx, color: hasOneDigit ? green[800] : red[800] }}
       >
-        {hasOneDigit ? (
-          <DoneOutlined fontSize="small" />
-        ) : (
-          <CloseOutlined fontSize="small" />
-        )}
+        <RequirementIcon isFulfilled={hasOneDigit} />
         At least one digit
       </Typography>
 
@@ -61,11 +53,7 @@ export default function PasswordValidationBox() {
           color: hasOneLowercaseLetter ? green[800] : red[800],
         }}
       >
-        {hasOneLowercaseLetter ? (
-          <DoneOutlined fontSize="small" />
-        ) : (
-          <CloseOutlined fontSize="small" />
-        )}
+        <RequirementIcon isFulfilled={hasOneLowercaseLetter} />
         At least one lowercase letter
       </Typography>
 
@@ -75,22 +63,14 @@ export default function PasswordValidationBox() {
           color: hasOneUppercaseLetter ? green[800] : red[800],
         }}
       >
-        {hasOneUppercaseLetter ? (
-          <DoneOutlined fontSize="small" />
-        ) : (
-          <CloseOutlined fontSize="small" />
-        )}
+        <RequirementIcon isFulfilled={hasOneUppercaseLetter} />
         At least one uppercase letter
       </Typography>
 
       <Typography
         sx={{ ...typographySx, color: hasOneSymbol ? green[800] : red[800] }}
       >
-        {hasOneSymbol ? (
-          <DoneOutlined fontSize="small" />
-        ) : (
-          <CloseOutlined fontSize="small" />
-        )}
+        <RequirementIcon isFulfilled={hasOneSymbol} />
         At least one symbol
       </Typography>
     </Stack>

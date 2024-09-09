@@ -1,19 +1,17 @@
-import { Stack } from '@mui/material';
+import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 export default function CenteredContentLayout() {
   return (
-    <Stack
+    <Box
       sx={{
         position: 'absolute',
-        width: '100%',
-        alignItems: 'center',
-        margin: '0 auto',
-        height: '100%',
-        justifyContent: 'center',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
       }}
     >
       <Outlet />
-    </Stack>
+    </Box>
   );
 }

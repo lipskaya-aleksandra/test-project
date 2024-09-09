@@ -7,12 +7,15 @@ import PasswordResetPage from '../../auth/pages/PasswordResetPage';
 import RequestPasswordResetPage from '../../auth/pages/RequestPasswordResetPage';
 import SignUpPage from '../../auth/pages/SignUpPage';
 import PostsPage from '../../posts/PostsPage';
+import UserCardFallback from '../../users/components/UserCardFallback';
 import CreateUserPage from '../../users/pages/CreateUserPage';
 import EditUserPage from '../../users/pages/EditUserPage';
 import UserDetailPage from '../../users/pages/UserDetailPage';
 import UsersPage from '../../users/pages/UsersPage';
 import CenteredContentLayout from '../components/CenteredContentLayout';
+import QueryWrapper from '../components/QueryWrapper';
 import Root, { rootLoader } from '../components/Root';
+import Error404Fallback from '../components/fallbacks/Error404Fallback';
 
 const router = createBrowserRouter([
   {
@@ -32,7 +35,14 @@ const router = createBrowserRouter([
             children: [
               {
                 path: ':userId',
-                element: <UserDetailPage />,
+                element: (
+                  <QueryWrapper
+                    suspenseFallback={<UserCardFallback />}
+                    errorFallback={<Error404Fallback />}
+                  >
+                    <UserDetailPage />
+                  </QueryWrapper>
+                ),
               },
               {
                 path: 'edit/:userId',

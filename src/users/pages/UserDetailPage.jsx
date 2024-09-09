@@ -1,19 +1,11 @@
 import { useParams } from 'react-router-dom';
 
-import QueryWrapper from '../../common/components/QueryWrapper';
-import Error404Fallback from '../../common/components/fallbacks/Error404Fallback';
-import UserCardFallback from '../components/UserCardFallback';
-import UserDataWrapper from '../components/UserDataWrapper';
+import { useGetUserById } from '../api/useGetUserById';
+import UserCard from '../components/UserCard';
 
 export default function UserDetailPage() {
   const { userId } = useParams();
+  const { data } = useGetUserById(userId);
 
-  return (
-    <QueryWrapper
-      suspenseFallback={<UserCardFallback />}
-      errorFallback={<Error404Fallback />}
-    >
-      <UserDataWrapper userId={userId} />
-    </QueryWrapper>
-  );
+  return <UserCard user={data} />;
 }

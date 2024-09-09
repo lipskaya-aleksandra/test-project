@@ -85,11 +85,7 @@ export default function UserCard({ user, menuOptions }) {
         </Button>
         <Button
           onClick={() => {
-            navigate(`/users/edit/${user.id}`, {
-              state: {
-                user,
-              },
-            });
+            navigate(`/users/edit/${user.id}`);
           }}
           startIcon={<Edit />}
           variant="outlined"

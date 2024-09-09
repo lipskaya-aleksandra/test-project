@@ -1,12 +1,21 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import Root, { rootLoader } from '../components/Root';
-import UsersPage from '../../users/pages/UsersPage';
+import AccountPage from '../../account/pages/AccountPage';
+import AuthedPasswordResetPage from '../../account/pages/AuthedPasswordResetPage';
+import LoginPage from '../../auth/pages/LoginPage';
+import PasswordResetPage from '../../auth/pages/PasswordResetPage';
+import RequestPasswordResetPage from '../../auth/pages/RequestPasswordResetPage';
+import SignUpPage from '../../auth/pages/SignUpPage';
 import PostsPage from '../../posts/PostsPage';
-import UserDetailPage from '../../users/pages/UserDetailPage';
-import LoginPage from '../../users/pages/LoginPage';
+import UserCardFallback from '../../users/components/UserCardFallback';
 import CreateUserPage from '../../users/pages/CreateUserPage';
 import EditUserPage from '../../users/pages/EditUserPage';
+import UserDetailPage from '../../users/pages/UserDetailPage';
+import UsersPage from '../../users/pages/UsersPage';
+import CenteredContentLayout from '../components/CenteredContentLayout';
+import QueryWrapper from '../components/QueryWrapper';
+import Root, { rootLoader } from '../components/Root';
+import Error404Fallback from '../components/fallbacks/Error404Fallback';
 
 const router = createBrowserRouter([
   {
@@ -22,33 +31,71 @@ const router = createBrowserRouter([
             element: <UsersPage />,
           },
           {
-            path: ':userId',
-            element: <UserDetailPage />,
+            element: <CenteredContentLayout />,
+            children: [
+              {
+                path: ':userId',
+                element: (
+                  <QueryWrapper
+                    suspenseFallback={<UserCardFallback />}
+                    errorFallback={<Error404Fallback />}
+                  >
+                    <UserDetailPage />
+                  </QueryWrapper>
+                ),
+              },
+              {
+                path: 'edit/:userId',
+                element: <EditUserPage />,
+              },
+              {
+                path: 'create',
+                element: <CreateUserPage />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: 'account',
+        element: <CenteredContentLayout />,
+        children: [
+          {
+            index: true,
+            element: <AccountPage />,
           },
           {
-            path: 'edit/:userId',
-            element: <EditUserPage />,
-          },
-          {
-            path: 'create',
-            element: <CreateUserPage />,
+            path: 'reset-password',
+            element: <AuthedPasswordResetPage />,
           },
         ],
       },
       {
         path: 'posts',
-        //loader: postsLoader,
-        element: (
-          //<RedirectToCurrentPagination path="posts">
-          <PostsPage />
-          //</RedirectToCurrentPagination>
-        ),
+        element: <PostsPage />,
       },
     ],
   },
   {
-    path: '/login',
-    element: <LoginPage />,
+    element: <CenteredContentLayout />,
+    children: [
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/signup',
+        element: <SignUpPage />,
+      },
+      {
+        path: '/request-password-reset',
+        element: <RequestPasswordResetPage />,
+      },
+      {
+        path: '/password-reset',
+        element: <PasswordResetPage />,
+      },
+    ],
   },
 ]);
 

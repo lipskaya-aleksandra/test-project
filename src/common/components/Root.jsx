@@ -1,57 +1,33 @@
-import { AppBar, Link, Toolbar } from '@mui/material';
-import { Outlet, redirect, NavLink } from 'react-router-dom';
+import { Box } from '@mui/material';
+import { Outlet, redirect } from 'react-router-dom';
+
+import useUnauthorizedInterceptor from '../../auth/hooks/useUnauthorizedInterceptor';
 import { defaultValues } from '../hooks/usePagination';
-import { blue } from '@mui/material/colors';
 
-const linkStyle = {
-  color: 'white',
-  textDecoration: 'none',
-  fontSize: 16,
-  '&:hover': {
-    color: blue[200],
-  },
-  padding: '6px 12px',
-  borderRadius: 2,
-  marginRight: 6,
-  marginLeft: 6,
-
-  '&.active': {
-    backgroundColor: blue[400],
-  },
-};
+import NavBar from './NavBar';
+import QueryWrapper from './QueryWrapper';
+import ErrorFallback from './fallbacks/ErrorFallback';
+import LoadingFallback from './fallbacks/LoadingFallback';
 
 export default function Root() {
-  const searchParams = new URLSearchParams(defaultValues);
+  useUnauthorizedInterceptor();
+
   return (
-    <>
-      <AppBar sx={{ width: '100%', mb: 3 }} position="sticky">
-        <Toolbar>
-          <Link
-            className={({ isActive }) => (isActive ? 'active' : '')}
-            component={NavLink}
-            to={'/users?' + searchParams.toString()}
-            end
-            sx={linkStyle}
-          >
-            Users
-          </Link>
-          <Link
-            className={({ isActive }) => (isActive ? 'active' : '')}
-            component={NavLink}
-            to={'/posts?' + searchParams.toString()}
-            end
-            sx={linkStyle}
-          >
-            Posts
-          </Link>
-        </Toolbar>
-      </AppBar>
-      <Outlet />
-    </>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <NavBar />
+
+      <QueryWrapper
+        suspenseFallback={<LoadingFallback />}
+        errorFallback={<ErrorFallback />}
+      >
+        <Outlet />
+      </QueryWrapper>
+    </Box>
   );
 }
 
 export function rootLoader() {
   const searchParams = new URLSearchParams(defaultValues);
-  return redirect('/users');
+
+  return redirect(`/users?${searchParams.toString()}`);
 }

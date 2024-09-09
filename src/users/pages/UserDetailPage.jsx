@@ -1,17 +1,11 @@
-import { Alert } from '@mui/material';
-import UserCard from '../UserCard';
-import QueryWrapper from '../../common/components/QueryWrapper';
-import UserCardFallback from '../UserCardFallback';
+import { useParams } from 'react-router-dom';
+
+import { useGetUserById } from '../api/useGetUserById';
+import UserCard from '../components/UserCard';
 
 export default function UserDetailPage() {
-  return (
-    <QueryWrapper
-      suspenseFallback={<UserCardFallback />}
-      errorFallback={
-        <Alert severity="error">Could not load user details</Alert>
-      }
-    >
-      <UserCard />
-    </QueryWrapper>
-  );
+  const { userId } = useParams();
+  const { data } = useGetUserById(userId);
+
+  return <UserCard user={data} />;
 }

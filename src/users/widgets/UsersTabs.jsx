@@ -1,8 +1,10 @@
 import { Tab, Tabs } from '@mui/material';
-import { statusColorMap } from './StatusLabel';
-import useQueryParams from '../common/hooks/useQueryParams';
-import { defaultValues, usePagination } from '../common/hooks/usePagination';
-import { defaultFilters } from './defaultUserFilters';
+import { useTransition } from 'react';
+
+import { defaultValues } from '../../common/hooks/usePagination';
+import useQueryParams from '../../common/hooks/useQueryParams';
+import { statusColorMap } from '../components/StatusLabel';
+import { defaultFilters } from '../defaultUserFilters';
 
 const tabSx = {
   textTransform: 'none',
@@ -17,11 +19,12 @@ const tabSx = {
 };
 
 export default function UsersTabs() {
-  const { pageParams } = usePagination();
   const { queryParams, setQueryParams } = useQueryParams({
     defaults: { status: defaultFilters.status },
     allowOverrideKeys: ['page'],
   });
+
+  const [, startTransition] = useTransition();
 
   return (
     <Tabs
@@ -46,55 +49,57 @@ export default function UsersTabs() {
               queryParams.status && queryParams.status.length > 0
                 ? queryParams.status
                 : 'all'
-            ],
+            ].color,
         },
       }}
       onChange={(e, value) => {
-        if (value === 'all') {
-          setQueryParams({ status: '', page: defaultValues.page });
-        } else {
-          setQueryParams({ status: value, page: defaultValues.page });
-        }
+        startTransition(() => {
+          if (value === 'all') {
+            setQueryParams({ status: '', page: defaultValues.page });
+          } else {
+            setQueryParams({ status: value, page: defaultValues.page });
+          }
+        });
       }}
     >
       <Tab
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap['all'],
+            color: statusColorMap.all.color,
           },
         }}
-        value={'all'}
+        value="all"
         label="All"
       />
       <Tab
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap['active'],
+            color: statusColorMap.active.color,
           },
         }}
-        value={'active'}
+        value="active"
         label="Active"
       />
       <Tab
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap['pending'],
+            color: statusColorMap.pending.color,
           },
         }}
-        value={'pending'}
+        value="pending"
         label="Pending"
       />
       <Tab
         sx={{
           ...tabSx,
           '&.Mui-selected': {
-            color: statusColorMap['blocked'],
+            color: statusColorMap.blocked.color,
           },
         }}
-        value={'blocked'}
+        value="blocked"
         label="Blocked"
       />
     </Tabs>

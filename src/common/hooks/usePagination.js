@@ -1,21 +1,20 @@
-import { useCallback } from 'react';
+import { useCallback , useMemo } from 'react';
+
 import useQueryParams from './useQueryParams';
-import { useMemo } from 'react';
+
 
 export const defaultValues = { page: '1', perPage: '10' };
 
 export function usePagination(defaults = defaultValues) {
   const { queryParams, setQueryParams } = useQueryParams({ defaults });
 
-  const getCurrentParams = useCallback(() => {
-    return {
+  const getCurrentParams = useCallback(() => ({
       page: parseInt(queryParams.page, 10),
       perPage: parseInt(queryParams.perPage, 10),
-    };
-  }, [queryParams]);
+    }), [queryParams]);
 
   const updatePageParams = useCallback(
-    (newParams) => {
+    newParams => {
       setQueryParams({ ...getCurrentParams(), ...newParams });
     },
     [getCurrentParams, setQueryParams],

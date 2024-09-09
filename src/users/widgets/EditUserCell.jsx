@@ -1,7 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import { useDeleteUser } from './api/useDeleteUser';
+import { Delete, Close, MoreVert } from '@mui/icons-material';
 import {
-  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -9,16 +7,16 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
-import { useState } from 'react';
-import EditActions from '../common/components/EditActions';
-import { Delete } from '@mui/icons-material';
-import { Close } from '@mui/icons-material';
-import useAlertSnackbar from '../common/hooks/useAlertSnackbar.jsx';
-import { Dropdown, IconButton, Menu, MenuButton } from '@mui/joy';
-import { MoreVert } from '@mui/icons-material';
-import useOptimisticUpdate from '../common/hooks/useOptimisticUpdate.js';
-import useUsersTableQueryParams from './hooks/useUsersTableQueryParams.js';
-import { useSnackbar } from 'notistack';
+import { useState, Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import EditActions from '../../common/components/EditActions';
+import BaseMenu from '../../common/components/menu/BaseMenu';
+import { DismissButton } from '../../common/components/snackbar/SnackbarActions.';
+import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
+import useOptimisticUpdate from '../../common/hooks/useOptimisticUpdate';
+import { useDeleteUser } from '../api/useDeleteUser';
+import useUsersTableQueryParams from '../hooks/useUsersTableQueryParams';
 
 export default function EditUserCell({ cell }) {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -31,7 +29,6 @@ export default function EditUserCell({ cell }) {
   const id = cell.row.getValue('id');
 
   const displaySnackbar = useAlertSnackbar();
-  const { closeSnackbar } = useSnackbar();
 
   const deleteMutation = useDeleteUser();
 
@@ -43,9 +40,9 @@ export default function EditUserCell({ cell }) {
     setDialogOpen(false);
 
     startUpdate({
-      newData: (oldData) => ({
+      newData: oldData => ({
         count: oldData.count,
-        rows: oldData.rows.filter((u) => u.id != id),
+        rows: oldData.rows.filter(u => u.id !== id),
       }),
       delay: 5000,
       updateFn: () => {
@@ -56,11 +53,7 @@ export default function EditUserCell({ cell }) {
     displaySnackbar({
       onCancel: cancelUpdate,
       message: `User with id ${id} deleted succesfully.`,
-      Action: ({ onClose }) => (
-        <Button sx={{ '&:focus': { outline: 'none' } }} onClick={onClose}>
-          Dismiss
-        </Button>
-      ),
+      Action: <DismissButton />,
     });
   };
 
@@ -73,20 +66,14 @@ export default function EditUserCell({ cell }) {
   };
 
   return (
-    <>
-      <Dropdown>
-        <MenuButton
-          sx={{ '&:focus': { outline: 'none' } }}
-          slots={{ root: IconButton }}
-          slotProps={{ root: { variant: 'outlined', color: 'neutral' } }}
-        >
-          <MoreVert />
-        </MenuButton>
-
-        <Menu placement="right-start">
-          <EditActions onDelete={onDeleteInitiated} onEdit={onEdit} />
-        </Menu>
-      </Dropdown>
+    <Fragment>
+      <BaseMenu
+        tooltipTitle="Open edit menu"
+        id="edit-menu"
+        MenuIcon={<MoreVert />}
+      >
+        <EditActions onDelete={onDeleteInitiated} onEdit={onEdit} />
+      </BaseMenu>
 
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle>
@@ -110,6 +97,6 @@ export default function EditUserCell({ cell }) {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Fragment>
   );
 }

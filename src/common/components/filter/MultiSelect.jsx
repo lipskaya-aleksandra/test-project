@@ -1,5 +1,7 @@
-import { CheckBox as CheckBoxIcon } from '@mui/icons-material';
-import { CheckBoxOutlineBlank } from '@mui/icons-material';
+import {
+  CheckBox as CheckBoxIcon,
+  CheckBoxOutlineBlank,
+} from '@mui/icons-material';
 import { Autocomplete, Checkbox, TextField } from '@mui/material';
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
@@ -7,6 +9,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const defaultRenderOption = (props, option, { selected }) => {
   const { key, ...optionProps } = props;
+
   return (
     <li key={key} {...optionProps}>
       <Checkbox
@@ -28,12 +31,11 @@ export default function MultiSelect({
 }) {
   return (
     <Autocomplete
-      sx={{ mt: 1, mb: 1, minWidth: '300px' }}
       multiple
       {...autocompleteProps}
       disableCloseOnSelect
       renderOption={renderOption || defaultRenderOption}
-      renderInput={(params) => (
+      renderInput={params => (
         <TextField {...params} label={label} placeholder={placeholder} />
       )}
     />

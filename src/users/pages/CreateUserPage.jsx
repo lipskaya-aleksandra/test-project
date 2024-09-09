@@ -1,20 +1,36 @@
 import { useNavigate } from 'react-router-dom';
+
+import useAlertSnackbar from '../../common/hooks/useAlertSnackbar';
 import { useCreateUser } from '../api/useCreateUser';
-import UserForm from '../UserForm';
-import { usePagination } from '../../common/hooks/usePagination';
+import UserForm from '../widgets/UserForm';
 
 export default function CreateUserPage() {
+  const navigate = useNavigate();
+  const displaySnackbar = useAlertSnackbar();
+
   const createUser = useCreateUser({
-    onSuccess: () => {
-      navigate(`/users?page=${pageParams.page}&perPage=${pageParams.perPage}`);
+    onSuccess: ({ data }) => {
+      navigate(`/users/${data.id}`);
+    },
+    onError: error => {
+      displaySnackbar({
+        severity: 'error',
+        message:
+          error.response.data?.message ??
+          'Something went wrong, please try again later.',
+      });
     },
   });
 
-  const navigate = useNavigate();
-  const { pageParams } = usePagination();
-  const onSubmit = (data) => {
+  const onSubmit = data => {
     createUser.mutate(data);
   };
 
-  return <UserForm onSubmit={onSubmit} />;
+  return (
+    <UserForm
+      loading={createUser.isPending}
+      title="Create user"
+      onSubmit={onSubmit}
+    />
+  );
 }

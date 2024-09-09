@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+
 import useDebouncedValue from '../../common/hooks/useDebouncedValue';
 import { usePagination } from '../../common/hooks/usePagination';
 import useQueryParams from '../../common/hooks/useQueryParams';
@@ -12,11 +13,12 @@ export default function useUsersTableQueryParams() {
 
   const { pageParams } = usePagination();
 
-  const params = {
-    ...pageParams,
-    ...queryParams,
-    search: debouncedSearchTerm,
-  };
-
-  return useMemo(() => params, [pageParams, queryParams, debouncedSearchTerm]);
+  return useMemo(
+    () => ({
+      ...pageParams,
+      ...queryParams,
+      search: debouncedSearchTerm,
+    }),
+    [pageParams, queryParams, debouncedSearchTerm],
+  );
 }

@@ -9,14 +9,11 @@ export default function QueryWrapper({
 }) {
   return (
     <QueryErrorResetBoundary>
-      {({ reset }) => {
-        return (
-          <ErrorBoundary onReset={reset} fallbackRender={errorFallback}>
-            <Suspense fallback={suspenseFallback}>{children}</Suspense>
-          </ErrorBoundary>
-        );
-      }}
+      {({ reset }) => (
+        <ErrorBoundary onReset={reset} fallback={errorFallback}>
+          <Suspense fallback={suspenseFallback}>{children}</Suspense>
+        </ErrorBoundary>
+      )}
     </QueryErrorResetBoundary>
-    // <Suspense fallback={suspenseFallback}>{children}</Suspense>
   );
 }

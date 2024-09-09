@@ -1,7 +1,9 @@
 import { Typography, TablePagination, Alert } from '@mui/material';
-import PostsList from './PostsList.jsx';
-import { usePagination } from '../common/hooks/usePagination.js';
-import QueryWrapper from '../common/components/QueryWrapper.jsx';
+
+import QueryWrapper from '../common/components/QueryWrapper';
+import { usePagination } from '../common/hooks/usePagination';
+
+import PostsList from './PostsList';
 
 export default function PostsPage() {
   const { pageParams, setPageParams } = usePagination();
@@ -20,7 +22,7 @@ export default function PostsPage() {
           setPageParams({ page: value + 1 });
         }}
         rowsPerPage={pageParams.perPage}
-        onRowsPerPageChange={(e) => {
+        onRowsPerPageChange={e => {
           setPageParams({ perPage: e.target.value, page: 1 });
         }}
       />

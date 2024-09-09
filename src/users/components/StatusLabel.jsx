@@ -12,7 +12,7 @@ export const statusColorMap = {
   active: { color: green[800], backgroundColor: green[100] },
   pending: { color: yellow[900], backgroundColor: yellow[100] },
   blocked: { color: red[900], backgroundColor: red[100] },
-  all: 'black',
+  all: { color: 'black', backgroundColor: 'black' },
 };
 
 export default function StatusLabel({ value }) {

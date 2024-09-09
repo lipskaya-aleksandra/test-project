@@ -1,7 +1,7 @@
-import { useCallback } from 'react';
-import useQueryParams from './useQueryParams';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
+
 import { defaultValues as paginationDefaultValues } from './usePagination';
+import useQueryParams from './useQueryParams';
 
 export const defaultValues = { search: '' };
 
@@ -12,7 +12,7 @@ export function useSearch() {
   });
 
   const updateSearch = useCallback(
-    (newTerm) => {
+    newTerm => {
       setQueryParams({ search: newTerm, page: paginationDefaultValues.page });
     },
     [setQueryParams],
@@ -23,6 +23,6 @@ export function useSearch() {
       search: queryParams.search,
       setSearch: updateSearch,
     }),
-    [updateSearch],
+    [updateSearch, queryParams.search],
   );
 }

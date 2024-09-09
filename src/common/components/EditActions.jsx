@@ -1,24 +1,19 @@
-import {
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-  CheckBox as CheckBoxIcon,
-  CheckBoxOutlineBlank,
-} from '@mui/icons-material';
-import { Box, IconButton } from '@mui/material';
-
-const icon = <CheckBoxOutlineBlank fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
+import { Box, MenuItem, Tooltip } from '@mui/material';
 
 export default function EditActions({ onDelete, onEdit }) {
   return (
-    <Box>
-      <IconButton sx={{ ':focus': { outline: 'none' } }} onClick={onEdit}>
-        <EditIcon />
-      </IconButton>
-      <IconButton sx={{ ':focus': { outline: 'none' } }} onClick={onDelete}>
-        <DeleteIcon />
-      </IconButton>
-      {/* <Checkbox icon={icon} checkedIcon={checkedIcon} /> */}
+    <Box sx={{ color: 'gray' }}>
+      <Tooltip title="Edit" arrow>
+        <MenuItem onClick={onEdit}>
+          <EditIcon />
+        </MenuItem>
+      </Tooltip>
+      <Tooltip title="Delete" arrow>
+        <MenuItem onClick={onDelete}>
+          <DeleteIcon />
+        </MenuItem>
+      </Tooltip>
     </Box>
   );
 }

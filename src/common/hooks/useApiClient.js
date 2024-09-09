@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import { baseServerUrl } from '../constants/server';
 
 const instance = axios.create({
@@ -6,6 +7,7 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
   },
+  withCredentials: true,
 });
 
 export default function useApiClient() {

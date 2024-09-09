@@ -5,7 +5,9 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
+
 import { usePagination } from '../common/hooks/usePagination';
+
 import { useGetPosts } from './api/useGetPosts';
 
 export default function PostsList() {
@@ -16,7 +18,7 @@ export default function PostsList() {
     <Container>
       <Typography variant="h4">Posts</Typography>
       <List>
-        {data.map((post) => (
+        {data.map(post => (
           <ListItemButton key={post.question_id}>
             <ListItemText primary={post.title} />
           </ListItemButton>

@@ -1,13 +1,39 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SnackbarProvider } from 'notistack';
 import { RouterProvider } from 'react-router-dom';
 
-import { SnackbarProvider } from 'notistack';
+import { ALLOWED_UNAUTHORIZED_URLS } from './auth/constants';
+import { router } from './common/router/config';
 
-import { router } from './common/router/config.jsx';
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+      retry: (failureCount, error) => {
+        if (
+          error.response.status === 401 &&
+          ALLOWED_UNAUTHORIZED_URLS.includes(error.config.url)
+        ) {
+          return false;
+        }
 
-const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: Infinity } },
+        return 4 - failureCount;
+      },
+    },
+    mutations: {
+      retry: (failureCount, error) => {
+        if (
+          error.response.status === 401 &&
+          ALLOWED_UNAUTHORIZED_URLS.includes(error.config.url)
+        ) {
+          return false;
+        }
+
+        return 4 - failureCount;
+      },
+    },
+  },
 });
 
 function App() {
